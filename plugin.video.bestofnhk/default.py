@@ -47,10 +47,10 @@ print "Time zone is: " + TimeZone
 if TimeZone == " ":
     print "TimeZone is not selected."
     line1 = "The schedule will not be correct for your time zone."
-    line2 = "Please set your time zone in the Best of NHK settings."
+    line2 = "Please set your time zone in the Best of NHK addon settings."
     line3 = "Changes take effect after close and re-open of Best of NHK."
     xbmcgui.Dialog().ok(addonname, line1, line2, line3)
-    xbmc.executebuiltin('ActivateWindow(10140)')
+    #xbmc.executebuiltin('ActivateWindow(10140)')
 else:
     pass
 isdst = time.localtime().tm_isdst

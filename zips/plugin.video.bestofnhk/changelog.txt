@@ -1,3 +1,11 @@
+Ver. 0.9.7
+
+Best of NHK - Sixth release.
+
+Maintenance release. Removed forced auto-opening of addon settings menu if timezone is not set.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 0.9.6
 
 Best of NHK - Fifth release.
