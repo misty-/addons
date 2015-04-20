@@ -1,8 +1,9 @@
-# Best of NHK - by misty 2013/2014.
+# Best of NHK - by misty 2013-2015.
 # import python libraries
 import urllib
 import urllib2
 import re
+import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
@@ -11,6 +12,7 @@ import string
 import sys
 import os
 import time
+
 #import SimpleDownloader as downloader
 #downloader = downloader.SimpleDownloader()
 addon01 = xbmcaddon.Addon('plugin.video.bestofnhk')
@@ -21,12 +23,12 @@ addon = Addon(addon_id, sys.argv)
 from t0mm0.common.net import Net
 net = Net()
 settings = xbmcaddon.Addon(id='plugin.video.bestofnhk')
+from F4mProxy import f4mProxyHelper
 
 # globals
-host = 'http://bestofnhk.tv/'
+host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
 host2 = 'http://www3.nhk.or.jp/'
 radio = 'rj/podcast/mp3/'
-shows = 'http://bestofnhk.tv/shows/'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
@@ -87,13 +89,8 @@ sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
-    media_item_list('NHK World Live Stream 1','http://plslive-w1.nhk.or.jp/http-live/nhkworld-ios-live1/delivery/index_high.m3u8')
-    media_item_list('NHK World Live Stream 2','http://www.widih.com/widih-tv/s-3/nhk.m3u8')
+    addDir('NHK World Live Stream', host1, 'video', icon)
     addDir('NHK Radio News', host2, 'audio', icon)
-    addDir('Latest Shows', host, 'latest', icon)
-    addDir('Shows by Name', host, 'by_name', icon)
-    addDir('Random Show', host, 'by_random', icon)
-
 
 # Create content list
 def addDir(name,url,mode,iconimage):
@@ -149,7 +146,8 @@ class TextBox:
         text = f.read()
         self.win.getControl(self.CONTROL_TEXTBOX).setText(text)
 
-
+def IDX_VIDEO(url):
+    media_item_list('NHK World Live 512',host1+'nhkworld-live-512.f4m')
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
@@ -171,46 +169,21 @@ def IDX_RADIO(url):
     media_item_list('NHK Radio News in Urdu',host2+radio+'urdu.mp3')
     media_item_list('NHK Radio News in Vietnamese',host2+radio+'vietnamese.mp3')
 
-
-# Simple website scrape for content list
-def IDX_LATEST_SHOWS(url):
-    link = net.http_GET(url).content
-    match=re.compile('<option value="(.+?).flv" >(.+?)&nbsp;&nbsp;&nbsp;(.+?)</option>').findall(link)
-    for url,date,name in match:
-        media_item_list(url.encode('UTF-8'),shows+url+'.flv')
-
-
-# Simple website scrape for content list
-def IDX_SHOWS_BY_NAME(url):
-    link = net.http_GET(url).content
-    match=re.compile('<option value="(.+?).flv" >(.+?)&nbsp;&nbsp;&nbsp;(.+?)</option>').findall(link)
-    match.sort()
-    for url,name,date in match:
-        media_item_list(url.encode('UTF-8'),shows+url+'.flv')
-
-
-# Play a random video
-def IDX_RANDOM_SHOW(url):
-    link = net.http_GET(host).content
-    match=re.compile('<option value="(.+?).flv" >(.+?)&nbsp;&nbsp;&nbsp;(.+?)</option>').findall(link)
-    rnd_match = random.choice(match)
-    for url in rnd_match:
-        addon.add_video_item({'url': shows+url+'.flv'}, {'title': url}, img = icon, playlist=False)
-        addon.resolve_url(url.encode('UTF-8'))
-        addon.end_of_directory()
-
         
 # Create media items list
 def media_item_list(name,url):
-    if mode=='audio':
+    if mode=='video':
+        player=f4mProxyHelper()
+        player.playF4mLink(url, name)
+        if not play:
+            pass
+    elif mode!='video':    
         addon.add_music_item({'url': url}, {'title': name}, context_replace = icon, playlist=False)
-    elif mode!='audio':    
-        addon.add_video_item({'url': url}, {'title': name}, img = icon, playlist=False)
 
 
 # Downloader
-def download_media():
-    print df
+#def download_media():
+#    print df
 
 # Query play, mode, url and name
 play = addon.queries.get('play', None)
@@ -236,21 +209,13 @@ elif mode=='schedule':
     print ""+url
     IDX_SCHED(url)
 
+elif mode=='video':
+    print ""+url
+    IDX_VIDEO(url)
+
 elif mode=='audio':
     print ""+url
     IDX_RADIO(url)
-
-elif mode=='latest':
-    print ""+url
-    IDX_LATEST_SHOWS(url)
-
-elif mode=='by_name':
-    print ""+url
-    IDX_SHOWS_BY_NAME(url)
-    
-elif mode=='by_random':
-    print ""+url
-    IDX_RANDOM_SHOW(url)    
 
 if not play:
     addon.end_of_directory()
