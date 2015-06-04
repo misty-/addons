@@ -1,3 +1,11 @@
+Ver. 0.9.10
+
+Best of NHK - Ninth release.
+
+Added 2nd live stream and Newsroom Tokyo daily news (M-F)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 0.9.9
 
 Best of NHK - Eighth release.

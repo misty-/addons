@@ -28,6 +28,7 @@ from F4mProxy import f4mProxyHelper
 # globals
 host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
 host2 = 'http://www3.nhk.or.jp/'
+#host3 = 'http://www3.nhk.or.jp/nhkworld/newsroomtokyo/'
 radio = 'rj/podcast/mp3/'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
@@ -39,6 +40,7 @@ Hr = str(time.strftime ('%H'))
 Min = str(time.strftime ('%M'))
 Date = str(time.strftime ('%m/%d/%Y'))
 TimeZone = settings.getSetting('tz')
+day = ''
 tz_C = ''
 #print "tz_C is:" + tz_C
 #print "Time zone is: " + TimeZone
@@ -89,7 +91,9 @@ sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
-    addDir('NHK World Live Stream', host1, 'video', icon)
+    addDir('NHK World Live Stream 1', host1, 'video', icon)
+    media_item_list('NHK World Live Stream 2', 'http://plslive-w.nhk.or.jp/nhkworld/app-mainp/live.m3u8')
+    addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK Radio News', host2, 'audio', icon)
 
 # Create content list
@@ -146,8 +150,19 @@ class TextBox:
         text = f.read()
         self.win.getControl(self.CONTROL_TEXTBOX).setText(text)
 
+# F4m video
 def IDX_VIDEO(url):
     media_item_list('NHK World Live 512',host1+'nhkworld-live-512.f4m')
+    
+# Newsroom Tokyo news broadcast updated daily M-F
+def IDX_NEWS(url):
+    link = net.http_GET(url).content
+    #print link
+    match=re.compile('xml/latest_(.+?).xml').findall(link)
+    for name in match:
+        print name
+        media_item_list('Newsroom Tokyo '+name,'rtmp://flv.nhk.or.jp/ondemand/flv/nhkworld-mov/newsroomtokyo/latest_'+name+'.mp4')
+        
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
@@ -177,8 +192,13 @@ def media_item_list(name,url):
         player.playF4mLink(url, name)
         if not play:
             pass
-    elif mode!='video':    
+
+    elif mode=='audio':
         addon.add_music_item({'url': url}, {'title': name}, context_replace = icon, playlist=False)
+
+    else:
+        addon.add_video_item({'url': url}, {'title': name}, img = icon, playlist=False)
+            
 
 
 # Downloader
@@ -213,6 +233,10 @@ elif mode=='video':
     print ""+url
     IDX_VIDEO(url)
 
+elif mode=='newsroom':
+    print ""+url
+    IDX_NEWS(url)
+    
 elif mode=='audio':
     print ""+url
     IDX_RADIO(url)
