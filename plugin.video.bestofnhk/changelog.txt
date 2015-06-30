@@ -1,3 +1,11 @@
+Ver. 0.9.11
+
+Best of NHK - 10th release
+
+Fix: NHK World live stream failure
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 0.9.10
 
 Best of NHK - Ninth release.

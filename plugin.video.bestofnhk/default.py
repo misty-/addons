@@ -91,8 +91,9 @@ sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
-    addDir('NHK World Live Stream 1', host1, 'video', icon)
-    media_item_list('NHK World Live Stream 2', 'http://plslive-w.nhk.or.jp/nhkworld/app-mainp/live.m3u8')
+    media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8')
+    #BROKEN LINK addDir('NHK World Live Stream 1', host1, 'video', icon)
+    #BROKEN LINK media_item_list('NHK World Live Stream 2', 'http://plslive-w.nhk.or.jp/nhkworld/app-mainp/live.m3u8')
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK Radio News', host2, 'audio', icon)
 
