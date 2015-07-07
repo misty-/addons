@@ -176,11 +176,21 @@ def IDX_NEWS(url):
 
 def IDX_TOPNEWS(url):
     link = net.http_GET(url).content
-    match1=re.compile('<h1 class="top-title"><a href="/nhkworld/english/news/(.+?).html">(.+?)</a></h1>\n.+?<div class="cat-info">\n.+?<a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
-    match2=re.compile('<h3 class="sub-title"><a href="/nhkworld/english/news/(.+?).html">(.+?)</a></h3>\n.+?<div class="cat-info">\n.+?<div class="fll"><a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
-    for vidnum,name in match1+match2:
-        print match
-        media_item_list(name,'rtmp://flv.nhk.or.jp/ondemand/flv/nhkworld/english/news/update/'+vidnum+'_512k.mp4')
+    match1=re.compile('<h1 class="top-title"><a href="/(.+?)">(.+?)</a></h1>\n.+?<div class="cat-info">\n.+?<a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
+    match2=re.compile('<h3 class="sub-title"><a href="/(.+?)">(.+?)</a></h3>\n.+?<div class="cat-info">\n.+?<div class="fll"><a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
+    for pg_link,name in match1+match2:
+        link2 = net.http_GET(host2+pg_link).content
+        match3=re.compile("movie_play\('(.+?)'").findall(link2)
+        for xml_link in match3:
+            file = urllib2.urlopen(host2+xml_link)
+            data = file.read()
+            file.close()
+            dom = parseString(data)
+            xmlTag = dom.getElementsByTagName('file.high')[0].toxml()
+            xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+            #print xmlTag
+            #print xmlData
+            media_item_list(name,xmlData)
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):

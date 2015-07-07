@@ -1,3 +1,11 @@
+Ver. 1.0.2
+
+Best of NHK - 12th release
+
+Fix: Small problem with Top Stories not finding some videos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.1
 
 Best of NHK - 11th release
