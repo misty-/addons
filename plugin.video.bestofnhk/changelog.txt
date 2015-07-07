@@ -1,3 +1,16 @@
+Ver. 1.0.1
+
+Best of NHK - 11th release
+
+New features: Added NHK News Top Stories and NHK World on Youtube.
+Top Stories are frequently updated NHK breaking news video clips.
+NHK World on Youtube brings back the long missed ability to view
+archived NHK World programs.
+
+Fix: Small problem with NHK Newsroom Tokyo not finding video.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 0.9.11
 
 Best of NHK - 10th release

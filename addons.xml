@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-<addon id="plugin.video.bestofnhk" name="Best of NHK" version="0.9.11" provider-name="misty">
+<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.1" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.1.0"/>
-	    <import addon="script.module.t0mm0.common" version="2.1.1"/>
+        <import addon="script.module.t0mm0.common" version="2.1.1"/>
 	    <import addon="script.module.simple.downloader" version="1.9.4"/>
 	    <import addon="script.video.F4mProxy" version="2.1.3"/>
+	    <import addon="plugin.video.youtube" version="5.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
         <provides>video</provides>
@@ -13,7 +14,7 @@
   <extension point="xbmc.addon.metadata">
   	    <platform>all</platform>
   	    <language></language>
-        <summary>bestofnhk.tv</summary>
+        <summary>NHK World</summary>
         <description>Weird, fun, interesting documentaries from NHK World Japan. New shows daily.</description>
   </extension>
 </addon>

@@ -7,11 +7,12 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-import random
+#import random
 import string
 import sys
 import os
 import time
+import plugintools
 
 #import SimpleDownloader as downloader
 #downloader = downloader.SimpleDownloader()
@@ -24,6 +25,7 @@ from t0mm0.common.net import Net
 net = Net()
 settings = xbmcaddon.Addon(id='plugin.video.bestofnhk')
 from F4mProxy import f4mProxyHelper
+from xml.dom.minidom import parseString
 
 # globals
 host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
@@ -92,10 +94,10 @@ sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
     media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8')
-    #BROKEN LINK addDir('NHK World Live Stream 1', host1, 'video', icon)
-    #BROKEN LINK media_item_list('NHK World Live Stream 2', 'http://plslive-w.nhk.or.jp/nhkworld/app-mainp/live.m3u8')
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
+    addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
     addDir('NHK Radio News', host2, 'audio', icon)
+    addDir('NHK Videos on Youtube', '', 'youtube1', icon)
 
 # Create content list
 def addDir(name,url,mode,iconimage):
@@ -159,11 +161,26 @@ def IDX_VIDEO(url):
 def IDX_NEWS(url):
     link = net.http_GET(url).content
     #print link
-    match=re.compile('xml/latest_(.+?).xml').findall(link)
-    for name in match:
-        print name
-        media_item_list('Newsroom Tokyo '+name,'rtmp://flv.nhk.or.jp/ondemand/flv/nhkworld-mov/newsroomtokyo/latest_'+name+'.mp4')
-        
+    match1=re.compile("movie_play\('(.+?)'.+?iframe-movie-latest").findall(link)
+    match2=re.compile('xml/latest_(.+?).xml').findall(link)
+    for xml_link in match1:
+        file = urllib2.urlopen(host2+'nhkworld/newsroomtokyo/'+xml_link)
+        data = file.read()    #convert to string:
+        file.close()    #close file because we don't need it anymore:
+        dom = parseString(data)    #parse the xml you downloaded
+        xmlTag = dom.getElementsByTagName('file.high')[0].toxml()    #retrieve the first xml tag (<tag>data</tag>) that the parser finds with name tagName:
+        xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')    #strip off the tag (<tag>data</tag>  --->   data):
+        #print xmlTag    #print out the xml tag and data in this format: <tag>data</tag>
+        #print xmlData    #just print the data
+        media_item_list('Newsroom Tokyo '+match2[0],xmlData)
+
+def IDX_TOPNEWS(url):
+    link = net.http_GET(url).content
+    match1=re.compile('<h1 class="top-title"><a href="/nhkworld/english/news/(.+?).html">(.+?)</a></h1>\n.+?<div class="cat-info">\n.+?<a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
+    match2=re.compile('<h3 class="sub-title"><a href="/nhkworld/english/news/(.+?).html">(.+?)</a></h3>\n.+?<div class="cat-info">\n.+?<div class="fll"><a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
+    for vidnum,name in match1+match2:
+        print match
+        media_item_list(name,'rtmp://flv.nhk.or.jp/ondemand/flv/nhkworld/english/news/update/'+vidnum+'_512k.mp4')
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
@@ -185,7 +202,191 @@ def IDX_RADIO(url):
     media_item_list('NHK Radio News in Urdu',host2+radio+'urdu.mp3')
     media_item_list('NHK Radio News in Vietnamese',host2+radio+'vietnamese.mp3')
 
+def IDX_YOUTUBE1():
+    plugintools.log("nhkworld1.run")
+    
+    # Get params
+    params = plugintools.get_params()
+    
+    if params.get("action") is None:
+        main_list1(params)
+    else:
+        action = params.get("action")
+        exec action+"(params)"
+    
+    plugintools.close_item_list()
+
+# Youtube menu
+def main_list1(params):
+    plugintools.log("nhkworld1.main_list "+repr(params))
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Channel",
+        url="plugin://plugin.video.youtube/user/NHKWorld/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Youtube Search for 'NHK World'",
+        url='plugin://plugin.video.youtube/search/?q=NHK World',
+        thumbnail=icon,
+        folder=True )
         
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 01",
+        url="plugin://plugin.video.youtube/channel/UCySEkVg1Q3QXjDvRFB0H41Q/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 02",
+        url="plugin://plugin.video.youtube/channel/UCcajZR_EkvQro0ZgFX6lgtQ/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 03",
+        url="plugin://plugin.video.youtube/channel/UCqKxEjL3beC6urT_B41Iq1g/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 04",
+        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 05",
+        url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 06",
+        url="plugin://plugin.video.youtube/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 07",
+        url="plugin://plugin.video.youtube.plus/channel/UCnx4tq4meIIDdszdtl8gu5A/",
+        thumbnail=icon,
+        folder=True )
+     
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 08",
+        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
+        thumbnail=icon,
+        folder=True )
+        
+    addDir('More Shows', '', 'youtube2', icon)
+    
+def IDX_YOUTUBE2():
+    plugintools.log("nhkworld2.run")
+    
+    # Get params
+    params = plugintools.get_params()
+    
+    if params.get("action") is None:
+        main_list2(params)
+    else:
+        action = params.get("action")
+        exec action+"(params)"
+    
+    plugintools.close_item_list()
+
+# Youtube menu
+def main_list2(params):
+    plugintools.log("nhkworld2.main_list "+repr(params))
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK Documentary - Silk Road",
+        url="plugin://plugin.video.youtube/playlist/PLB8KCZnnrFKmP6CPynDrFVheEt9VOBPk4/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="NHK Documentary - Silk Road II",
+        url="plugin://plugin.video.youtube/playlist/PLdwCuEoZ_6l7FvbsfjidxMIybBrF5jnb5/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="Begin Japanology 01",
+        url="plugin://plugin.video.youtube/channel/UCPMSNvTv2rgODVy0GvsMxZg/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Begin Japanology 02",
+        url="plugin://plugin.video.youtube/playlist/PL8IcLS3A4sWKqf47xzXl_NIwlj_Hae5fM/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="Begin Japanology 03",
+        url="plugin://plugin.video.youtube/playlist/PLJ4SclxaotEijsfzIFlUcHG6huoiovh9s/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Tokyo Eye",
+        url="plugin://plugin.video.youtube/channel/UC5ehEXRuBeVo1gkulk5I4BQ/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="cool japan",
+        url="plugin://plugin.video.youtube/playlist/PL54G12jDE7cPq7xbyEyaIf7jRvUC04TJg/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="Dining with the Chef",
+        url="plugin://plugin.video.youtube/playlist/PLIz8fpF_mbPSpMiJ9OHXo5Ai7dYDLXhYM/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="Sports Japan",
+        url="plugin://plugin.video.youtube/playlist/PLIz8fpF_mbPSjA3l8bPyYF2vYZioFl2S1/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="Meet and Speak",
+        url="plugin://plugin.video.youtube/playlist/PLdRCqO13zyDfQuDoZG6pHQuSJ2dbwVWQu/",
+        thumbnail=icon,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="MoshiMoshi Nippon",
+        url="plugin://plugin.video.youtube/playlist/PLpHD2EwLFcoQkHEP7w458jR-kSY_W4mo2/",
+        thumbnail=icon,
+        folder=True )
+
 # Create media items list
 def media_item_list(name,url):
     if mode=='video':
@@ -234,10 +435,22 @@ elif mode=='video':
     print ""+url
     IDX_VIDEO(url)
 
+elif mode=='youtube1':
+    print ""+url
+    IDX_YOUTUBE1()
+    
+elif mode=='youtube2':
+    print ""+url
+    IDX_YOUTUBE2()
+
 elif mode=='newsroom':
     print ""+url
     IDX_NEWS(url)
     
+elif mode=='topnews':
+    print ""+url
+    IDX_TOPNEWS(url)
+
 elif mode=='audio':
     print ""+url
     IDX_RADIO(url)
