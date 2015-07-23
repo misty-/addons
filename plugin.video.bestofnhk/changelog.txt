@@ -1,3 +1,15 @@
+Ver. 1.0.3
+
+Best of NHK - 13th release
+
+New features: NHK World On Demand - Catchup on recently shown
+selection of programs you may have missed. Added NHK Radio
+News in Japanese.
+
+Fix: NHK Newsroom Tokyo video change
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.2
 
 Best of NHK - 12th release

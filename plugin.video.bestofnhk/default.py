@@ -26,11 +26,13 @@ net = Net()
 settings = xbmcaddon.Addon(id='plugin.video.bestofnhk')
 from F4mProxy import f4mProxyHelper
 from xml.dom.minidom import parseString
+import xml.etree.ElementTree as ET
 
 # globals
-host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
+#host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
 host2 = 'http://www3.nhk.or.jp/'
-#host3 = 'http://www3.nhk.or.jp/nhkworld/newsroomtokyo/'
+host3 = 'http://ak.c.ooyala.com/'
+host4 = 'http://player.ooyala.com/player/all/'
 radio = 'rj/podcast/mp3/'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
@@ -94,6 +96,7 @@ sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
     media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8')
+    addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
     addDir('NHK Radio News', host2, 'audio', icon)
@@ -153,26 +156,33 @@ class TextBox:
         text = f.read()
         self.win.getControl(self.CONTROL_TEXTBOX).setText(text)
 
-# F4m video
-def IDX_VIDEO(url):
-    media_item_list('NHK World Live 512',host1+'nhkworld-live-512.f4m')
+# video on demand
+def IDX_VOD(url):
+    #media_item_list('NHK World Live 512',host1+'nhkworld-live-512.f4m')
+    vod_xml = urllib2.urlopen(url)
+    tree = ET.parse(vod_xml)
+    #print tree
+    root = tree.getroot()
+    for item in root.findall('item'):
+        vod_url = item.find('epi_url').text
+        #print vod_url
+        od_url = ''.join(vod_url)
+        link = net.http_GET(host2[:-1]+od_url).content
+        match1 = re.compile('<h2 class="detail-top-player-title__h"><a href="/nhkworld/en/vod/.+?/">(.+?)</a></h2>').findall(link)
+        match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
+        match3 = re.compile('<div class="episode-detail">\n.+?<h3>(.+?)</h3>').findall(link)
+        series = str(match1).replace('[\'','').replace('\']','')
+        ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e')
+        vid_id = str(match2).replace('[\'','').replace('\']','')
+        media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8')
     
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
     #print link
-    match1=re.compile("movie_play\('(.+?)'.+?iframe-movie-latest").findall(link)
-    match2=re.compile('xml/latest_(.+?).xml').findall(link)
-    for xml_link in match1:
-        file = urllib2.urlopen(host2+'nhkworld/newsroomtokyo/'+xml_link)
-        data = file.read()    #convert to string:
-        file.close()    #close file because we don't need it anymore:
-        dom = parseString(data)    #parse the xml you downloaded
-        xmlTag = dom.getElementsByTagName('file.high')[0].toxml()    #retrieve the first xml tag (<tag>data</tag>) that the parser finds with name tagName:
-        xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')    #strip off the tag (<tag>data</tag>  --->   data):
-        #print xmlTag    #print out the xml tag and data in this format: <tag>data</tag>
-        #print xmlData    #just print the data
-        media_item_list('Newsroom Tokyo '+match2[0],xmlData)
+    match=re.compile('<!--latest_start-->\n<script>nw_vod_ooplayer\(\'movie-area\', \'(.+?)\'\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
+    for vid_id, d_ate in match:
+        media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8')
 
 def IDX_TOPNEWS(url):
     link = net.http_GET(url).content
@@ -202,6 +212,7 @@ def IDX_RADIO(url):
     media_item_list('NHK Radio News in French',host2+radio+'french.mp3')
     media_item_list('NHK Radio News in Hindi',host2+radio+'hindi.mp3')
     media_item_list('NHK Radio News in Indonesian',host2+radio+'indonesian.mp3')
+    media_item_list('NHK Radio News in Japanese','mms://wm.nhk.or.jp/rj/on_demand/wma/japanese.wma')
     media_item_list('NHK Radio News in Korean',host2+radio+'korean.mp3')
     media_item_list('NHK Radio News in Persian',host2+radio+'persian.mp3')
     media_item_list('NHK Radio News in Portugese',host2+radio+'portugese.mp3')
@@ -399,7 +410,7 @@ def main_list2(params):
 
 # Create media items list
 def media_item_list(name,url):
-    if mode=='video':
+    if mode=='f4m':
         player=f4mProxyHelper()
         player.playF4mLink(url, name)
         if not play:
@@ -441,9 +452,13 @@ elif mode=='schedule':
     print ""+url
     IDX_SCHED(url)
 
-elif mode=='video':
+elif mode=='vod':
     print ""+url
-    IDX_VIDEO(url)
+    IDX_VOD(url)
+    
+elif mode=='f4m':
+    print ""+url
+    media_item_list(name,url)
 
 elif mode=='youtube1':
     print ""+url
