@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.xivetv" name="XiveTV" version="1.0.9" provider-name="misty">
+<addon id="plugin.video.xivetv" name="XiveTV" version="1.0.10" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.addon.common" version="2.0.0"/>
