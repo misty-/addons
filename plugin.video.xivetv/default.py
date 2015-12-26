@@ -42,7 +42,7 @@ def main_list(params):
     plugintools.add_item( 
         #action="", 
         title="XiveTV",
-        url="plugin://plugin.video.youtube/user/AlliantContent/",
+        url="plugin://plugin.video.youtube.plus/channel/UC62NeTy6Ocd5Jmh_963mLFg/",
         thumbnail=icon,
         fanart=fan_art,
         folder=True )
