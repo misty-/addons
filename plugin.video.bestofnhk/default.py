@@ -33,7 +33,7 @@ import xml.etree.ElementTree as ET
 host2 = 'http://www3.nhk.or.jp/'
 host3 = 'http://ak.c.ooyala.com/'
 host4 = 'http://player.ooyala.com/player/all/'
-radio = 'rj/podcast/mp3/'
+radio = 'nhkworld/app/radio/clip/'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
@@ -95,11 +95,11 @@ sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
-    media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8')
+    media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', '')
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
-    addDir('NHK Radio News', host2, 'audio', icon)
+    addDir('NHK Radio News', '', 'audio', icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', icon)
 
 # Create content list
@@ -158,32 +158,32 @@ class TextBox:
 
 # video on demand
 def IDX_VOD(url):
-    #media_item_list('NHK World Live 512',host1+'nhkworld-live-512.f4m')
     vod_xml = urllib2.urlopen(url)
     tree = ET.parse(vod_xml)
-    #print tree
     root = tree.getroot()
     for item in root.findall('item'):
+        vod_img = item.find('main_img').text
         vod_url = item.find('epi_url').text
-        #print vod_url
+        od_img = ''.join(vod_img)
         od_url = ''.join(vod_url)
+        thumbnl = host2[:-1]+od_img
         link = net.http_GET(host2[:-1]+od_url).content
         match1 = re.compile('<h2 class="detail-top-player-title__h"><a href="/nhkworld/en/vod/.+?/">(.+?)</a></h2>').findall(link)
         match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
         match3 = re.compile('<div class="episode-detail">\n.+?<h3>(.+?)</h3>').findall(link)
         series = str(match1).replace('[\'','').replace('\']','')
-        ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e')
+        ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ')
         vid_id = str(match2).replace('[\'','').replace('\']','')
-        media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8')
+        media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', thumbnl)
     
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
-    #print link
     match=re.compile('<!--latest_start-->\n<script>nw_vod_ooplayer\(\'movie-area\', \'(.+?)\'\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
     for vid_id, d_ate in match:
-        media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8')
+        media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','')
 
+# Top news stories
 def IDX_TOPNEWS(url):
     link = net.http_GET(url).content
     match1=re.compile('<h1 class="top-title"><a href="/(.+?)">(.+?)</a></h1>\n.+?<div class="cat-info">\n.+?<a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
@@ -198,30 +198,28 @@ def IDX_TOPNEWS(url):
             dom = parseString(data)
             xmlTag = dom.getElementsByTagName('file.high')[0].toxml()
             xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
-            #print xmlTag
-            #print xmlData
-            media_item_list(name,xmlData)
+            media_item_list(name,xmlData,'')
 
-# Pre-recorded NHK World Radio in 17 languages
+# Pre-recorded NHK World Radio in 18 languages
 def IDX_RADIO(url):
-    media_item_list('NHK Radio News in Arabic',host2+radio+'arabic.mp3')
-    media_item_list('NHK Radio News in Bengali',host2+radio+'bengali.mp3')
-    media_item_list('NHK Radio News in Burmese',host2+radio+'burmese.mp3')
-    media_item_list('NHK Radio News in Chinese',host2+radio+'chinese.mp3')
-    media_item_list('NHK Radio News in English',host2+radio+'english.mp3')
-    media_item_list('NHK Radio News in French',host2+radio+'french.mp3')
-    media_item_list('NHK Radio News in Hindi',host2+radio+'hindi.mp3')
-    media_item_list('NHK Radio News in Indonesian',host2+radio+'indonesian.mp3')
-    media_item_list('NHK Radio News in Japanese','mms://wm.nhk.or.jp/rj/on_demand/wma/japanese.wma')
-    media_item_list('NHK Radio News in Korean',host2+radio+'korean.mp3')
-    media_item_list('NHK Radio News in Persian',host2+radio+'persian.mp3')
-    media_item_list('NHK Radio News in Portugese',host2+radio+'portugese.mp3')
-    media_item_list('NHK Radio News in Russian',host2+radio+'russian.mp3')
-    media_item_list('NHK Radio News in Spanish',host2+radio+'spanish.mp3')
-    media_item_list('NHK Radio News in Swahili',host2+radio+'swahili.mp3')
-    media_item_list('NHK Radio News in Thai',host2+radio+'thai.mp3')
-    media_item_list('NHK Radio News in Urdu',host2+radio+'urdu.mp3')
-    media_item_list('NHK Radio News in Vietnamese',host2+radio+'vietnamese.mp3')
+    media_item_list('NHK Radio News in Arabic', host2+radio+'arabic_news.xml','')
+    media_item_list('NHK Radio News in Bengali', host2+radio+'bengali_news.xml','')
+    media_item_list('NHK Radio News in Burmese', host2+radio+'burmese_news.xml','')
+    media_item_list('NHK Radio News in Chinese', host2+radio+'chinese_news.xml','')
+    media_item_list('NHK Radio News in English', host2+radio+'english_news.xml','')
+    media_item_list('NHK Radio News in French', host2+radio+'french_news.xml','')
+    media_item_list('NHK Radio News in Hindi', host2+radio+'hindi_news.xml','')
+    media_item_list('NHK Radio News in Indonesian', host2+radio+'indonesian_news.xml','')
+    media_item_list('NHK Radio News in Japanese', host2+radio+'japanese_news.xml','')
+    media_item_list('NHK Radio News in Korean', host2+radio+'korean_news.xml','')
+    media_item_list('NHK Radio News in Persian', host2+radio+'persian_news.xml','')
+    media_item_list('NHK Radio News in Portuguese', host2+radio+'portuguese_news.xml','')
+    media_item_list('NHK Radio News in Russian', host2+radio+'russian_news.xml','')
+    media_item_list('NHK Radio News in Spanish', host2+radio+'spanish_news.xml','')
+    media_item_list('NHK Radio News in Swahili', host2+radio+'swahili_news.xml','')
+    media_item_list('NHK Radio News in Thai', host2+radio+'thai_news.xml','')
+    media_item_list('NHK Radio News in Urdu', host2+radio+'urdu_news.xml','')
+    media_item_list('NHK Radio News in Vietnamese', host2+radio+'vietnamese_news.xml','')
 
 def IDX_YOUTUBE1():
     plugintools.log("nhkworld1.run")
@@ -272,21 +270,21 @@ def main_list1(params):
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 03",
-        url="plugin://plugin.video.youtube/channel/UCqKxEjL3beC6urT_B41Iq1g/",
+        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
         thumbnail=icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 04",
-        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
+        url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
         thumbnail=icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 05",
-        url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
+        url="plugin://plugin.video.youtube/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
         thumbnail=icon,
         folder=True )
         
@@ -300,14 +298,14 @@ def main_list1(params):
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 07",
-        url="plugin://plugin.video.youtube.plus/channel/UCnx4tq4meIIDdszdtl8gu5A/",
+        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
         thumbnail=icon,
         folder=True )
      
     plugintools.add_item( 
         #action="", 
-        title="NHK World Shows 08",
-        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
+        title="UNESCO/NHK",
+        url="plugin://plugin.video.youtube/playlist/PLWuYED1WVJIPKU_tUlzLTfkbNnAtkDOhS/",
         thumbnail=icon,
         folder=True )
         
@@ -409,7 +407,7 @@ def main_list2(params):
         folder=True )
 
 # Create media items list
-def media_item_list(name,url):
+def media_item_list(name,url,img):
     if mode=='f4m':
         player=f4mProxyHelper()
         player.playF4mLink(url, name)
@@ -417,7 +415,16 @@ def media_item_list(name,url):
             pass
 
     elif mode=='audio':
-        addon.add_music_item({'url': url}, {'title': name}, context_replace = icon, playlist=False)
+        file = urllib2.urlopen(url)
+        data = file.read()
+        file.close()
+        dom = parseString(data)
+        xmlTag = dom.getElementsByTagName('url')[0].toxml()
+        radionews_url=xmlTag.replace('<url>','').replace('</url>','')
+        addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = icon, playlist=False)
+
+    elif mode=='vod':
+        addon.add_video_item({'url': url}, {'title': name}, img = img, playlist=False)
 
     else:
         addon.add_video_item({'url': url}, {'title': name}, img = icon, playlist=False)
@@ -458,7 +465,7 @@ elif mode=='vod':
     
 elif mode=='f4m':
     print ""+url
-    media_item_list(name,url)
+    media_item_list(name,url,img)
 
 elif mode=='youtube1':
     print ""+url
