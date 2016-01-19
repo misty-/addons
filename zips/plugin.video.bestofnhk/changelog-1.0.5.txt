@@ -1,3 +1,11 @@
+Ver. 1.0.5
+
+Best of NHK - 15th release
+
+Fix: NHK schedule and NHK Newsroom Tokyo
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.4
 
 Best of NHK - 14th release

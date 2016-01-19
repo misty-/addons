@@ -8,10 +8,13 @@ import xbmcplugin
 import xbmcgui
 import xbmcaddon
 #import random
-import string
+#import string
 import sys
 import os
+import datetime
 import time
+import calendar
+import json
 import plugintools
 
 #import SimpleDownloader as downloader
@@ -37,9 +40,9 @@ radio = 'nhkworld/app/radio/clip/'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
-Yr = str(time.strftime ('%Y'))
-Mth = str(time.strftime ('%m'))
-Dy = str(time.strftime ('%d'))
+Yr = int(time.strftime ('%Y'))
+Mth = int(time.strftime ('%m'))
+Dy = int(time.strftime ('%d'))
 Hr = str(time.strftime ('%H'))
 Min = str(time.strftime ('%M'))
 Date = str(time.strftime ('%m/%d/%Y'))
@@ -72,11 +75,12 @@ for tz_gmt in match:
         elif isdst == int(0) and tz_gmt == 'GMT':
             tz_corrected = 0
         print int(tz_corrected)
-        tz_C = str(int(tz_corrected))
+        tz_C = tz_corrected
     except:
         t = tz_gmt[4:]
         (H,M) = t.split(':')
         result = int(H) + int(M)/60.0
+        print "result = "+str(result)
         if isdst == int(1) and tz_gmt[3:4] == '-':
             tz_corrected = (result - 1) * 60
         elif isdst == int(0) and tz_gmt[3:4] == '-':
@@ -86,16 +90,19 @@ for tz_gmt in match:
         elif isdst == int(0) and tz_gmt[3:4] == '+':
             tz_corrected = result * -60
         print int(tz_corrected)
-        tz_C = str(int(tz_corrected))
+        tz_C = tz_corrected
+d_atetime = datetime.datetime(Yr,Mth,Dy,00,00,00)
+e_poch_midnt = calendar.timegm(d_atetime.timetuple())
+start_time = e_poch_midnt + (60*tz_C) # e_poch_midnt = GMT midnight
+end_time = start_time + ((60*60*24)-60) # date+23:59:00
 
-
-sch = 'http://www.jibtv.com/schedule/getjson.php?mode=schedule&y='+Yr+'&a='+Mth+'&d='+Dy+'&h='+Hr+'&m='+Min+'&jisa='+tz_C+'&innd=0&print=false'
+sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 
 
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', sch, 'schedule', icon)
-    media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', '')
+    media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
@@ -117,16 +124,23 @@ def IDX_SCHED(url):
         print 'File "nhk_schedule.txt" already exists.'
     except IOError as e:
         print 'Creating new file "nhk_schedule.txt".'
+    req = urllib2.urlopen(url)
+    sch_json = json.load(req)
+    f = open(sch_path, 'w')
     try:
-        link = net.http_GET(url).content
-        f = open(sch_path, 'w')
-        match1 = re.compile('<div class="sche_now_on_air">(.+?)\n<span class="sche_now_on_air_mark"><img src="img/sche_oa.png" width="70" height="20" alt="now on air" /></span>\n</div>\n<div class="sche_program_ad">\n<p class="sche_program_title" span style="">(.+?)</p>\n<p class="sche_program_txt">(.+?)<!--').findall(link)
-        match2 = re.compile('<div class="sche_now_on_air">(.+?)\n</div>\n<div class="sche_program_ad">\n<p class="sche_program_title" span style="">(.+?)</p>\n<p class="sche_program_txt">(.+?)<!--').findall(link)
-        for time,name,desc in match1 + match2:
-            f.write('[COLOR blue][B]' + time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
-        f.close()
+        for i in range(200):
+            pubDate = int(sch_json['channel']['item'][i]['pubDate'])
+            name = str(sch_json['channel']['item'][i]['title'])
+            desc = str(sch_json['channel']['item'][i]['description'])
+            sub_name = str(sch_json['channel']['item'][i]['subtitle'])
+            show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
+            if sub_name == "":
+                f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+            else:
+                f.write('[COLOR blue][B]' + show_time + ' - ' + name + ' - ' + sub_name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
     except:
         pass
+    f.close()
     TextBox()        
         
 
@@ -179,7 +193,7 @@ def IDX_VOD(url):
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
-    match=re.compile('<!--latest_start-->\n<script>nw_vod_ooplayer\(\'movie-area\', \'(.+?)\'\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
+    match=re.compile('nw_vod_ooplayer\(\'movie-area\', \'(.+?)\', playerCallback\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
     for vid_id, d_ate in match:
         media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','')
 

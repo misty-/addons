@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.4" provider-name="misty">
+<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.5" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.t0mm0.common" version="2.1.1"/>
@@ -51,7 +51,7 @@
         <platform>all</platform>
         <language></language>
         <summary>XiveTV</summary>
-        <description>The Official YouTube Channel of XiveTV. The largest free collection of high-quality documentary content on the planet!</description>
+        <description>The Official YouTube Channel of XiveTV. The deepest collection of great documentaries on the planet. XiveTV has a huge collection of everything from Science to History, Nature to Paranormal, and everything in between!</description>
         <website>http://www.xivetv.com/</website>
   </extension>
 </addon>
