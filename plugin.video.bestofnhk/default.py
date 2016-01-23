@@ -1,4 +1,4 @@
-# Best of NHK - by misty 2013-2015.
+# Best of NHK - by misty 2013-2016.
 # import python libraries
 import urllib
 import urllib2
@@ -37,6 +37,7 @@ host2 = 'http://www3.nhk.or.jp/'
 host3 = 'http://ak.c.ooyala.com/'
 host4 = 'http://player.ooyala.com/player/all/'
 radio = 'nhkworld/app/radio/clip/'
+feat = 'nhkworld/rss/news/english/features_'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
@@ -48,64 +49,17 @@ Min = str(time.strftime ('%M'))
 Date = str(time.strftime ('%m/%d/%Y'))
 TimeZone = settings.getSetting('tz')
 day = ''
-tz_C = ''
-#print "tz_C is:" + tz_C
-#print "Time zone is: " + TimeZone
-print "Date and time is: " + Date + " " + Time
 
-# NHK World Schedule Time Zone and DST correction
-print "Time zone is: " + TimeZone
-if TimeZone == " ":
-    print "TimeZone is not selected."
-    line1 = "The schedule will not be correct for your time zone."
-    line2 = "Please set your time zone in the Best of NHK addon settings."
-    line3 = "Changes take effect after close and re-open of Best of NHK."
-    xbmcgui.Dialog().ok(addonname, line1, line2, line3)
-    #xbmc.executebuiltin('ActivateWindow(10140)')
-else:
-    pass
-isdst = time.localtime().tm_isdst
-print "isdst is: " + str(isdst)
-tz_link = TimeZone
-match=re.compile('\((.+?)\) .+?').findall(tz_link)
-for tz_gmt in match:
-    try:
-        if isdst == int(1) and tz_gmt == 'GMT':
-            tz_corrected = -60
-        elif isdst == int(0) and tz_gmt == 'GMT':
-            tz_corrected = 0
-        print int(tz_corrected)
-        tz_C = tz_corrected
-    except:
-        t = tz_gmt[4:]
-        (H,M) = t.split(':')
-        result = int(H) + int(M)/60.0
-        print "result = "+str(result)
-        if isdst == int(1) and tz_gmt[3:4] == '-':
-            tz_corrected = (result - 1) * 60
-        elif isdst == int(0) and tz_gmt[3:4] == '-':
-            tz_corrected = result * 60
-        elif isdst == int(1) and tz_gmt[3:4] == '+':
-            tz_corrected = (result + 1) * -60
-        elif isdst == int(0) and tz_gmt[3:4] == '+':
-            tz_corrected = result * -60
-        print int(tz_corrected)
-        tz_C = tz_corrected
-d_atetime = datetime.datetime(Yr,Mth,Dy,00,00,00)
-e_poch_midnt = calendar.timegm(d_atetime.timetuple())
-start_time = e_poch_midnt + (60*tz_C) # e_poch_midnt = GMT midnight
-end_time = start_time + ((60*60*24)-60) # date+23:59:00
-
-sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 
 
 # Main Menu
 def CATEGORIES():
-    addDir('NHK World Live Schedule', sch, 'schedule', icon)
+    addDir('NHK World Live Schedule', '', 'schedule', icon)
     media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
+    addDir('NHK News Feature Stories', '', 'feature', icon)
     addDir('NHK Radio News', '', 'audio', icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', icon)
 
@@ -117,6 +71,57 @@ def addDir(name,url,mode,iconimage):
 
 # NHK World Live Schedule
 def IDX_SCHED(url):
+    tz_C = 0
+    print "Date and time is: " + Date + " " + Time
+
+    # NHK World Schedule Time Zone and DST correction
+    print "Time zone is: " + TimeZone
+    # TZ message box
+    if TimeZone == " ":
+        print "TimeZone is not selected."
+        line1 = "The schedule will not be correct for your time zone."
+        line2 = "Please set your time zone in the Best of NHK addon settings."
+        line3 = "Changes take effect after close and re-open of Best of NHK."
+        xbmcgui.Dialog().ok(addonname, line1, line2, line3)
+    else:
+        pass
+
+    # TZ and DST calc
+    isdst = time.localtime().tm_isdst
+    print "isdst is: " + str(isdst)
+    tz_link = TimeZone
+    match=re.compile('\((.+?)\) .+?').findall(tz_link)
+    for tz_gmt in match:
+        try:
+            if isdst == int(1) and tz_gmt == 'GMT':
+                tz_corrected = -60
+            elif isdst == int(0) and tz_gmt == 'GMT':
+                tz_corrected = 0
+            print int(tz_corrected)
+            tz_C = tz_corrected
+        except:
+            t = tz_gmt[4:]
+            (H,M) = t.split(':')
+            result = int(H) + int(M)/60.0
+            print "result = "+str(result)
+            if isdst == int(1) and tz_gmt[3:4] == '-':
+                tz_corrected = (result - 1) * 60
+            elif isdst == int(0) and tz_gmt[3:4] == '-':
+                tz_corrected = result * 60
+            elif isdst == int(1) and tz_gmt[3:4] == '+':
+                tz_corrected = (result + 1) * -60
+            elif isdst == int(0) and tz_gmt[3:4] == '+':
+                tz_corrected = result * -60
+            print int(tz_corrected)
+            tz_C = tz_corrected
+    d_atetime = datetime.datetime(Yr,Mth,Dy,00,00,00)
+    e_poch_midnt = calendar.timegm(d_atetime.timetuple())
+    start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
+    end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
+
+    sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
+
+    # File write for textbox
     root = addon.get_path()
     sch_path = os.path.join(root, 'nhk_schedule.txt')
     try:
@@ -124,7 +129,7 @@ def IDX_SCHED(url):
         print 'File "nhk_schedule.txt" already exists.'
     except IOError as e:
         print 'Creating new file "nhk_schedule.txt".'
-    req = urllib2.urlopen(url)
+    req = urllib2.urlopen(sch)
     sch_json = json.load(req)
     f = open(sch_path, 'w')
     try:
@@ -213,6 +218,44 @@ def IDX_TOPNEWS(url):
             xmlTag = dom.getElementsByTagName('file.high')[0].toxml()
             xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
             media_item_list(name,xmlData,'')
+            
+# Feature news stories
+def IDX_FEATURE(url):
+    addDir('NHK News Feature Stories - Japan', host2+feat+'japan.xml', 'feat_news', icon)
+    addDir('NHK News Feature Stories - Asia', host2+feat+'asia.xml', 'feat_news', icon)
+    addDir('NHK News Feature Stories - World', host2+feat+'world.xml', 'feat_news', icon)
+    addDir('NHK News Feature Stories - BizTec', host2+feat+'biztec.xml', 'feat_news', icon)
+    addDir('NHK News Feature Stories - Nuclear & Energy', host2+feat+'post311.xml', 'feat_news', icon)
+    
+def IDX_FEAT_NEWS(url):
+    feat_xml = urllib2.urlopen(url)
+    data = feat_xml.read()
+    feat_xml.close()
+    dom = parseString(data)
+
+    try:
+        for i in range(1,200):
+            title = dom.getElementsByTagName('title')[i].toxml()
+            html = dom.getElementsByTagName('link')[i].toxml()
+            title_ = title.replace('<title><![CDATA[','').replace(']]></title>','')
+            html_ = html.replace('<link>','').replace('</link>','')
+            IDX_FEAT_NEWS_1(html_, title_)
+    except:
+        pass
+
+def IDX_FEAT_NEWS_1(url, name):
+    link = net.http_GET(url).content
+    match = re.compile("movie_play\('(.+?)',").findall(link)
+    for xml_link in match:
+        file = urllib2.urlopen(host2[:-1]+xml_link)
+        data = file.read()
+        file.close()
+        dom = parseString(data)
+        v_url = dom.getElementsByTagName('file.high')[0].toxml()
+        image = dom.getElementsByTagName('image')[0].toxml()
+        vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+        thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
+        media_item_list(name,vid_url,thumbnl)
 
 # Pre-recorded NHK World Radio in 18 languages
 def IDX_RADIO(url):
@@ -412,7 +455,7 @@ def main_list2(params):
         url="plugin://plugin.video.youtube/playlist/PLdRCqO13zyDfQuDoZG6pHQuSJ2dbwVWQu/",
         thumbnail=icon,
         folder=True )
-        
+    
     plugintools.add_item( 
         #action="", 
         title="MoshiMoshi Nippon",
@@ -437,7 +480,7 @@ def media_item_list(name,url,img):
         radionews_url=xmlTag.replace('<url>','').replace('</url>','')
         addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = icon, playlist=False)
 
-    elif mode=='vod':
+    elif mode=='vod' or 'feat_news':
         addon.add_video_item({'url': url}, {'title': name}, img = img, playlist=False)
 
     else:
@@ -496,6 +539,14 @@ elif mode=='newsroom':
 elif mode=='topnews':
     print ""+url
     IDX_TOPNEWS(url)
+    
+elif mode=='feature':
+    print ""+url
+    IDX_FEATURE(url)
+    
+elif mode=='feat_news':
+    print ""+url
+    IDX_FEAT_NEWS(url)
 
 elif mode=='audio':
     print ""+url
