@@ -54,5 +54,37 @@ Query string problem
 
 [B]Version 2.2.0[/B]
 Fixed for BBC, now picking up last fragement of last segment
-[B]Version 2.2.1[/B]
+[B]Version 2.2.2[/B]
 updated the retry
+
+[B]Version 2.2.3[/B]
+added akhds support for tag decrypt and pvtoken
+
+[B]Version 2.2.4[/B]
+removed crypto reference
+
+[B]Version 2.2.5[/B]
+small bug
+
+[B]Version 2.2.6[/B]
+support local copy of pycrypto
+
+[B]Version 2.2.7[/B]
+support pycrypto proxy on Android
+
+[B]Version 2.2.8[/B]
+using libcrypto so file on Android
+[B]Version 2.2.9[/B]
+Default back to slow aes
+[B]Version 2.3.0[/B]
+ondemand load
+
+[B]Version 2.3.1[/B]
+small error in hls
+[B]Version 2.3.2[/B]
+small error in hls
+[B]Version 2.3.3[/B]
+return true when played
+[B]Version 2.3.4[/B]
+renamed util folder due to clash
+
