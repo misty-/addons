@@ -217,7 +217,7 @@ def IDX_TOPNEWS(url):
             dom = parseString(data)
             xmlTag = dom.getElementsByTagName('file.high')[0].toxml()
             xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
-            media_item_list(name,xmlData,'')
+            media_item_list(name,xmlData,icon)
             
 # Feature news stories
 def IDX_FEATURE(url):

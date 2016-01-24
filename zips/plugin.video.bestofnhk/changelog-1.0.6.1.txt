@@ -1,3 +1,11 @@
+Ver. 1.0.6.1
+
+Best of NHK - 17th release
+
+Fix: misc. code fix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.6
 
 Best of NHK - 16th release
