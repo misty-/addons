@@ -1,3 +1,12 @@
+Ver. 1.0.7
+
+Best of NHK - 18th release
+
+New feature: Add HD (720) live stream
+Fix: misc. code fix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.6.1
 
 Best of NHK - 17th release

@@ -55,7 +55,8 @@ day = ''
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', icon)
-    media_item_list('NHK World Live Stream', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
+    media_item_list('NHK World Live Stream SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
+    media_item_list('NHK World Live Stream HD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_2100.m3u8', icon)
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
@@ -237,7 +238,7 @@ def IDX_FEAT_NEWS(url):
         for i in range(1,200):
             title = dom.getElementsByTagName('title')[i].toxml()
             html = dom.getElementsByTagName('link')[i].toxml()
-            title_ = title.replace('<title><![CDATA[','').replace(']]></title>','')
+            title_ = title.replace('<title><![CDATA[','').replace(']]></title>','').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ')
             html_ = html.replace('<link>','').replace('</link>','')
             IDX_FEAT_NEWS_1(html_, title_)
     except:
