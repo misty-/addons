@@ -49,7 +49,56 @@ Min = str(time.strftime ('%M'))
 Date = str(time.strftime ('%m/%d/%Y'))
 TimeZone = settings.getSetting('tz')
 day = ''
+tz_C = 0
+print "Date and time is: " + Date + " " + Time
 
+# NHK World Schedule Time Zone and DST correction
+print "Time zone is: " + TimeZone
+# TZ message box
+if TimeZone == " ":
+    print "TimeZone is not selected."
+    line1 = "The schedule will not be correct for your time zone."
+    line2 = "Please set your time zone in the Best of NHK addon settings."
+    line3 = "Changes take effect after close and re-open of Best of NHK."
+    xbmcgui.Dialog().ok(addonname, line1, line2, line3)
+else:
+    pass
+
+# TZ and DST calc
+isdst = time.localtime().tm_isdst
+print "isdst is: " + str(isdst)
+tz_link = TimeZone
+match=re.compile('\((.+?)\) .+?').findall(tz_link)
+for tz_gmt in match:
+    try:
+        if isdst == int(1) and tz_gmt == 'GMT':
+            tz_corrected = -60
+        elif isdst == int(0) and tz_gmt == 'GMT':
+            tz_corrected = 0
+        print int(tz_corrected)
+        tz_C = tz_corrected
+    except:
+        t = tz_gmt[4:]
+        (H,M) = t.split(':')
+        result = int(H) + int(M)/60.0
+        print "result = "+str(result)
+        if isdst == int(1) and tz_gmt[3:4] == '-':
+            tz_corrected = (result - 1) * 60
+        elif isdst == int(0) and tz_gmt[3:4] == '-':
+            tz_corrected = result * 60
+        elif isdst == int(1) and tz_gmt[3:4] == '+':
+            tz_corrected = (result + 1) * -60
+        elif isdst == int(0) and tz_gmt[3:4] == '+':
+            tz_corrected = result * -60
+        print int(tz_corrected)
+        tz_C = tz_corrected
+d_atetime = datetime.datetime(Yr,Mth,Dy,00,00,00)
+e_poch_midnt = calendar.timegm(d_atetime.timetuple())
+start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
+end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
+
+sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
+now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 
 
 # Main Menu
@@ -72,56 +121,6 @@ def addDir(name,url,mode,iconimage):
 
 # NHK World Live Schedule
 def IDX_SCHED(url):
-    tz_C = 0
-    print "Date and time is: " + Date + " " + Time
-
-    # NHK World Schedule Time Zone and DST correction
-    print "Time zone is: " + TimeZone
-    # TZ message box
-    if TimeZone == " ":
-        print "TimeZone is not selected."
-        line1 = "The schedule will not be correct for your time zone."
-        line2 = "Please set your time zone in the Best of NHK addon settings."
-        line3 = "Changes take effect after close and re-open of Best of NHK."
-        xbmcgui.Dialog().ok(addonname, line1, line2, line3)
-    else:
-        pass
-
-    # TZ and DST calc
-    isdst = time.localtime().tm_isdst
-    print "isdst is: " + str(isdst)
-    tz_link = TimeZone
-    match=re.compile('\((.+?)\) .+?').findall(tz_link)
-    for tz_gmt in match:
-        try:
-            if isdst == int(1) and tz_gmt == 'GMT':
-                tz_corrected = -60
-            elif isdst == int(0) and tz_gmt == 'GMT':
-                tz_corrected = 0
-            print int(tz_corrected)
-            tz_C = tz_corrected
-        except:
-            t = tz_gmt[4:]
-            (H,M) = t.split(':')
-            result = int(H) + int(M)/60.0
-            print "result = "+str(result)
-            if isdst == int(1) and tz_gmt[3:4] == '-':
-                tz_corrected = (result - 1) * 60
-            elif isdst == int(0) and tz_gmt[3:4] == '-':
-                tz_corrected = result * 60
-            elif isdst == int(1) and tz_gmt[3:4] == '+':
-                tz_corrected = (result + 1) * -60
-            elif isdst == int(0) and tz_gmt[3:4] == '+':
-                tz_corrected = result * -60
-            print int(tz_corrected)
-            tz_C = tz_corrected
-    d_atetime = datetime.datetime(Yr,Mth,Dy,00,00,00)
-    e_poch_midnt = calendar.timegm(d_atetime.timetuple())
-    start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
-    end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
-
-    sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
-
     # File write for textbox
     root = addon.get_path()
     sch_path = os.path.join(root, 'nhk_schedule.txt')
@@ -130,20 +129,37 @@ def IDX_SCHED(url):
         print 'File "nhk_schedule.txt" already exists.'
     except IOError as e:
         print 'Creating new file "nhk_schedule.txt".'
+    req_now = urllib2.urlopen(now)
+    pl_now = json.load(req_now)
     req = urllib2.urlopen(sch)
     sch_json = json.load(req)
     f = open(sch_path, 'w')
+    f.write('[B]Currently streaming:[/B]' + '\n' + '\n')
+    pubDate = int(pl_now['channel']['item'][0]['pubDate'])
+    name = str(pl_now['channel']['item'][0]['title'])
+    desc = str(pl_now['channel']['item'][0]['description'])
+    show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
+    f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+    f.write('[B]Next:[/B]' + '\n' + '\n')
+    
+    try:
+        for i in range(1,3):
+            pubDate = int(pl_now['channel']['item'][i]['pubDate'])
+            name = str(pl_now['channel']['item'][i]['title'])
+            desc = str(pl_now['channel']['item'][i]['description'])
+            show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
+            f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+    except:
+        pass
+    f.write('[B]Today\'s schedule:[/B]' + '\n' + '\n')
+    
     try:
         for i in range(200):
             pubDate = int(sch_json['channel']['item'][i]['pubDate'])
             name = str(sch_json['channel']['item'][i]['title'])
             desc = str(sch_json['channel']['item'][i]['description'])
-            sub_name = str(sch_json['channel']['item'][i]['subtitle'])
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
-            if sub_name == "":
-                f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
-            else:
-                f.write('[COLOR blue][B]' + show_time + ' - ' + name + ' - ' + sub_name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+            f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
     except:
         pass
     f.close()
@@ -176,6 +192,7 @@ class TextBox:
         text = f.read()
         self.win.getControl(self.CONTROL_TEXTBOX).setText(text)
 
+
 # video on demand
 def IDX_VOD(url):
     vod_xml = urllib2.urlopen(url)
@@ -192,7 +209,7 @@ def IDX_VOD(url):
         match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
         match3 = re.compile('<div class="episode-detail">\n.+?<h3>(.+?)</h3>').findall(link)
         series = str(match1).replace('[\'','').replace('\']','')
-        ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ')
+        ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
         vid_id = str(match2).replace('[\'','').replace('\']','')
         media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', thumbnl)
     
@@ -238,7 +255,7 @@ def IDX_FEAT_NEWS(url):
         for i in range(1,200):
             title = dom.getElementsByTagName('title')[i].toxml()
             html = dom.getElementsByTagName('link')[i].toxml()
-            title_ = title.replace('<title><![CDATA[','').replace(']]></title>','').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ')
+            title_ = title.replace('<title><![CDATA[','').replace(']]></title>','').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
             html_ = html.replace('<link>','').replace('</link>','')
             IDX_FEAT_NEWS_1(html_, title_)
     except:

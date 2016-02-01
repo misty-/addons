@@ -1,3 +1,11 @@
+Ver. 1.0.7.1
+
+Best of NHK - 18th release
+
+Fix: NHK schedule fix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.7
 
 Best of NHK - 18th release
