@@ -104,8 +104,7 @@ now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?apikey=EJfK8jdS57Gqlu
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', icon)
-    media_item_list('NHK World Live Stream SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
-    media_item_list('NHK World Live Stream HD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_2100.m3u8', icon)
+    addDir('NHK World Live Stream', '', 'live_strm', icon)
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
     addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
@@ -118,6 +117,13 @@ def addDir(name,url,mode,iconimage):
      params = {'url':url, 'mode':mode, 'name':name}
      addon.add_directory(params, {'title': str(name)}, img = icon)
 
+def addLink(name,url,mode,iconimage,fanart,description=''):
+        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&description="+str(description)
+        ok=True
+        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
+        liz.setProperty('fanart_image', fanart)
+        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
+        return ok
 
 # NHK World Live Schedule
 def IDX_SCHED(url):
@@ -136,30 +142,43 @@ def IDX_SCHED(url):
     f = open(sch_path, 'w')
     f.write('[B]Currently streaming:[/B]' + '\n' + '\n')
     pubDate = int(pl_now['channel']['item'][0]['pubDate'])
-    name = str(pl_now['channel']['item'][0]['title'])
-    desc = str(pl_now['channel']['item'][0]['description'])
+    name = pl_now['channel']['item'][0]['title']
+    desc = pl_now['channel']['item'][0]['description']
+    sub_name = pl_now['channel']['item'][0]['subtitle']
     show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
-    f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+    if sub_name == "":
+        f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+    else:
+        f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
     f.write('[B]Next:[/B]' + '\n' + '\n')
     
     try:
         for i in range(1,3):
             pubDate = int(pl_now['channel']['item'][i]['pubDate'])
-            name = str(pl_now['channel']['item'][i]['title'])
-            desc = str(pl_now['channel']['item'][i]['description'])
+            name = pl_now['channel']['item'][i]['title']
+            desc = pl_now['channel']['item'][i]['description']
+            sub_name = pl_now['channel']['item'][i]['subtitle']
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
-            f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+            if sub_name == "":
+                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+            else:
+                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
     except:
         pass
+
     f.write('[B]Today\'s schedule:[/B]' + '\n' + '\n')
-    
+
     try:
         for i in range(200):
             pubDate = int(sch_json['channel']['item'][i]['pubDate'])
-            name = str(sch_json['channel']['item'][i]['title'])
-            desc = str(sch_json['channel']['item'][i]['description'])
+            name = sch_json['channel']['item'][i]['title']
+            desc = sch_json['channel']['item'][i]['description']
+            sub_name = sch_json['channel']['item'][i]['subtitle']
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
-            f.write('[COLOR blue][B]' + show_time + ' - ' + name + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc + '[/COLOR]' + '\n' + '\n')
+            if sub_name == "":
+                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+            else:
+                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
     except:
         pass
     f.close()
@@ -192,6 +211,38 @@ class TextBox:
         text = f.read()
         self.win.getControl(self.CONTROL_TEXTBOX).setText(text)
 
+# live streams
+def IDX_LIVE_STRM():
+    req_now = urllib2.urlopen(now)
+    pl_now = json.load(req_now)
+    pubDate = int(pl_now['channel']['item'][0]['pubDate'])
+    name = pl_now['channel']['item'][0]['title']
+    desc = pl_now['channel']['item'][0]['description']
+    sub_name = pl_now['channel']['item'][0]['subtitle']
+    show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
+    # menu
+    media_item_list('NHK World Live Stream SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
+    media_item_list('NHK World Live Stream HD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_2100.m3u8', icon)
+    try:
+        addLink('', '', '', icon, '')
+        addLink('[B]Currently streaming:[/B]', '', '', icon, '')
+        if sub_name == "":
+            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+        else:
+            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+        addLink('[B]Next:[/B]', '', '', icon, '')
+        for i in range(1,3):
+            pubDate = int(pl_now['channel']['item'][i]['pubDate'])
+            name = pl_now['channel']['item'][i]['title']
+            desc = pl_now['channel']['item'][i]['description']
+            sub_name = pl_now['channel']['item'][i]['subtitle']
+            show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
+            if sub_name == "":
+                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+            else:
+                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+    except:
+        pass
 
 # video on demand
 def IDX_VOD(url):
@@ -533,6 +584,10 @@ if mode=='main':
 elif mode=='schedule':
     print ""+url
     IDX_SCHED(url)
+
+elif mode=='live_strm':
+    print ""+url
+    IDX_LIVE_STRM()
 
 elif mode=='vod':
     print ""+url

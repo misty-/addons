@@ -1,6 +1,15 @@
+Ver. 1.0.8
+
+Best of NHK - 20th release
+
+New feature: Current and next show schedule preview
+Fix: Unicode error in NHK schedule
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.7.1
 
-Best of NHK - 18th release
+Best of NHK - 19th release
 
 Fix: NHK schedule fix
 
