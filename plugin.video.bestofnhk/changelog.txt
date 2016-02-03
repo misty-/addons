@@ -1,3 +1,11 @@
+Ver. 1.0.9
+
+Best of NHK - 21th release
+
+Fix: NHK Radio News links
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.8
 
 Best of NHK - 20th release

@@ -36,7 +36,8 @@ import xml.etree.ElementTree as ET
 host2 = 'http://www3.nhk.or.jp/'
 host3 = 'http://ak.c.ooyala.com/'
 host4 = 'http://player.ooyala.com/player/all/'
-radio = 'nhkworld/app/radio/clip/'
+host5 = 'http://api.nhk.or.jp/nhkworld/base/x2j/v1/'
+apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
@@ -97,8 +98,8 @@ e_poch_midnt = calendar.timegm(d_atetime.timetuple())
 start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
 end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
 
-sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
-now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
+sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
+now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?%s' % apikey
 
 
 # Main Menu
@@ -328,24 +329,24 @@ def IDX_FEAT_NEWS_1(url, name):
 
 # Pre-recorded NHK World Radio in 18 languages
 def IDX_RADIO(url):
-    media_item_list('NHK Radio News in Arabic', host2+radio+'arabic_news.xml','')
-    media_item_list('NHK Radio News in Bengali', host2+radio+'bengali_news.xml','')
-    media_item_list('NHK Radio News in Burmese', host2+radio+'burmese_news.xml','')
-    media_item_list('NHK Radio News in Chinese', host2+radio+'chinese_news.xml','')
-    media_item_list('NHK Radio News in English', host2+radio+'english_news.xml','')
-    media_item_list('NHK Radio News in French', host2+radio+'french_news.xml','')
-    media_item_list('NHK Radio News in Hindi', host2+radio+'hindi_news.xml','')
-    media_item_list('NHK Radio News in Indonesian', host2+radio+'indonesian_news.xml','')
-    media_item_list('NHK Radio News in Japanese', host2+radio+'japanese_news.xml','')
-    media_item_list('NHK Radio News in Korean', host2+radio+'korean_news.xml','')
-    media_item_list('NHK Radio News in Persian', host2+radio+'persian_news.xml','')
-    media_item_list('NHK Radio News in Portuguese', host2+radio+'portuguese_news.xml','')
-    media_item_list('NHK Radio News in Russian', host2+radio+'russian_news.xml','')
-    media_item_list('NHK Radio News in Spanish', host2+radio+'spanish_news.xml','')
-    media_item_list('NHK Radio News in Swahili', host2+radio+'swahili_news.xml','')
-    media_item_list('NHK Radio News in Thai', host2+radio+'thai_news.xml','')
-    media_item_list('NHK Radio News in Urdu', host2+radio+'urdu_news.xml','')
-    media_item_list('NHK Radio News in Vietnamese', host2+radio+'vietnamese_news.xml','')
+    media_item_list('NHK Radio News in Arabic', host5+'arabic_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Bengali', host5+'bengali_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Burmese', host5+'burmese_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Chinese', host5+'chinese_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in English', host5+'english_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in French', host5+'french_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Hindi', host5+'hindi_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Indonesian', host5+'indonesian_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Japanese', host5+'japanese_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Korean', host5+'korean_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Persian', host5+'persian_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Portuguese', host5+'portuguese_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Russian', host5+'russian_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Spanish', host5+'spanish_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Swahili', host5+'swahili_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Thai', host5+'thai_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Urdu', host5+'urdu_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Vietnamese', host5+'vietnamese_news.xml?'+apikey,'')
 
 def IDX_YOUTUBE1():
     plugintools.log("nhkworld1.run")
