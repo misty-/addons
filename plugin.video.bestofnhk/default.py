@@ -36,7 +36,7 @@ import xml.etree.ElementTree as ET
 host2 = 'http://www3.nhk.or.jp/'
 host3 = 'http://ak.c.ooyala.com/'
 host4 = 'http://player.ooyala.com/player/all/'
-host5 = 'http://api.nhk.or.jp/nhkworld/base/x2j/v1/'
+host5 = 'http://www.nhk.or.jp/rj/podcast/rss/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
@@ -329,24 +329,24 @@ def IDX_FEAT_NEWS_1(url, name):
 
 # Pre-recorded NHK World Radio in 18 languages
 def IDX_RADIO(url):
-    media_item_list('NHK Radio News in Arabic', host5+'arabic_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Bengali', host5+'bengali_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Burmese', host5+'burmese_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Chinese', host5+'chinese_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in English', host5+'english_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in French', host5+'french_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Hindi', host5+'hindi_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Indonesian', host5+'indonesian_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Japanese', host5+'japanese_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Korean', host5+'korean_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Persian', host5+'persian_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Portuguese', host5+'portuguese_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Russian', host5+'russian_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Spanish', host5+'spanish_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Swahili', host5+'swahili_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Thai', host5+'thai_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Urdu', host5+'urdu_news.xml?'+apikey,'')
-    media_item_list('NHK Radio News in Vietnamese', host5+'vietnamese_news.xml?'+apikey,'')
+    media_item_list('NHK Radio News in Arabic', host5+'arabic.xml','')
+    media_item_list('NHK Radio News in Bengali', host5+'bengali.xml','')
+    media_item_list('NHK Radio News in Burmese', host5+'burmese.xml','')
+    media_item_list('NHK Radio News in Chinese', host5+'chinese.xml','')
+    media_item_list('NHK Radio News in English', host5+'english.xml','')
+    media_item_list('NHK Radio News in French', host5+'french.xml','')
+    media_item_list('NHK Radio News in Hindi', host5+'hindi.xml','')
+    media_item_list('NHK Radio News in Indonesian', host5+'indonesian.xml','')
+    media_item_list('NHK Radio News in Japanese', host5+'japanese.xml','')
+    media_item_list('NHK Radio News in Korean', host5+'korean.xml','')
+    media_item_list('NHK Radio News in Persian', host5+'persian.xml','')
+    media_item_list('NHK Radio News in Portuguese', host5+'portuguese.xml','')
+    media_item_list('NHK Radio News in Russian', host5+'russian.xml','')
+    media_item_list('NHK Radio News in Spanish', host5+'spanish.xml','')
+    media_item_list('NHK Radio News in Swahili', host5+'swahili.xml','')
+    media_item_list('NHK Radio News in Thai', host5+'thai.xml','')
+    media_item_list('NHK Radio News in Urdu', host5+'urdu.xml','')
+    media_item_list('NHK Radio News in Vietnamese', host5+'vietnamese.xml','')
 
 def IDX_YOUTUBE1():
     plugintools.log("nhkworld1.run")
@@ -546,8 +546,9 @@ def media_item_list(name,url,img):
         data = file.read()
         file.close()
         dom = parseString(data)
-        xmlTag = dom.getElementsByTagName('url')[0].toxml()
-        radionews_url=xmlTag.replace('<url>','').replace('</url>','')
+        xmlTag = dom.getElementsByTagName('enclosure')[0].toxml()
+        url = re.compile('.+?url="(.+?)".+?').findall(xmlTag)
+        radionews_url = str(url).replace("[u'", "").replace("']","")
         addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = icon, playlist=False)
 
     elif mode=='vod' or 'feat_news':
