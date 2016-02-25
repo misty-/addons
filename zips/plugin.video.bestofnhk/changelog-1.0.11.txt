@@ -1,3 +1,12 @@
+Ver. 1.0.11
+
+Best of NHK - 23th release
+
+Remove NHK News Top Stories
+Fix: NHK News Feature Stories
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.10
 
 Best of NHK - 22th release

@@ -17,8 +17,6 @@ import calendar
 import json
 import plugintools
 
-#import SimpleDownloader as downloader
-#downloader = downloader.SimpleDownloader()
 addon01 = xbmcaddon.Addon('plugin.video.bestofnhk')
 addonname = addon01.getAddonInfo('name')
 addon_id = 'plugin.video.bestofnhk'
@@ -108,8 +106,7 @@ def CATEGORIES():
     addDir('NHK World Live Stream', '', 'live_strm', icon)
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
-    addDir('NHK News Top Stories', host2+'nhkworld/english/news/', 'topnews', icon)
-    addDir('NHK News Feature Stories', '', 'feature', icon)
+    addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', icon)
     addDir('NHK Radio News', '', 'audio', icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', icon)
 
@@ -271,61 +268,38 @@ def IDX_NEWS(url):
     match=re.compile('nw_vod_ooplayer\(\'movie-area\', \'(.+?)\', playerCallback\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
     for vid_id, d_ate in match:
         media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','')
-
-# Top news stories
-def IDX_TOPNEWS(url):
-    link = net.http_GET(url).content
-    match1=re.compile('<h1 class="top-title"><a href="/(.+?)">(.+?)</a></h1>\n.+?<div class="cat-info">\n.+?<a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
-    match2=re.compile('<h3 class="sub-title"><a href="/(.+?)">(.+?)</a></h3>\n.+?<div class="cat-info">\n.+?<div class="fll"><a href="/nhkworld/english/news/.+?.html" class="linkBtn">.+?</a><a href').findall(link)
-    for pg_link,name in match1+match2:
-        link2 = net.http_GET(host2+pg_link).content
-        match3=re.compile("movie_play\('(.+?)'").findall(link2)
-        for xml_link in match3:
-            file = urllib2.urlopen(host2+xml_link)
-            data = file.read()
-            file.close()
-            dom = parseString(data)
-            xmlTag = dom.getElementsByTagName('file.high')[0].toxml()
-            xmlData=xmlTag.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
-            media_item_list(name,xmlData,icon)
             
 # Feature news stories
 def IDX_FEATURE(url):
-    addDir('NHK News Feature Stories - Japan', host2+feat+'japan.xml', 'feat_news', icon)
-    addDir('NHK News Feature Stories - Asia', host2+feat+'asia.xml', 'feat_news', icon)
-    addDir('NHK News Feature Stories - World', host2+feat+'world.xml', 'feat_news', icon)
-    addDir('NHK News Feature Stories - BizTec', host2+feat+'biztec.xml', 'feat_news', icon)
-    addDir('NHK News Feature Stories - Nuclear & Energy', host2+feat+'post311.xml', 'feat_news', icon)
-    
-def IDX_FEAT_NEWS(url):
-    feat_xml = urllib2.urlopen(url)
-    data = feat_xml.read()
-    feat_xml.close()
-    dom = parseString(data)
+    addDir('NHK News Feature Stories - Japan', url, 'feat_news_japan', icon)
+    addDir('NHK News Feature Stories - Asia', url, 'feat_news_asia', icon)
+    addDir('NHK News Feature Stories - World', url, 'feat_news_world', icon)
+    addDir('NHK News Feature Stories - BizTec', url, 'feat_news_biztec', icon)
 
+def IDX_FEAT_NEWS(url):
+    req = urllib2.urlopen(url)
+    feat_json = json.load(req)
     try:
-        for i in range(1,200):
-            title = dom.getElementsByTagName('title')[i].toxml()
-            html = dom.getElementsByTagName('link')[i].toxml()
-            title_ = title.replace('<title><![CDATA[','').replace(']]></title>','').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-            html_ = html.replace('<link>','').replace('</link>','')
-            IDX_FEAT_NEWS_1(html_, title_)
+        for i in range(300):
+            #thumbnl = feat_json['data'][i]['thumbnails']['middle']
+            xml_link = feat_json['data'][i]['videos']['config']
+            #title = feat_json['data'][i]['title']
+            cat = feat_json['data'][i]['categories']['name']
+            if mode == 'feat_news_japan' and cat == 'JAPAN' or mode == 'feat_news_asia' and cat == 'ASIA' or mode == 'feat_news_world' and cat == 'WORLD' or mode == 'feat_news_biztec' and cat == 'BIZTCH':
+                file = urllib2.urlopen(host2[:-1]+xml_link)
+                data = file.read()
+                file.close()
+                dom = parseString(data)
+                v_url = dom.getElementsByTagName('file.high')[0].toxml()
+                image = dom.getElementsByTagName('image')[0].toxml()
+                name = dom.getElementsByTagName('media.title')[0].toxml()
+                vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+                thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
+                name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
+                print "name is: "+name_
+                media_item_list(name_,vid_url,thumbnl)
     except:
         pass
-
-def IDX_FEAT_NEWS_1(url, name):
-    link = net.http_GET(url).content
-    match = re.compile("movie_play\('(.+?)',").findall(link)
-    for xml_link in match:
-        file = urllib2.urlopen(host2[:-1]+xml_link)
-        data = file.read()
-        file.close()
-        dom = parseString(data)
-        v_url = dom.getElementsByTagName('file.high')[0].toxml()
-        image = dom.getElementsByTagName('image')[0].toxml()
-        vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
-        thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
-        media_item_list(name,vid_url,thumbnl)
 
 # Pre-recorded NHK World Radio in 18 languages
 def IDX_RADIO(url):
@@ -619,7 +593,19 @@ elif mode=='feature':
     print ""+url
     IDX_FEATURE(url)
     
-elif mode=='feat_news':
+elif mode=='feat_news_japan':
+    print ""+url
+    IDX_FEAT_NEWS(url)
+
+elif mode=='feat_news_asia':
+    print ""+url
+    IDX_FEAT_NEWS(url)
+
+elif mode=='feat_news_world':
+    print ""+url
+    IDX_FEAT_NEWS(url)
+
+elif mode=='feat_news_biztec':
     print ""+url
     IDX_FEAT_NEWS(url)
 
