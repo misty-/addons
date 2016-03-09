@@ -87,4 +87,15 @@ small error in hls
 return true when played
 [B]Version 2.3.4[/B]
 renamed util folder due to clash
+[B]Version 2.4.0[/B]
+Support for TSDownloader
+[B]Version 2.4.1[/B]
+slight change for TSDownloader
+[B]Version 2.4.3[/B]
+check if its TS
+[B]Version 2.4.4[/B]
+Play command
+[B]Version 2.4.5[/B]
+Proxy for HLS
+
 

@@ -301,7 +301,7 @@ def IDX_FEAT_NEWS(url):
     except:
         pass
 
-# Pre-recorded NHK World Radio in 18 languages
+# Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
     media_item_list('NHK Radio News in Arabic', host5+'arabic.xml','')
     media_item_list('NHK Radio News in Bengali', host5+'bengali.xml','')
@@ -311,7 +311,6 @@ def IDX_RADIO(url):
     media_item_list('NHK Radio News in French', host5+'french.xml','')
     media_item_list('NHK Radio News in Hindi', host5+'hindi.xml','')
     media_item_list('NHK Radio News in Indonesian', host5+'indonesian.xml','')
-    media_item_list('NHK Radio News in Japanese', host5+'japanese.xml','')
     media_item_list('NHK Radio News in Korean', host5+'korean.xml','')
     media_item_list('NHK Radio News in Persian', host5+'persian.xml','')
     media_item_list('NHK Radio News in Portuguese', host5+'portuguese.xml','')

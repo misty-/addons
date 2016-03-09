@@ -1,3 +1,11 @@
+Ver. 1.0.12
+
+Best of NHK - 23th release
+
+Fix: Remove Radio News Japanese - causing 404 error file does not exist
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.11
 
 Best of NHK - 23th release
