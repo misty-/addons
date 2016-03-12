@@ -46,8 +46,7 @@ def run():
     plugintools.add_item( 
         #action="", 
         title="Digital[COLOR red]Rev[/COLOR] TV",
-        #url="plugin://plugin.video.youtube.plus/user/"+YOUTUBE_CHANNEL_ID+"/",
-        url="plugin://plugin.video.youtube.plus/user/DigitalRevCom/",
+        url="plugin://plugin.video.youtube/user/DigitalRevCom/",
         #thumbnail=icon,
         thumbnail="https://yt3.ggpht.com/-YYeuDHAMWyE/AAAAAAAAAAI/AAAAAAAAAAA/CXL5kGlxMbw/s240-c-k-no/photo.jpg",
         fanart=fan_art,

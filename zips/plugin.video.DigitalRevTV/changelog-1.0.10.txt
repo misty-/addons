@@ -1,3 +1,7 @@
+1.0.10
+
+- fix typo
+
 1.0.9
 
 - Add Bokeh channel
