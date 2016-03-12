@@ -20,12 +20,12 @@ import plugintools
 addonID = 'plugin.video.DigitalRevTV'
 addon = Addon(addonID, sys.argv)
 local = xbmcaddon.Addon(id=addonID)
-icon = local.getAddonInfo('icon')
+#icon = local.getAddonInfo('icon')
 fan_art = local.getAddonInfo('fanart')
 
 
 # Put channel between quotes: YOUTUBE_CHANNEL_ID = ""
-YOUTUBE_CHANNEL_ID = "DigitalRevCom"
+#YOUTUBE_CHANNEL_ID = "DigitalRevCom"
 
 # Entry point
 def run():
@@ -43,14 +43,22 @@ def run():
     plugintools.close_item_list()
 
 # Main menu
-def main_list(params):
-    plugintools.log("DigitalRevTV.main_list "+repr(params))
-
     plugintools.add_item( 
-        #action="digrev_latest", 
+        #action="", 
         title="Digital[COLOR red]Rev[/COLOR] TV",
-        url="plugin://plugin.video.youtube/user/"+YOUTUBE_CHANNEL_ID+"/",
-        thumbnail=icon,
+        #url="plugin://plugin.video.youtube.plus/user/"+YOUTUBE_CHANNEL_ID+"/",
+        url="plugin://plugin.video.youtube.plus/user/DigitalRevCom/",
+        #thumbnail=icon,
+        thumbnail="https://yt3.ggpht.com/-YYeuDHAMWyE/AAAAAAAAAAI/AAAAAAAAAAA/CXL5kGlxMbw/s240-c-k-no/photo.jpg",
+        fanart=fan_art,
+        folder=True )
+        
+    plugintools.add_item( 
+        #action="", 
+        title="Bokeh",
+        url="plugin://plugin.video.youtube/channel/UCDemW4lwMRF_l71YVyscNyw/",
+        #thumbnail=icon,
+        thumbnail="https://yt3.ggpht.com/-MELa5bOE4dA/AAAAAAAAAAI/AAAAAAAAAAA/Rc_XEXI_LIk/s240-c-k-no/photo.jpg",
         fanart=fan_art,
         folder=True )
 

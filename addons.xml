@@ -20,7 +20,7 @@
 
 <addon id="plugin.video.DigitalRevTV"
 	name="Digital[COLOR red]Rev[/COLOR] TV"
-	version="1.0.8"
+	version="1.0.9"
 	provider-name="misty">
   <requires>
     <import addon="xbmc.python" version="2.1.0"/>
@@ -32,7 +32,7 @@
   </extension>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">DigitalRev TV</summary>
-    <description lang="en">Awesome DigitalRev TV videos from YouTube.</description>
+    <description lang="en">Awesome DigitalRev TV and Bokeh YouTube channels.</description>
     <platform>all</platform>
   </extension>
 </addon>
