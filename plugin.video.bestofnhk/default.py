@@ -49,10 +49,10 @@ Date = str(time.strftime ('%m/%d/%Y'))
 TimeZone = settings.getSetting('tz')
 day = ''
 tz_C = 0
-print "Date and time is: " + Date + " " + Time
+#print "Date and time is: " + Date + " " + Time
 
 # NHK World Schedule Time Zone and DST correction
-print "Time zone is: " + TimeZone
+#print "Time zone is: " + TimeZone
 # TZ message box
 if TimeZone == " ":
     print "TimeZone is not selected."
@@ -65,7 +65,7 @@ else:
 
 # TZ and DST calc
 isdst = time.localtime().tm_isdst
-print "isdst is: " + str(isdst)
+#print "isdst is: " + str(isdst)
 tz_link = TimeZone
 match=re.compile('\((.+?)\) .+?').findall(tz_link)
 for tz_gmt in match:
@@ -89,7 +89,7 @@ for tz_gmt in match:
             tz_corrected = (result + 1) * -60
         elif isdst == int(0) and tz_gmt[3:4] == '+':
             tz_corrected = result * -60
-        print int(tz_corrected)
+        #print int(tz_corrected)
         tz_C = tz_corrected
 d_atetime = datetime.datetime(Yr,Mth,Dy,00,00,00)
 e_poch_midnt = calendar.timegm(d_atetime.timetuple())
@@ -106,6 +106,7 @@ def CATEGORIES():
     addDir('NHK World Live Stream', '', 'live_strm', icon)
     addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
+    addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', icon)
     addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', icon)
     addDir('NHK Radio News', '', 'audio', icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', icon)
@@ -257,7 +258,7 @@ def IDX_VOD(url):
         match1 = re.compile('<h2 class="detail-top-player-title__h"><a href="/nhkworld/en/vod/.+?/">(.+?)</a></h2>').findall(link)
         match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
         match3 = re.compile('<div class="episode-detail">\n.+?<h3>(.+?)</h3>').findall(link)
-        series = str(match1).replace('[\'','').replace('\']','')
+        series = str(match1).replace('[\'','').replace('\']','').replace('<br />',' ')
         ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
         vid_id = str(match2).replace('[\'','').replace('\']','')
         media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', thumbnl)
@@ -268,7 +269,29 @@ def IDX_NEWS(url):
     match=re.compile('nw_vod_ooplayer\(\'movie-area\', \'(.+?)\', playerCallback\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
     for vid_id, d_ate in match:
         media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','')
-            
+
+# Latest top news stories
+def IDX_TOPNEWS(url):
+    req = urllib2.urlopen(url)
+    top_json = json.load(req)
+    try:
+        for i in range(200):
+            if top_json['data'][i]['videos']:
+                xml_link = top_json['data'][i]['videos']['config']
+                file = urllib2.urlopen(host2[:-1]+xml_link)
+                data = file.read()
+                file.close()
+                dom = parseString(data)
+                v_url = dom.getElementsByTagName('file.high')[0].toxml()
+                image = dom.getElementsByTagName('image')[0].toxml()
+                name = dom.getElementsByTagName('media.title')[0].toxml()
+                vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+                thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
+                name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
+                media_item_list(name_,vid_url,thumbnl)
+    except:
+        pass
+
 # Feature news stories
 def IDX_FEATURE(url):
     addDir('NHK News Feature Stories - Japan', url, 'feat_news_japan', icon)
@@ -296,7 +319,7 @@ def IDX_FEAT_NEWS(url):
                 vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
                 thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
                 name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-                print "name is: "+name_
+                #print "name is: "+name_
                 media_item_list(name_,vid_url,thumbnl)
     except:
         pass
@@ -380,24 +403,10 @@ def main_list1(params):
         url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
         thumbnail=icon,
         folder=True )
-        
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 05",
-        url="plugin://plugin.video.youtube/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
-        thumbnail=icon,
-        folder=True )
-        
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 06",
-        url="plugin://plugin.video.youtube/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
-        thumbnail=icon,
-        folder=True )
 
     plugintools.add_item( 
         #action="", 
-        title="NHK World Shows 07",
+        title="NHK World Shows 05",
         url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
         thumbnail=icon,
         folder=True )
@@ -409,6 +418,27 @@ def main_list1(params):
         thumbnail=icon,
         folder=True )
         
+    plugintools.add_item( 
+        #action="", 
+        title="Journeys in Japan",
+        url='plugin://plugin.video.youtube/search/?q=intitle:"journeys in japan"',
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="J-Innovators",
+        url="plugin://plugin.video.youtube/playlist/PLgpKqm4E4A9oKOHfT-CmjtIppxP0Yp71R/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Seasoning the Seasons",
+        url='plugin://plugin.video.youtube/search/?q=intitle:"Seasoning the Seasons"',
+        thumbnail=icon,
+        folder=True )
+
     addDir('More Shows', '', 'youtube2', icon)
     
 def IDX_YOUTUBE2():
