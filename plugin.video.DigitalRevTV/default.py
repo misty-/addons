@@ -43,6 +43,7 @@ def run():
     plugintools.close_item_list()
 
 # Main menu
+def main_list(params):
     plugintools.add_item( 
         #action="", 
         title="Digital[COLOR red]Rev[/COLOR] TV",
