@@ -28,6 +28,8 @@ settings = xbmcaddon.Addon(id='plugin.video.bestofnhk')
 from F4mProxy import f4mProxyHelper
 from xml.dom.minidom import parseString
 import xml.etree.ElementTree as ET
+pluginhandle = int(sys.argv[1])
+confluence_views = [500,501,502,503,504,508,515]
 
 # globals
 #host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
@@ -40,6 +42,8 @@ feat = 'nhkworld/rss/news/english/features_'
 icon = addon01.getAddonInfo('icon') # icon.png in addon directory
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
+str_Yr = str(time.strftime ('%Y'))
+str_Mth = str(time.strftime ('%m'))
 Yr = int(time.strftime ('%Y'))
 Mth = int(time.strftime ('%m'))
 Dy = int(time.strftime ('%d'))
@@ -113,16 +117,12 @@ def CATEGORIES():
 
 # Create content list
 def addDir(name,url,mode,iconimage):
-     params = {'url':url, 'mode':mode, 'name':name}
-     addon.add_directory(params, {'title': str(name)}, img = icon)
+    params = {'url':url, 'mode':mode, 'name':name}
+    addon.add_directory(params, {'title': str(name)}, img = icon, fanart = 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
 
-def addLink(name,url,mode,iconimage,fanart,description=''):
-        u=sys.argv[0]+"?url="+urllib.quote_plus(url)+"&mode="+str(mode)+"&name="+urllib.quote_plus(name)+"&description="+str(description)
-        ok=True
-        liz=xbmcgui.ListItem(name, iconImage="DefaultFolder.png", thumbnailImage=iconimage)
-        liz.setProperty('fanart_image', fanart)
-        ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=u,listitem=liz,isFolder=False)
-        return ok
+def addLink(name,url,plot,img,fanart):
+    addon.add_item({'url': fanart}, {'title': name, 'plot': plot}, img = img, fanart = fanart, resolved=False, total_items=0, playlist=False, item_type='video', 
+                 is_folder=False)
 
 # NHK World Live Schedule
 def IDX_SCHED(url):
@@ -218,30 +218,31 @@ def IDX_LIVE_STRM():
     name = pl_now['channel']['item'][0]['title']
     desc = pl_now['channel']['item'][0]['description']
     sub_name = pl_now['channel']['item'][0]['subtitle']
+    thumbnl = pl_now['channel']['item'][0]['thumbnail']
     show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
     # menu
-    media_item_list('NHK World Live Stream SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', icon)
-    media_item_list('NHK World Live Stream HD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_2100.m3u8', icon)
+    media_item_list(name.encode('UTF-8') + ' - SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
+    media_item_list(name.encode('UTF-8') + ' - HD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_2100.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     try:
-        addLink('', '', '', icon, '')
-        addLink('[B]Currently streaming:[/B]', '', '', icon, '')
         if sub_name == "":
-            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
         else:
-            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
-        addLink('[B]Next:[/B]', '', '', icon, '')
-        for i in range(1,3):
+            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+        for i in range(1,20):
             pubDate = int(pl_now['channel']['item'][i]['pubDate'])
             name = pl_now['channel']['item'][i]['title']
             desc = pl_now['channel']['item'][i]['description']
             sub_name = pl_now['channel']['item'][i]['subtitle']
+            thumbnl = pl_now['channel']['item'][i]['thumbnail']
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
             if sub_name == "":
-                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
             else:
-                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]', '', '', icon, '')
+                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
     except:
         pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
+    xbmc.executebuiltin("Container.SetViewMode("+str(confluence_views[3])+")")
 
 # video on demand
 def IDX_VOD(url):
@@ -249,11 +250,17 @@ def IDX_VOD(url):
     tree = ET.parse(vod_xml)
     root = tree.getroot()
     for item in root.findall('item'):
+        desc_ = item.find('description').text
         vod_img = item.find('main_img').text
+        vod_img_l = item.find('main_img_l').text
         vod_url = item.find('epi_url').text
+        desc = ''.join(desc_)
         od_img = ''.join(vod_img)
+        od_img_l = ''.join(vod_img_l)
         od_url = ''.join(vod_url)
+        plot = str(desc).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<em><span style="font-style: italic;">','').replace('</span></em>','').replace('<span style="font-style: italic;">','').replace('</span>','').replace('<div style="text-align: right;">','').replace('</div>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
         thumbnl = host2[:-1]+od_img
+        fanart = host2[:-1]+od_img_l
         link = net.http_GET(host2[:-1]+od_url).content
         match1 = re.compile('<h2 class="detail-top-player-title__h"><a href="/nhkworld/en/vod/.+?/">(.+?)</a></h2>').findall(link)
         match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
@@ -261,14 +268,18 @@ def IDX_VOD(url):
         series = str(match1).replace('[\'','').replace('\']','').replace('<br />',' ')
         ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
         vid_id = str(match2).replace('[\'','').replace('\']','')
-        media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', thumbnl)
+        media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, fanart)
+        xbmcplugin.setContent(pluginhandle, 'episodes')
+        xbmc.executebuiltin("Container.SetViewMode("+str(confluence_views[3])+")")
     
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
     match=re.compile('nw_vod_ooplayer\(\'movie-area\', \'(.+?)\', playerCallback\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
+    icon = "http://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
+    fanart_ = "https://www.kcet.org/sites/kl/files/atoms/article_atoms/www.kcet.org/shows/tvtalk/assets/images/NewsroomTokyo_630.jpg"
     for vid_id, d_ate in match:
-        media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','')
+        media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','', icon, fanart_)
 
 # Latest top news stories
 def IDX_TOPNEWS(url):
@@ -287,8 +298,8 @@ def IDX_TOPNEWS(url):
                 name = dom.getElementsByTagName('media.title')[0].toxml()
                 vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
                 thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
-                name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-                media_item_list(name_,vid_url,thumbnl)
+                name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('_amp_','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
+                media_item_list(name_,vid_url,'',thumbnl,thumbnl)
     except:
         pass
 
@@ -320,29 +331,29 @@ def IDX_FEAT_NEWS(url):
                 thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
                 name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
                 #print "name is: "+name_
-                media_item_list(name_,vid_url,thumbnl)
+                media_item_list(name_,vid_url,'',thumbnl,thumbnl)
     except:
         pass
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
-    media_item_list('NHK Radio News in Arabic', host5+'arabic.xml','')
-    media_item_list('NHK Radio News in Bengali', host5+'bengali.xml','')
-    media_item_list('NHK Radio News in Burmese', host5+'burmese.xml','')
-    media_item_list('NHK Radio News in Chinese', host5+'chinese.xml','')
-    media_item_list('NHK Radio News in English', host5+'english.xml','')
-    media_item_list('NHK Radio News in French', host5+'french.xml','')
-    media_item_list('NHK Radio News in Hindi', host5+'hindi.xml','')
-    media_item_list('NHK Radio News in Indonesian', host5+'indonesian.xml','')
-    media_item_list('NHK Radio News in Korean', host5+'korean.xml','')
-    media_item_list('NHK Radio News in Persian', host5+'persian.xml','')
-    media_item_list('NHK Radio News in Portuguese', host5+'portuguese.xml','')
-    media_item_list('NHK Radio News in Russian', host5+'russian.xml','')
-    media_item_list('NHK Radio News in Spanish', host5+'spanish.xml','')
-    media_item_list('NHK Radio News in Swahili', host5+'swahili.xml','')
-    media_item_list('NHK Radio News in Thai', host5+'thai.xml','')
-    media_item_list('NHK Radio News in Urdu', host5+'urdu.xml','')
-    media_item_list('NHK Radio News in Vietnamese', host5+'vietnamese.xml','')
+    media_item_list('NHK Radio News in Arabic (mp3)', host5+'arabic.xml','','','')
+    media_item_list('NHK Radio News in Bengali (mp3)', host5+'bengali.xml','','','')
+    media_item_list('NHK Radio News in Burmese (mp3)', host5+'burmese.xml','','','')
+    media_item_list('NHK Radio News in Chinese (mp3)', host5+'chinese.xml','','','')
+    media_item_list('NHK Radio News in English (mp3)', host5+'english.xml','','','')
+    media_item_list('NHK Radio News in French (mp3)', host5+'french.xml','','','')
+    media_item_list('NHK Radio News in Hindi (mp3)', host5+'hindi.xml','','','')
+    media_item_list('NHK Radio News in Indonesian (mp3)', host5+'indonesian.xml','','','')
+    media_item_list('NHK Radio News in Korean (mp3)', host5+'korean.xml','','','')
+    media_item_list('NHK Radio News in Persian (mp3)', host5+'persian.xml','','','')
+    media_item_list('NHK Radio News in Portuguese (mp3)', host5+'portuguese.xml','','','')
+    media_item_list('NHK Radio News in Russian (mp3)', host5+'russian.xml','','','')
+    media_item_list('NHK Radio News in Spanish (mp3)', host5+'spanish.xml','','','')
+    media_item_list('NHK Radio News in Swahili (mp3)', host5+'swahili.xml','','','')
+    media_item_list('NHK Radio News in Thai (mp3)', host5+'thai.xml','','','')
+    media_item_list('NHK Radio News in Urdu (mp3)', host5+'urdu.xml','','','')
+    media_item_list('NHK Radio News in Vietnamese (mp3)', host5+'vietnamese.xml','','','')
 
 def IDX_YOUTUBE1():
     plugintools.log("nhkworld1.run")
@@ -537,7 +548,7 @@ def main_list2(params):
         folder=True )
 
 # Create media items list
-def media_item_list(name,url,img):
+def media_item_list(name,url,plot,img,fanart):
     if mode=='f4m':
         player=f4mProxyHelper()
         player.playF4mLink(url, name)
@@ -555,10 +566,10 @@ def media_item_list(name,url,img):
         addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = icon, playlist=False)
 
     elif mode=='vod' or 'feat_news':
-        addon.add_video_item({'url': url}, {'title': name}, img = img, playlist=False)
+        addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = img, fanart = fanart, playlist=False)
 
     else:
-        addon.add_video_item({'url': url}, {'title': name}, img = icon, playlist=False)
+        addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = icon, fanart = fanart, playlist=False)
             
 
 
@@ -600,7 +611,7 @@ elif mode=='vod':
     
 elif mode=='f4m':
     print ""+url
-    media_item_list(name,url,img)
+    media_item_list(name,url,'','','')
 
 elif mode=='youtube1':
     print ""+url
