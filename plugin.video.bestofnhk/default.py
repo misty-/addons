@@ -29,7 +29,6 @@ from F4mProxy import f4mProxyHelper
 from xml.dom.minidom import parseString
 import xml.etree.ElementTree as ET
 pluginhandle = int(sys.argv[1])
-confluence_views = [500,501,502,503,504,508,515]
 
 # globals
 #host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
@@ -242,7 +241,6 @@ def IDX_LIVE_STRM():
     except:
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
-    xbmc.executebuiltin("Container.SetViewMode("+str(confluence_views[3])+")")
 
 # video on demand
 def IDX_VOD(url):
@@ -270,7 +268,6 @@ def IDX_VOD(url):
         vid_id = str(match2).replace('[\'','').replace('\']','')
         media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, fanart)
         xbmcplugin.setContent(pluginhandle, 'episodes')
-        xbmc.executebuiltin("Container.SetViewMode("+str(confluence_views[3])+")")
     
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):

@@ -1,3 +1,11 @@
+Ver. 1.0.14.1
+
+Best of NHK - 26th release
+
+Update: Remove forced 'media info 2' view selection.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.14
 
 Best of NHK - 25th release
