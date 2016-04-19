@@ -1,3 +1,11 @@
+Ver. 1.0.15
+
+Best of NHK - 27th release
+
+Fix: Video on demand 404 error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.14.1
 
 Best of NHK - 26th release

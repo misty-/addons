@@ -151,7 +151,7 @@ def IDX_SCHED(url):
     f.write('[B]Next:[/B]' + '\n' + '\n')
     
     try:
-        for i in range(1,3):
+        for i in range(1,4):
             pubDate = int(pl_now['channel']['item'][i]['pubDate'])
             name = pl_now['channel']['item'][i]['title']
             desc = pl_now['channel']['item'][i]['description']
@@ -259,7 +259,10 @@ def IDX_VOD(url):
         plot = str(desc).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<em><span style="font-style: italic;">','').replace('</span></em>','').replace('<span style="font-style: italic;">','').replace('</span>','').replace('<div style="text-align: right;">','').replace('</div>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
         thumbnl = host2[:-1]+od_img
         fanart = host2[:-1]+od_img_l
-        link = net.http_GET(host2[:-1]+od_url).content
+        try:
+            link = net.http_GET(host2[:-1]+od_url).content
+        except IOError:
+            pass
         match1 = re.compile('<h2 class="detail-top-player-title__h"><a href="/nhkworld/en/vod/.+?/">(.+?)</a></h2>').findall(link)
         match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
         match3 = re.compile('<div class="episode-detail">\n.+?<h3>(.+?)</h3>').findall(link)
