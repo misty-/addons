@@ -1,3 +1,12 @@
+Ver. 1.0.16
+
+Best of NHK - 28th release
+
+Fix: Live streams for residents of Japan
+Add: 'Somewhere Street' in YouTube videos
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.15
 
 Best of NHK - 27th release
