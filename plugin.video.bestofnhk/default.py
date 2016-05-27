@@ -38,7 +38,8 @@ host4 = 'http://player.ooyala.com/player/all/'
 host5 = 'http://www.nhk.or.jp/rj/podcast/rss/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
-icon = addon01.getAddonInfo('icon') # icon.png in addon directory
+nhk_icon = addon01.getAddonInfo('icon') # icon.png in addon directory
+jib_icon = 'http://www.jamaipanese.com/wp-content/uploads/2009/05/jibbywithfreesby.jpg'
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
 str_Yr = str(time.strftime ('%Y'))
@@ -105,19 +106,20 @@ now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?%s' % apikey
 
 # Main Menu
 def CATEGORIES():
-    addDir('NHK World Live Schedule', '', 'schedule', icon)
-    addDir('NHK World Live Stream', '', 'live_strm', icon)
-    addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', icon)
-    addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', icon)
-    addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', icon)
-    addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', icon)
-    addDir('NHK Radio News', '', 'audio', icon)
-    addDir('NHK Videos on Youtube', '', 'youtube1', icon)
+    addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
+    addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
+    addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', nhk_icon)
+    addDir('JIBTV On Demand', 'http://jibtv.com/', 'jibtv', jib_icon)
+    addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
+    addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
+    addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
+    addDir('NHK Radio News', '', 'audio', nhk_icon)
+    addDir('NHK Videos on Youtube', '', 'youtube1', nhk_icon)
 
 # Create content list
 def addDir(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name}
-    addon.add_directory(params, {'title': str(name)}, img = icon, fanart = 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
 
 def addLink(name,url,plot,img,fanart):
     addon.add_item({'url': fanart}, {'title': name, 'plot': plot}, img = img, fanart = fanart, resolved=False, total_items=0, playlist=False, item_type='video', 
@@ -275,6 +277,59 @@ def IDX_VOD(url):
         vid_id = str(match2).replace('[\'','').replace('\']','')
         media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, fanart)
         xbmcplugin.setContent(pluginhandle, 'episodes')
+
+# jibtv
+def IDX_JIBTV(url):
+    addDir('Recommended', 'http://jibtv.com/', 'jib_rec', jib_icon)
+    addDir('Featured Programs', 'http://jibtv.com/programs/', 'jib_feat', jib_icon)
+
+def JIB_REC(url):
+    link = net.http_GET(url).content
+    match=re.compile('<a href="(.+?)" title="(.+?)">').findall(link)
+    for vid_page, title in match:
+        try:
+            link1 = net.http_GET('http://jibtv.com/%s' % vid_page).content
+            desc_ = re.compile('<meta property="og:description" content="(.+?)" />').findall(link1)
+            plot = ''.join(desc_)
+            thumb = re.compile('<meta property="og:image" content="(.+?)" />').findall(link1)
+            thumbnl = ''.join(thumb).replace('showcace','showcase')
+            meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
+            vid_id = ''.join(meta_id)
+            link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
+            vid_src_ = re.compile('\[\{"format":"hls","url":"(.+?)"\}\]').findall(link2)
+            vid_src = ''.join(vid_src_)
+            if thumbnl == "":
+                media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+            else:
+                media_item_list(title, vid_src, plot, thumbnl, thumbnl)
+        except:
+            pass
+        xbmcplugin.setContent(pluginhandle, 'episodes')
+
+def JIB_FEAT(url):
+    link = net.http_GET(url).content
+    match=re.compile('<a href="/programs/(.+?)">').findall(link)
+    for vid_page in match:
+        try:
+            link1 = net.http_GET('http://jibtv.com/programs/%s' % vid_page).content
+            title_ = re.compile('<meta property="og:title" content="(.+?)" />').findall(link1)
+            title = ''.join(title_)
+            desc_ = re.compile('<meta property="og:description" content="(.+?)" />').findall(link1)
+            plot = ''.join(desc_)
+            thumb = re.compile('<meta property="og:image" content="(.+?)" />').findall(link1)
+            thumbnl = ''.join(thumb).replace('showcace','showcase')
+            meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
+            vid_id = ''.join(meta_id)
+            link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
+            vid_src_ = re.compile('\[\{"format":"hls","url":"(.+?)"\}\]').findall(link2)
+            vid_src = ''.join(vid_src_)
+            if thumbnl == "":
+                media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+            else:
+                media_item_list(title, vid_src, plot, thumbnl, thumbnl)
+        except:
+           pass
+        xbmcplugin.setContent(pluginhandle, 'episodes')
     
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
@@ -309,10 +364,10 @@ def IDX_TOPNEWS(url):
 
 # Feature news stories
 def IDX_FEATURE(url):
-    addDir('NHK News Feature Stories - Japan', url, 'feat_news_japan', icon)
-    addDir('NHK News Feature Stories - Asia', url, 'feat_news_asia', icon)
-    addDir('NHK News Feature Stories - World', url, 'feat_news_world', icon)
-    addDir('NHK News Feature Stories - BizTec', url, 'feat_news_biztec', icon)
+    addDir('NHK News Feature Stories - Japan', url, 'feat_news_japan', nhk_icon)
+    addDir('NHK News Feature Stories - Asia', url, 'feat_news_asia', nhk_icon)
+    addDir('NHK News Feature Stories - World', url, 'feat_news_world', nhk_icon)
+    addDir('NHK News Feature Stories - BizTec', url, 'feat_news_biztec', nhk_icon)
 
 def IDX_FEAT_NEWS(url):
     req = urllib2.urlopen(url)
@@ -381,87 +436,87 @@ def main_list1(params):
         #action="", 
         title="NHK World Channel",
         url="plugin://plugin.video.youtube/user/NHKWorld/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="Youtube Search for 'NHK World'",
         url='plugin://plugin.video.youtube/search/?q=NHK World',
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 01",
         url="plugin://plugin.video.youtube/channel/UCySEkVg1Q3QXjDvRFB0H41Q/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 02",
         url="plugin://plugin.video.youtube/channel/UCcajZR_EkvQro0ZgFX6lgtQ/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 03",
         url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 04",
         url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 05",
         url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
      
     plugintools.add_item( 
         #action="", 
         title="UNESCO/NHK",
         url="plugin://plugin.video.youtube/playlist/PLWuYED1WVJIPKU_tUlzLTfkbNnAtkDOhS/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Journeys in Japan",
         url='plugin://plugin.video.youtube/search/?q=intitle:"journeys in japan"',
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="J-Innovators",
         url="plugin://plugin.video.youtube/playlist/PLgpKqm4E4A9oKOHfT-CmjtIppxP0Yp71R/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="Seasoning the Seasons",
         url='plugin://plugin.video.youtube/search/?q=intitle:"Seasoning the Seasons"',
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Somewhere Street",
         url="plugin://plugin.video.youtube/playlist/PLlvv-XeEWsbc7iLhLRSGRLF5TkkFf7P9x/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
-    addDir('More Shows', '', 'youtube2', icon)
+    addDir('More Shows', '', 'youtube2', nhk_icon)
     
 def IDX_YOUTUBE2():
     plugintools.log("nhkworld2.run")
@@ -485,77 +540,77 @@ def main_list2(params):
         #action="", 
         title="NHK Documentary - Silk Road",
         url="plugin://plugin.video.youtube/playlist/PLB8KCZnnrFKmP6CPynDrFVheEt9VOBPk4/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="NHK Documentary - Silk Road II",
         url="plugin://plugin.video.youtube/playlist/PLdwCuEoZ_6l7FvbsfjidxMIybBrF5jnb5/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Begin Japanology 01",
         url="plugin://plugin.video.youtube/channel/UCPMSNvTv2rgODVy0GvsMxZg/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="Begin Japanology 02",
         url="plugin://plugin.video.youtube/playlist/PL8IcLS3A4sWKqf47xzXl_NIwlj_Hae5fM/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Begin Japanology 03",
         url="plugin://plugin.video.youtube/playlist/PLJ4SclxaotEijsfzIFlUcHG6huoiovh9s/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="Tokyo Eye",
         url="plugin://plugin.video.youtube/channel/UC5ehEXRuBeVo1gkulk5I4BQ/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="cool japan",
         url="plugin://plugin.video.youtube/playlist/PL54G12jDE7cPq7xbyEyaIf7jRvUC04TJg/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Dining with the Chef",
         url="plugin://plugin.video.youtube/playlist/PLIz8fpF_mbPSpMiJ9OHXo5Ai7dYDLXhYM/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Sports Japan",
         url="plugin://plugin.video.youtube/playlist/PLIz8fpF_mbPSjA3l8bPyYF2vYZioFl2S1/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="Meet and Speak",
         url="plugin://plugin.video.youtube/playlist/PLdRCqO13zyDfQuDoZG6pHQuSJ2dbwVWQu/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
     
     plugintools.add_item( 
         #action="", 
         title="MoshiMoshi Nippon",
         url="plugin://plugin.video.youtube/playlist/PLpHD2EwLFcoQkHEP7w458jR-kSY_W4mo2/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
 # Create media items list
@@ -574,13 +629,13 @@ def media_item_list(name,url,plot,img,fanart):
         xmlTag = dom.getElementsByTagName('enclosure')[0].toxml()
         url = re.compile('.+?url="(.+?)".+?').findall(xmlTag)
         radionews_url = str(url).replace("[u'", "").replace("']","")
-        addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = icon, playlist=False)
+        addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = nhk_icon, playlist=False)
 
     elif mode=='vod' or 'feat_news':
         addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = img, fanart = fanart, playlist=False)
 
     else:
-        addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = icon, fanart = fanart, playlist=False)
+        addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = nhk_icon, fanart = fanart, playlist=False)
             
 
 
@@ -619,7 +674,19 @@ elif mode=='live_strm':
 elif mode=='vod':
     print ""+url
     IDX_VOD(url)
-    
+
+elif mode=='jibtv':
+    print ""+url
+    IDX_JIBTV(url)
+
+elif mode=='jib_rec':
+    print ""+url
+    JIB_REC(url)
+
+elif mode=='jib_feat':
+    print ""+url
+    JIB_FEAT(url)
+
 elif mode=='f4m':
     print ""+url
     media_item_list(name,url,'','','')
