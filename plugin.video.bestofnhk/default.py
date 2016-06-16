@@ -108,7 +108,7 @@ now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?%s' % apikey
 def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
-    addDir('NHK World On Demand', host2+'nhkworld/en/vod/vod_episodes.xml', 'vod', nhk_icon)
+    addDir('NHK World On Demand', 'http://api.nhk.or.jp/nhkworld/vodesdlist/v1/all/all/all.json?%s' % apikey, 'vod', icon)
     addDir('JIBTV On Demand', 'http://jibtv.com/', 'jibtv', jib_icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
     addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
@@ -250,33 +250,23 @@ def IDX_LIVE_STRM():
 
 # video on demand
 def IDX_VOD(url):
-    vod_xml = urllib2.urlopen(url)
-    tree = ET.parse(vod_xml)
-    root = tree.getroot()
-    for item in root.findall('item'):
-        desc_ = item.find('description').text
-        vod_img = item.find('main_img').text
-        vod_img_l = item.find('main_img_l').text
-        vod_url = item.find('epi_url').text
-        desc = ''.join(desc_)
-        od_img = ''.join(vod_img)
-        od_img_l = ''.join(vod_img_l)
-        od_url = ''.join(vod_url)
-        plot = str(desc).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<em><span style="font-style: italic;">','').replace('</span></em>','').replace('<span style="font-style: italic;">','').replace('</span>','').replace('<div style="text-align: right;">','').replace('</div>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-        thumbnl = host2[:-1]+od_img
-        fanart = host2[:-1]+od_img_l
-        try:
-            link = net.http_GET(host2[:-1]+od_url).content
-        except IOError:
-            pass
-        match1 = re.compile('<h2 class="detail-top-player-title__h"><a href="/nhkworld/en/vod/.+?/">(.+?)</a></h2>').findall(link)
-        match2 = re.compile("<script>nw_vod_ooplayer\('movie-area', '(.+?)'\)").findall(link)
-        match3 = re.compile('<div class="episode-detail">\n.+?<h3>(.+?)</h3>').findall(link)
-        series = str(match1).replace('[\'','').replace('\']','').replace('<br />',' ')
-        ep_name = str(match3).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-        vid_id = str(match2).replace('[\'','').replace('\']','')
-        media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, fanart)
-        xbmcplugin.setContent(pluginhandle, 'episodes')
+    req = urllib2.urlopen(url)
+    vod_json = json.load(req)
+    try:
+        for i in range(300):
+            series_ = vod_json['data']['episodes'][i]['title']
+            ep_name_ = vod_json['data']['episodes'][i]['sub_title']
+            plot_ = vod_json['data']['episodes'][i]['description']
+            thumbnl_ = vod_json['data']['episodes'][i]['image_l']
+            vid_id = vod_json['data']['episodes'][i]['vod_id']
+            series = (series_).replace('[\'','').replace('\']','').replace('<br />',' ')
+            ep_name = (ep_name_).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
+            plot = (plot_).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','')
+            thumbnl = host2[:-1]+thumbnl_
+            media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, thumbnl)
+    except:
+        pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
 
 # jibtv
 def IDX_JIBTV(url):
