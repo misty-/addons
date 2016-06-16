@@ -108,7 +108,7 @@ now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?%s' % apikey
 def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
-    addDir('NHK World On Demand', 'http://api.nhk.or.jp/nhkworld/vodesdlist/v1/all/all/all.json?%s' % apikey, 'vod', icon)
+    addDir('NHK World On Demand', 'http://api.nhk.or.jp/nhkworld/vodesdlist/v1/all/all/all.json?%s' % apikey, 'vod', nhk_icon)
     addDir('JIBTV On Demand', 'http://jibtv.com/', 'jibtv', jib_icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
     addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
