@@ -286,12 +286,14 @@ def JIB_REC(url):
             meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
             vid_id = ''.join(meta_id)
             link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
-            vid_src_ = re.compile('\[\{"format":"hls","url":"(.+?)"\}\]').findall(link2)
+            vid_src_ = re.compile('"format":"hls","url":"(.+?)"').findall(link2)
             vid_src = ''.join(vid_src_)
             if thumbnl == "":
-                media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
-            else:
+                media_item_list(title, vid_src, plot, thumbnl1, thumbnl1)
+            elif thumbnl1 == "":
                 media_item_list(title, vid_src, plot, thumbnl, thumbnl)
+            elif thumbnl and thumbnl1 == "":
+                media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
         except:
             pass
         xbmcplugin.setContent(pluginhandle, 'episodes')
@@ -310,13 +312,38 @@ def JIB_FEAT(url):
             thumbnl = ''.join(thumb).replace('showcace','showcase')
             meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
             vid_id = ''.join(meta_id)
-            link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
-            vid_src_ = re.compile('\[\{"format":"hls","url":"(.+?)"\}\]').findall(link2)
-            vid_src = ''.join(vid_src_)
-            if thumbnl == "":
-                media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
-            else:
-                media_item_list(title, vid_src, plot, thumbnl, thumbnl)
+            try:
+                link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
+                vid_src_ = re.compile('"format":"hls","url":"(.+?)"').findall(link2)
+                vid_src = ''.join(vid_src_)
+                if thumbnl == "":
+                    media_item_list(title, vid_src, plot, thumbnl1, thumbnl1)
+                elif thumbnl1 == "":
+                    media_item_list(title, vid_src, plot, thumbnl, thumbnl)
+                elif thumbnl and thumbnl1 == "":
+                    media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+            except:
+                link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/playlist' % vid_id).content
+                match1=re.compile('"metas":\[\{"meta_id":(.+?),"name":"(.+?)".+?,\{"meta_id":(.+?),"name":"(.+?)"').findall(link2)
+                for vid_id1, title1, vid_id2, title2 in match1:
+                    link3 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id1).content
+                    link4 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id2).content
+                    vid_src1_ = re.compile('"format":"hls","url":"(.+?)"').findall(link3)
+                    vid_src1 = ''.join(vid_src1_)
+                    if thumbnl == "":
+                        media_item_list(title1, vid_src1, plot, thumbnl1, thumbnl1)
+                    elif thumbnl1 == "":
+                        media_item_list(title1, vid_src1, plot, thumbnl, thumbnl)
+                    elif thumbnl and thumbnl1 == "":
+                        media_item_list(title1, vid_src1, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+                    vid_src2_ = re.compile('"format":"hls","url":"(.+?)"').findall(link4)
+                    vid_src2 = ''.join(vid_src2_)
+                    if thumbnl == "":
+                        media_item_list(title2, vid_src2, plot, thumbnl1, thumbnl1)
+                    elif thumbnl1 == "":
+                        media_item_list(title2, vid_src2, plot, thumbnl, thumbnl)
+                    elif thumbnl and thumbnl1 == "":
+                        media_item_list(title2, vid_src2, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
         except:
            pass
         xbmcplugin.setContent(pluginhandle, 'episodes')

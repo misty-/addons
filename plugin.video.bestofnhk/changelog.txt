@@ -1,3 +1,11 @@
+Ver. 1.0.19
+
+Best of NHK - 31st release
+
+Fix: JIBTV
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.18
 
 Best of NHK - 30th release
