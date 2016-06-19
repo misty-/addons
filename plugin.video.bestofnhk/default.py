@@ -276,13 +276,16 @@ def IDX_JIBTV(url):
 def JIB_REC(url):
     link = net.http_GET(url).content
     match=re.compile('<a href="(.+?)" title="(.+?)">').findall(link)
+    #thumb_=re.compile('<img src="programs/(.+?)"').findall(link)
     for vid_page, title in match:
         try:
             link1 = net.http_GET('http://jibtv.com/%s' % vid_page).content
             desc_ = re.compile('<meta property="og:description" content="(.+?)" />').findall(link1)
             plot = ''.join(desc_)
-            thumb = re.compile('<meta property="og:image" content="(.+?)" />').findall(link1)
+            thumb = re.compile('<meta property="og:image" content="(.+?)"').findall(link1)
+            thumb1 = re.compile('<meta content="(.+?)" property="og:image"').findall(link1)
             thumbnl = ''.join(thumb).replace('showcace','showcase')
+            thumbnl1 = ''.join(thumb1).replace('showcace','showcase')
             meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
             vid_id = ''.join(meta_id)
             link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
@@ -300,16 +303,18 @@ def JIB_REC(url):
 
 def JIB_FEAT(url):
     link = net.http_GET(url).content
-    match=re.compile('<a href="/programs/(.+?)">').findall(link)
+    match=re.compile('<a href="/programs/(.+?)"').findall(link)
     for vid_page in match:
         try:
             link1 = net.http_GET('http://jibtv.com/programs/%s' % vid_page).content
-            title_ = re.compile('<meta property="og:title" content="(.+?)" />').findall(link1)
+            title_ = re.compile('<meta property="og:title" content="(.+?)"').findall(link1)
             title = ''.join(title_)
-            desc_ = re.compile('<meta property="og:description" content="(.+?)" />').findall(link1)
+            desc_ = re.compile('<meta property="og:description" content="(.+?)"').findall(link1)
             plot = ''.join(desc_)
-            thumb = re.compile('<meta property="og:image" content="(.+?)" />').findall(link1)
+            thumb = re.compile('<meta property="og:image" content="(.+?)"').findall(link1)
+            thumb1 = re.compile('<meta content="(.+?)" property="og:image"').findall(link1)
             thumbnl = ''.join(thumb).replace('showcace','showcase')
+            thumbnl1 = ''.join(thumb1).replace('showcace','showcase')
             meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
             vid_id = ''.join(meta_id)
             try:
@@ -344,6 +349,7 @@ def JIB_FEAT(url):
                         media_item_list(title2, vid_src2, plot, thumbnl, thumbnl)
                     elif thumbnl and thumbnl1 == "":
                         media_item_list(title2, vid_src2, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+
         except:
            pass
         xbmcplugin.setContent(pluginhandle, 'episodes')
