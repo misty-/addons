@@ -308,7 +308,8 @@ def JIB_FEAT(url):
         try:
             link1 = net.http_GET('http://jibtv.com/programs/%s' % vid_page).content
             title_ = re.compile('<meta property="og:title" content="(.+?)"').findall(link1)
-            title = ''.join(title_)
+            titl_e = ''.join(title_)
+            title = titl_e.encode('UTF-8')
             desc_ = re.compile('<meta property="og:description" content="(.+?)"').findall(link1)
             plot = ''.join(desc_)
             thumb = re.compile('<meta property="og:image" content="(.+?)"').findall(link1)
@@ -316,7 +317,8 @@ def JIB_FEAT(url):
             thumbnl = ''.join(thumb).replace('showcace','showcase')
             thumbnl1 = ''.join(thumb1).replace('showcace','showcase')
             meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
-            vid_id = ''.join(meta_id)
+            vid_id_ = ''.join(meta_id)
+            vid_id = vid_id_[0:3]
             try:
                 link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
                 vid_src_ = re.compile('"format":"hls","url":"(.+?)"').findall(link2)
@@ -353,7 +355,7 @@ def JIB_FEAT(url):
         except:
            pass
         xbmcplugin.setContent(pluginhandle, 'episodes')
-    
+
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
@@ -466,6 +468,27 @@ def main_list1(params):
         #action="", 
         title="Youtube Search for 'NHK World'",
         url='plugin://plugin.video.youtube/search/?q=NHK World',
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK Easy Japanese",
+        url="plugin://plugin.video.youtube/channel/UCm7ga8PSKjecD6SgNGRK0dA/",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World On Demand",
+        url="plugin://plugin.video.youtube/channel/UCnUuoCbObCQG_kAH-1u3u6A/",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World News",
+        url="plugin://plugin.video.youtube/channel/UC0yS3eywg-KjPRSO9P6alsQ/",
         thumbnail=nhk_icon,
         folder=True )
         

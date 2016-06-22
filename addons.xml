@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addons>
-<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.19.1" provider-name="misty">
+<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.20" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.1.0"/>
         <import addon="script.module.t0mm0.common" version="2.1.1"/>
@@ -70,10 +70,11 @@
 
 <addon id="script.video.F4mProxy"
 	     name="F4mProxy"
-	     version="2.4.5"
+	     version="2.5.5"
 	     provider-name="Shani">
   <requires>
     <import addon="xbmc.python" version="2.1.0" />
+    <import addon="script.module.requests" />
   </requires>
   <extension point="xbmc.python.module" library="lib" />
     <extension point="xbmc.python.pluginsource" library="addon.py">

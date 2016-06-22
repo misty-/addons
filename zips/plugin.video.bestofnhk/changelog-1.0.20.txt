@@ -1,8 +1,17 @@
+Ver. 1.0.20
+
+Best of NHK - 33rd release
+
+Update: Code changes to JIBTV Featured Programs
+Add: Youtube channels for NHK World On Demand, NHK World News and NHK Easy Japanese
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.19.1
 
 Best of NHK - 32nd release
 
-Fix: JIBTV
+Fix: JIBTV (2nd try)
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
