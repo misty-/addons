@@ -1,3 +1,11 @@
+Ver. 1.0.20.1
+
+Best of NHK - 34th release
+
+Fix: JIBTV - They keep changing their code...
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.20
 
 Best of NHK - 33rd release
