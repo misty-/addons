@@ -259,9 +259,9 @@ def IDX_VOD(url):
             plot_ = vod_json['data']['episodes'][i]['description']
             thumbnl_ = vod_json['data']['episodes'][i]['image_l']
             vid_id = vod_json['data']['episodes'][i]['vod_id']
-            series = (series_).replace('[\'','').replace('\']','').replace('<br />',' ')
-            ep_name = (ep_name_).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-            plot = (plot_).replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','')
+            series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ')
+            ep_name = (ep_name_).encode('UTF-8').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
+            plot = (plot_).encode('UTF-8').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','')
             thumbnl = host2[:-1]+thumbnl_
             media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, thumbnl)
     except:

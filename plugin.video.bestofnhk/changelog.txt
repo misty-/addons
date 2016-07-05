@@ -1,3 +1,11 @@
+Ver. 1.0.21
+
+Best of NHK - 35th release
+
+Fix: NHK On Demand unicode error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Ver. 1.0.20.1
 
 Best of NHK - 34th release
