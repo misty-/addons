@@ -259,7 +259,7 @@ def IDX_VOD(url):
             plot_ = vod_json['data']['episodes'][i]['description']
             thumbnl_ = vod_json['data']['episodes'][i]['image_l']
             vid_id = vod_json['data']['episodes'][i]['vod_id']
-            series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ')
+            series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ').replace('<span style="font-style: italic;">', '').replace('</span>','')
             ep_name = (ep_name_).encode('UTF-8').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
             plot = (plot_).encode('UTF-8').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','')
             thumbnl = host2[:-1]+thumbnl_
@@ -421,23 +421,24 @@ def IDX_FEAT_NEWS(url):
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
-    media_item_list('NHK Radio News in Arabic (mp3)', host5+'arabic.xml','','','')
-    media_item_list('NHK Radio News in Bengali (mp3)', host5+'bengali.xml','','','')
-    media_item_list('NHK Radio News in Burmese (mp3)', host5+'burmese.xml','','','')
-    media_item_list('NHK Radio News in Chinese (mp3)', host5+'chinese.xml','','','')
-    media_item_list('NHK Radio News in English (mp3)', host5+'english.xml','','','')
-    media_item_list('NHK Radio News in French (mp3)', host5+'french.xml','','','')
-    media_item_list('NHK Radio News in Hindi (mp3)', host5+'hindi.xml','','','')
-    media_item_list('NHK Radio News in Indonesian (mp3)', host5+'indonesian.xml','','','')
-    media_item_list('NHK Radio News in Korean (mp3)', host5+'korean.xml','','','')
-    media_item_list('NHK Radio News in Persian (mp3)', host5+'persian.xml','','','')
-    media_item_list('NHK Radio News in Portuguese (mp3)', host5+'portuguese.xml','','','')
-    media_item_list('NHK Radio News in Russian (mp3)', host5+'russian.xml','','','')
-    media_item_list('NHK Radio News in Spanish (mp3)', host5+'spanish.xml','','','')
-    media_item_list('NHK Radio News in Swahili (mp3)', host5+'swahili.xml','','','')
-    media_item_list('NHK Radio News in Thai (mp3)', host5+'thai.xml','','','')
-    media_item_list('NHK Radio News in Urdu (mp3)', host5+'urdu.xml','','','')
-    media_item_list('NHK Radio News in Vietnamese (mp3)', host5+'vietnamese.xml','','','')
+    fanart = 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg'
+    media_item_list('NHK Radio News in Arabic (mp3)', host5+'arabic.xml','','',fanart)
+    media_item_list('NHK Radio News in Bengali (mp3)', host5+'bengali.xml','','',fanart)
+    media_item_list('NHK Radio News in Burmese (mp3)', host5+'burmese.xml','','',fanart)
+    media_item_list('NHK Radio News in Chinese (mp3)', host5+'chinese.xml','','',fanart)
+    media_item_list('NHK Radio News in English (mp3)', host5+'english.xml','','',fanart)
+    media_item_list('NHK Radio News in French (mp3)', host5+'french.xml','','',fanart)
+    media_item_list('NHK Radio News in Hindi (mp3)', host5+'hindi.xml','','',fanart)
+    media_item_list('NHK Radio News in Indonesian (mp3)', host5+'indonesian.xml','','',fanart)
+    media_item_list('NHK Radio News in Korean (mp3)', host5+'korean.xml','','',fanart)
+    media_item_list('NHK Radio News in Persian (mp3)', host5+'persian.xml','','',fanart)
+    media_item_list('NHK Radio News in Portuguese (mp3)', host5+'portuguese.xml','','',fanart)
+    media_item_list('NHK Radio News in Russian (mp3)', host5+'russian.xml','','',fanart)
+    media_item_list('NHK Radio News in Spanish (mp3)', host5+'spanish.xml','','',fanart)
+    media_item_list('NHK Radio News in Swahili (mp3)', host5+'swahili.xml','','',fanart)
+    media_item_list('NHK Radio News in Thai (mp3)', host5+'thai.xml','','',fanart)
+    media_item_list('NHK Radio News in Urdu (mp3)', host5+'urdu.xml','','',fanart)
+    media_item_list('NHK Radio News in Vietnamese (mp3)', host5+'vietnamese.xml','','',fanart)
 
 def IDX_YOUTUBE1():
     plugintools.log("nhkworld1.run")
@@ -478,20 +479,6 @@ def main_list1(params):
         thumbnail=nhk_icon,
         folder=True )
 
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World On Demand",
-        url="plugin://plugin.video.youtube/channel/UCnUuoCbObCQG_kAH-1u3u6A/",
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World News",
-        url="plugin://plugin.video.youtube/channel/UC0yS3eywg-KjPRSO9P6alsQ/",
-        thumbnail=nhk_icon,
-        folder=True )
-        
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 01",
@@ -675,7 +662,7 @@ def media_item_list(name,url,plot,img,fanart):
         xmlTag = dom.getElementsByTagName('enclosure')[0].toxml()
         url = re.compile('.+?url="(.+?)".+?').findall(xmlTag)
         radionews_url = str(url).replace("[u'", "").replace("']","")
-        addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = nhk_icon, playlist=False)
+        addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = nhk_icon, fanart = fanart, playlist=False)
 
     elif mode=='vod' or 'feat_news':
         addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = img, fanart = fanart, playlist=False)
