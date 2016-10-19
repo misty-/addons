@@ -359,7 +359,7 @@ def JIB_FEAT(url):
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
-    match=re.compile('nw_vod_ooplayer\(\'movie-area\', \'(.+?)\', playerCallback\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
+    match=re.compile('nw_addPlayer\(\'movie-area\', \{lang: \'en\', media: \'tv\', type: \'vod\', source: \'(.+?)\', callback: playerCallback\}\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
     icon = "http://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
     fanart_ = "https://www.kcet.org/sites/kl/files/atoms/article_atoms/www.kcet.org/shows/tvtalk/assets/images/NewsroomTokyo_630.jpg"
     for vid_id, d_ate in match:

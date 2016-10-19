@@ -1,6 +1,13 @@
+Ver. 1.0.21.2
+
+Best of NHK - 37th release
+
+Fix: NHK Newsroom
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.21.1
 
-Best of NHK - 35th release
+Best of NHK - 36th release
 
 Misc. fixes
 
