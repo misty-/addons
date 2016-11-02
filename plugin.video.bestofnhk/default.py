@@ -277,7 +277,7 @@ def JIB_REC(url):
     link = net.http_GET(url).content
     match=re.compile('<a href="(.+?)" title="(.+?)">').findall(link)
     #thumb_=re.compile('<img src="programs/(.+?)"').findall(link)
-    for vid_page, title in match:
+    for vid_page, title_ in match:
         try:
             link1 = net.http_GET('http://jibtv.com/%s' % vid_page).content
             desc_ = re.compile('<meta property="og:description" content="(.+?)" />').findall(link1)
@@ -288,9 +288,10 @@ def JIB_REC(url):
             thumbnl1 = ''.join(thumb1).replace('showcace','showcase')
             meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
             vid_id = ''.join(meta_id)
-            link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
+            link2 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id).content
             vid_src_ = re.compile('"url":"(.+?)"').findall(link2)
             vid_src = ''.join(vid_src_)
+            title = (title_).encode('UTF-8').replace('<br />',' - ')
             if thumbnl == "":
                 media_item_list(title, vid_src, plot, thumbnl1, thumbnl1)
             elif thumbnl1 == "":
@@ -309,7 +310,7 @@ def JIB_FEAT(url):
             link1 = net.http_GET('http://jibtv.com/programs/%s' % vid_page).content
             title_ = re.compile('<meta property="og:title" content="(.+?)"').findall(link1)
             titl_e = ''.join(title_)
-            title = titl_e.encode('UTF-8')
+            title = (titl_e).encode('UTF-8').replace('<br />',' - ')
             desc_ = re.compile('<meta property="og:description" content="(.+?)"').findall(link1)
             plot = ''.join(desc_)
             thumb = re.compile('<meta property="og:image" content="(.+?)"').findall(link1)
@@ -320,7 +321,7 @@ def JIB_FEAT(url):
             vid_id_ = ''.join(meta_id)
             vid_id = vid_id_[0:3]
             try:
-                link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
+                link2 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id).content
                 vid_src_ = re.compile('"url":"(.+?)"').findall(link2)
                 vid_src = ''.join(vid_src_)
                 if thumbnl == "":
@@ -330,11 +331,11 @@ def JIB_FEAT(url):
                 elif thumbnl and thumbnl1 == "":
                     media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
             except:
-                link2 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/playlist' % vid_id).content
+                link2 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/playlist' % vid_id).content
                 match1=re.compile('"metas":\[\{"meta_id":(.+?),"name":"(.+?)".+?,\{"meta_id":(.+?),"name":"(.+?)"').findall(link2)
                 for vid_id1, title1, vid_id2, title2 in match1:
-                    link3 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id1).content
-                    link4 = net.http_GET('http://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id2).content
+                    link3 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id1).content
+                    link4 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id2).content
                     vid_src1_ = re.compile('"url":"(.+?)"').findall(link3)
                     vid_src1 = ''.join(vid_src1_)
                     if thumbnl == "":
@@ -469,13 +470,6 @@ def main_list1(params):
         #action="", 
         title="Youtube Search for 'NHK World'",
         url='plugin://plugin.video.youtube/search/?q=NHK World',
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="NHK Easy Japanese",
-        url="plugin://plugin.video.youtube/channel/UCm7ga8PSKjecD6SgNGRK0dA/",
         thumbnail=nhk_icon,
         folder=True )
 

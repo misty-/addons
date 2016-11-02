@@ -1,3 +1,10 @@
+Ver. 1.0.21.3
+
+Best of NHK - 38th release
+
+Fix: JIBTV
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.21.2
 
 Best of NHK - 37th release
