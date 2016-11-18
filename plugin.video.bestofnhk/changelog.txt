@@ -1,3 +1,10 @@
+Ver. 1.0.21.4
+
+Best of NHK - 39th release
+
+Fix: NHK Live SD stream
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.21.3
 
 Best of NHK - 38th release

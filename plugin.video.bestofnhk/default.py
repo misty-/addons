@@ -223,10 +223,10 @@ def IDX_LIVE_STRM():
     show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
     # menu
     if TimeZone == '(GMT+09:00) Osaka, Sapporo, Tokyo':
-        media_item_list(name.encode('UTF-8') + ' - SD', 'http://nhkworldtvlive-i.akamaihd.net/hls/live/222467/dw/index_900.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
+        media_item_list(name.encode('UTF-8') + ' - SD', 'http://nhkworldtvlive-i.akamaihd.net/hls/live/222468/dwstv/index_900.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
         media_item_list(name.encode('UTF-8') + ' - HD', 'http://nhkworldtvlive-i.akamaihd.net/hls/live/222468/dwstv/index_2100.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     else:
-        media_item_list(name.encode('UTF-8') + ' - SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/222714/nhkwglobal/index_1180.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
+        media_item_list(name.encode('UTF-8') + ' - SD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_900.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
         media_item_list(name.encode('UTF-8') + ' - HD', 'http://nhkwglobal-i.akamaihd.net/hls/live/225446/nhkwstv/index_2100.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     try:
         if sub_name == "":
