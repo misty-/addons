@@ -1,3 +1,31 @@
+[B]Version 2.6.9[/B]
+removed extension
+[B]Version 2.6.8[/B]
+bug fix
+[B]Version 2.6.7[/B]
+proxy and user agent
+[B]Version 2.6.6[/B]
+not so strick check for TS, little more
+[B]Version 2.6.5[/B]
+not so strick check for TS
+[B]Version 2.6.4[/B]
+redirector support
+[B]Version 2.6.3[/B]
+hlsretry little time change
+[B]Version 2.6.2[/B]
+iconImage support
+[B]Version 2.6.1[/B]
+callback in HLSRETRY
+[B]Version 2.6.0[/B]
+HLSRETRY in f4mproxy improvements
+
+[B]Version 2.5.8[/B]
+TSDownloader second improvements again
+
+[B]Version 2.5.7[/B]
+TSDownloader second improvements
+
+
 [B]Version 0.0.1[/B]
 - Initial Release.
 [B]Version 1.0.3[/B]
@@ -110,13 +138,16 @@ request module in hls
 [B]Version 2.5.1[/B]
 proxy issue in hls
 [B]Version 2.5.2[/B]
-hls stop bug
+auth param for hls if you want to ignore key url and pass yours
 [B]Version 2.5.3[/B]
-iconImage added
-
+ignore unknown m3u8 tags
 [B]Version 2.5.4[/B]
-iconImage added
+m3u8 more wait of no data
 [B]Version 2.5.5[/B]
-hls top when error
+m3u8 more wait of no data
+[B]Version 2.5.6[/B]
+m3u8 fine tuning
+REVERSED
+
 
 

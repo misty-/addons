@@ -1,3 +1,10 @@
+Ver. 1.0.21.5
+
+Best of NHK - 40th release
+
+Add: "JAPANmania" VOD and "Blends" in Youtube section. Removed non-working Youtube channels.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.21.4
 
 Best of NHK - 39th release

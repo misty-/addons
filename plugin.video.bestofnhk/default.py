@@ -475,36 +475,36 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
-        title="NHK World Shows 01",
-        url="plugin://plugin.video.youtube/channel/UCySEkVg1Q3QXjDvRFB0H41Q/",
+        title="JAPANmania NHK VOD",
+        url="plugin://plugin.video.youtube/channel/UCG29zNTM2Se-jNJCVcyLsaQ/",
         thumbnail=nhk_icon,
         folder=True )
 
+    plugintools.add_item( 
+        #action="", 
+        title="NHK World Shows 01",
+        url="plugin://plugin.video.youtube.plus/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
+        thumbnail=nhk_icon,
+        folder=True )
+        
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 02",
-        url="plugin://plugin.video.youtube/channel/UCcajZR_EkvQro0ZgFX6lgtQ/",
+        url="plugin://plugin.video.youtube.plus/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
         thumbnail=nhk_icon,
         folder=True )
-
+        
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 03",
-        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
+        url="plugin://plugin.video.youtube.plus/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
         thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 04",
-        url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 05",
-        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
+        url="plugin://plugin.video.youtube.plus/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
         thumbnail=nhk_icon,
         folder=True )
      
@@ -514,7 +514,14 @@ def main_list1(params):
         url="plugin://plugin.video.youtube/playlist/PLWuYED1WVJIPKU_tUlzLTfkbNnAtkDOhS/",
         thumbnail=nhk_icon,
         folder=True )
-        
+
+    plugintools.add_item( 
+        #action="", 
+        title="Blends",
+        url="plugin://plugin.video.youtube/playlist/PL4LETBC6Driq5QCpyT2fV_ca35W1CZ87B/",
+        thumbnail=nhk_icon,
+        folder=True )
+
     plugintools.add_item( 
         #action="", 
         title="Journeys in Japan",
