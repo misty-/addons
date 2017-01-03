@@ -1,3 +1,13 @@
+Ver. 1.0.21.7
+
+Best of NHK - 42nd release
+
+Fix: NHK monthly background image
+Add: Youtube search for NHK BS, which are raw video (no subtitles).
+     In order to properly view Japanese titles, please navigate to:
+     SYSTEM > Settings > Appearance > Skin > Fonts, change font to Arial Based
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.21.6
 
 Best of NHK - 41st release

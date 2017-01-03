@@ -119,7 +119,7 @@ def CATEGORIES():
 # Create content list
 def addDir(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name}
-    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
+    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'https://www3.nhk.or.jp/nhkworld/en/calendar/images/2160_1920/'+str_Mth+'.jpg')
 
 def addLink(name,url,plot,img,fanart):
     addon.add_item({'url': fanart}, {'title': name, 'plot': plot}, img = img, fanart = fanart, resolved=False, total_items=0, playlist=False, item_type='video', 
@@ -450,8 +450,9 @@ def IDX_YOUTUBE1():
     if params.get("action") is None:
         main_list1(params)
     else:
-        action = params.get("action")
-        exec action+"(params)"
+        #action = params.get("action")
+        #exec action+"(params)"
+        pass
     
     plugintools.close_item_list()
 
@@ -475,6 +476,13 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
+        title="Youtube Search for 'NHK BS'",
+        url='plugin://plugin.video.youtube/search/?q=NHK BS',
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
         title="JAPANmania NHK VOD",
         url="plugin://plugin.video.youtube/channel/UCG29zNTM2Se-jNJCVcyLsaQ/",
         thumbnail=nhk_icon,
@@ -483,31 +491,31 @@ def main_list1(params):
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 01",
-        url="plugin://plugin.video.youtube.plus/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
+        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
         thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 02",
-        url="plugin://plugin.video.youtube.plus/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
+        url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
         thumbnail=nhk_icon,
         folder=True )
         
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 03",
-        url="plugin://plugin.video.youtube.plus/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
+        url="plugin://plugin.video.youtube/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
         thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
         title="NHK World Shows 04",
-        url="plugin://plugin.video.youtube.plus/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
+        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
         thumbnail=nhk_icon,
         folder=True )
-     
+
     plugintools.add_item( 
         #action="", 
         title="UNESCO/NHK",
@@ -526,13 +534,6 @@ def main_list1(params):
         #action="", 
         title="Journeys in Japan",
         url='plugin://plugin.video.youtube/search/?q=intitle:"journeys in japan"',
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="J-Innovators",
-        url="plugin://plugin.video.youtube/playlist/PLgpKqm4E4A9oKOHfT-CmjtIppxP0Yp71R/",
         thumbnail=nhk_icon,
         folder=True )
 
@@ -561,8 +562,9 @@ def IDX_YOUTUBE2():
     if params.get("action") is None:
         main_list2(params)
     else:
-        action = params.get("action")
-        exec action+"(params)"
+        #action = params.get("action")
+        #exec action+"(params)"
+        pass
     
     plugintools.close_item_list()
 
