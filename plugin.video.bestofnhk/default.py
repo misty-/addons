@@ -25,7 +25,6 @@ addon = Addon(addon_id, sys.argv)
 from t0mm0.common.net import Net
 net = Net()
 settings = xbmcaddon.Addon(id='plugin.video.bestofnhk')
-from F4mProxy import f4mProxyHelper
 from xml.dom.minidom import parseString
 import xml.etree.ElementTree as ET
 pluginhandle = int(sys.argv[1])
@@ -109,7 +108,7 @@ def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
     addDir('NHK World On Demand', 'http://api.nhk.or.jp/nhkworld/vodesdlist/v1/all/all/all.json?%s' % apikey, 'vod', nhk_icon)
-    addDir('JIBTV On Demand', 'http://jibtv.com/', 'jibtv', jib_icon)
+    #addDir('JIBTV On Demand', 'http://jibtv.com/', 'jibtv', jib_icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
     addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
     addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
@@ -422,7 +421,7 @@ def IDX_FEAT_NEWS(url):
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
-    fanart = 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg'
+    fanart = 'https://www3.nhk.or.jp/nhkworld/en/calendar/images/2160_1920/'+str_Mth+'.jpg'
     media_item_list('NHK Radio News in Arabic (mp3)', host5+'arabic.xml','','',fanart)
     media_item_list('NHK Radio News in Bengali (mp3)', host5+'bengali.xml','','',fanart)
     media_item_list('NHK Radio News in Burmese (mp3)', host5+'burmese.xml','','',fanart)
@@ -641,7 +640,14 @@ def main_list2(params):
         url="plugin://plugin.video.youtube/playlist/PLdRCqO13zyDfQuDoZG6pHQuSJ2dbwVWQu/",
         thumbnail=nhk_icon,
         folder=True )
-    
+
+    plugintools.add_item( 
+        #action="", 
+        title="Japan-easy",
+        url="plugin://plugin.video.youtube.plus/playlist/PL7eAPsV34ISJSDktdEHZ7aIHvunY-0RQA/",
+        thumbnail=icon,
+        folder=True )
+
     plugintools.add_item( 
         #action="", 
         title="MoshiMoshi Nippon",
@@ -651,13 +657,7 @@ def main_list2(params):
 
 # Create media items list
 def media_item_list(name,url,plot,img,fanart):
-    if mode=='f4m':
-        player=f4mProxyHelper()
-        player.playF4mLink(url, name)
-        if not play:
-            pass
-
-    elif mode=='audio':
+    if mode=='audio':
         file = urllib2.urlopen(url)
         data = file.read()
         file.close()
@@ -722,10 +722,6 @@ elif mode=='jib_rec':
 elif mode=='jib_feat':
     print ""+url
     JIB_FEAT(url)
-
-elif mode=='f4m':
-    print ""+url
-    media_item_list(name,url,'','','')
 
 elif mode=='youtube1':
     print ""+url

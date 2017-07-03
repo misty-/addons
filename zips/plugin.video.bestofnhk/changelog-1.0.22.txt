@@ -1,3 +1,12 @@
+Ver. 1.0.22
+
+Best of NHK - 43rd release
+
+Kodi 15.x is the minimum version for this add-on.
+Remove: Non-functional JIBTV
+Remove: f4mproxy dependency
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.21.7
 
 Best of NHK - 42nd release
