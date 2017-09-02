@@ -482,6 +482,13 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
+        title="Best Japan Asia",
+        url="plugin://plugin.video.youtube/channel/UCy_e-6H1aNSgqgPS9_i4QXA/",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
         title="JAPANmania NHK VOD",
         url="plugin://plugin.video.youtube/channel/UCG29zNTM2Se-jNJCVcyLsaQ/",
         thumbnail=nhk_icon,
