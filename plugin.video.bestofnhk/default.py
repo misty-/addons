@@ -651,8 +651,8 @@ def main_list2(params):
     plugintools.add_item( 
         #action="", 
         title="Japan-easy",
-        url="plugin://plugin.video.youtube.plus/playlist/PL7eAPsV34ISJSDktdEHZ7aIHvunY-0RQA/",
-        thumbnail=icon,
+        url="plugin://plugin.video.youtube/playlist/PL7eAPsV34ISJSDktdEHZ7aIHvunY-0RQA/",
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 

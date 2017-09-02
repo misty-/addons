@@ -1,3 +1,10 @@
+Ver. 1.0.23.1
+
+Best of NHK - 45th release
+
+Fix: Coding error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.23 
 
 Best of NHK - 44th release
