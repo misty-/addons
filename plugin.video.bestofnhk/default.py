@@ -100,7 +100,7 @@ start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
 end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
 
 sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
-now = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/now.json?%s' % apikey
+now = 'http://api.nhk.or.jp/nhkworld/epg/v7/world/now.json?%s' % apikey
 
 
 # Main Menu
@@ -218,7 +218,8 @@ def IDX_LIVE_STRM():
     name = pl_now['channel']['item'][0]['title']
     desc = pl_now['channel']['item'][0]['description']
     sub_name = pl_now['channel']['item'][0]['subtitle']
-    thumbnl = pl_now['channel']['item'][0]['thumbnail']
+    thumbnl_ = pl_now['channel']['item'][0]['thumbnail']
+    thumbnl = host2[:-1]+thumbnl_
     show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
     # menu
     if TimeZone == '(GMT+09:00) Osaka, Sapporo, Tokyo':
@@ -237,7 +238,8 @@ def IDX_LIVE_STRM():
             name = pl_now['channel']['item'][i]['title']
             desc = pl_now['channel']['item'][i]['description']
             sub_name = pl_now['channel']['item'][i]['subtitle']
-            thumbnl = pl_now['channel']['item'][i]['thumbnail']
+            thumbnl_ = pl_now['channel']['item'][i]['thumbnail']
+            thumbnl = host2[:-1]+thumbnl_
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
             if sub_name == "":
                 addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
@@ -651,7 +653,7 @@ def main_list2(params):
     plugintools.add_item( 
         #action="", 
         title="Japan-easy",
-        url="plugin://plugin.video.youtube/playlist/PL7eAPsV34ISJSDktdEHZ7aIHvunY-0RQA/",
+        url="plugin://plugin.video.youtube/playlist/PLLbOFqwYMFi9scMpmRKU-a8260EG7R_bJ/",
         thumbnail=nhk_icon,
         folder=True )
 

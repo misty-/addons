@@ -1,3 +1,10 @@
+Ver. 1.0.24
+
+Best of NHK - 45th release
+
+Fix: Schedule and Live
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.23.1
 
 Best of NHK - 45th release
