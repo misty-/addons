@@ -1,4 +1,4 @@
-# Best of NHK - by misty 2013-2016.
+# Best of NHK - by misty 2013-2017.
 # import python libraries
 import urllib
 import urllib2
@@ -361,11 +361,13 @@ def JIB_FEAT(url):
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
-    match=re.compile('nw_addPlayer\(\'movie-area\', \{lang: \'en\', media: \'tv\', type: \'vod\', source: \'(.+?)\', callback: playerCallback\}\);</script>\n</div>\n<h2>Latest edition</h2>\n<h3></h3>\n<p class="date">(.+?)</p>\n<!--latest_end-->').findall(link)
+    match1=re.compile('nw_addPlayer\(\'movie-area\', \{lang: \'en\', media: \'tv\', type: \'vod\', source: \'(.+?)\', callback: playerCallback\}\)').findall(link)
+    match2=re.compile('<h3></h3>\n.+?<p class="date">(.+?)</p>').findall(link)
+    vid_id = str(match1).replace("['","").replace("']","")
+    d_ate = str(match2).replace("['","").replace("']","")
     icon = "http://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
-    fanart_ = "https://www.kcet.org/sites/kl/files/atoms/article_atoms/www.kcet.org/shows/tvtalk/assets/images/NewsroomTokyo_630.jpg"
-    for vid_id, d_ate in match:
-        media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','', icon, fanart_)
+    fanart_ = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/top/our_team.jpg"
+    media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','', icon, fanart_)
 
 # Latest top news stories
 def IDX_TOPNEWS(url):
