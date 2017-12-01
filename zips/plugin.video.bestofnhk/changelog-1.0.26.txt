@@ -1,3 +1,10 @@
+Ver. 1.0.26
+
+Best of NHK - 48th release
+
+Fix: Increase VOD found and cosmetic fix to VOD descriptions
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.25
 
 Best of NHK - 47th release
