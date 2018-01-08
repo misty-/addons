@@ -1,4 +1,4 @@
-# Best of NHK - by misty 2013-2017.
+# Best of NHK - by misty 2013-2018.
 # import python libraries
 import urllib
 import urllib2
@@ -53,6 +53,7 @@ TimeZone = settings.getSetting('tz')
 day = ''
 tz_C = 0
 #print "Date and time is: " + Date + " " + Time
+use_color = settings.getSetting('usecolor')
 
 # NHK World Schedule Time Zone and DST correction
 #print "Time zone is: " + TimeZone
@@ -146,9 +147,15 @@ def IDX_SCHED(url):
     sub_name = pl_now['channel']['item'][0]['subtitle']
     show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
     if sub_name == "":
-        f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+        if use_color == "true":
+            f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+        else:
+            f.write('[B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B]' + '  -  ' + desc.encode('UTF-8') + '\n' + '\n')
     else:
-        f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+        if use_color == "true":
+            f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+        else:
+            f.write('[B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B]' + '  -  ' + desc.encode('UTF-8') + '\n' + '\n')
     f.write('[B]Next:[/B]' + '\n' + '\n')
     
     try:
@@ -159,9 +166,15 @@ def IDX_SCHED(url):
             sub_name = pl_now['channel']['item'][i]['subtitle']
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
             if sub_name == "":
-                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                if use_color == "true":
+                    f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                else:
+                    f.write('[B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B]' + '  -  ' + desc.encode('UTF-8') + '\n' + '\n')
             else:
-                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                if use_color == "true":
+                    f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                else:
+                    f.write('[B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B]' + '  -  ' + desc.encode('UTF-8') + '\n' + '\n')
     except:
         pass
 
@@ -175,9 +188,15 @@ def IDX_SCHED(url):
             sub_name = sch_json['channel']['item'][i]['subtitle']
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
             if sub_name == "":
-                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                if use_color == "true":
+                    f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                else:
+                    f.write('[B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B]' + '  -  ' + desc.encode('UTF-8') + '\n' + '\n')
             else:
-                f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                if use_color == "true":
+                    f.write('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]' + '  -  ' + '[COLOR green]' + desc.encode('UTF-8') + '[/COLOR]' + '\n' + '\n')
+                else:
+                    f.write('[B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B]' + '  -  ' + desc.encode('UTF-8') + '\n' + '\n')
     except:
         pass
     f.close()
@@ -230,9 +249,15 @@ def IDX_LIVE_STRM():
         media_item_list(name.encode('UTF-8') + ' - HD', 'https://nhkwtvglobal-i.akamaihd.net/hls/live/263941/nhkwtvglobal/index_2100.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     try:
         if sub_name == "":
-            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+            if use_color == "true":
+                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+            else:
+                addLink('[B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
         else:
-            addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+            if use_color == "true":
+                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+            else:
+                addLink('[B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
         for i in range(1,20):
             pubDate = int(pl_now['channel']['item'][i]['pubDate'])
             name = pl_now['channel']['item'][i]['title']
@@ -242,9 +267,15 @@ def IDX_LIVE_STRM():
             thumbnl = host2[:-1]+thumbnl_
             show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
             if sub_name == "":
-                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+                if use_color == "true":
+                    addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+                else:
+                    addLink('[B]' + show_time + ' - ' + name.encode('UTF-8') + '[/B]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
             else:
-                addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+                if use_color == "true":
+                    addLink('[COLOR blue][B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B][/COLOR]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
+                else:
+                    addLink('[B]' + show_time + ' - ' + name.encode('UTF-8') + ' - ' + sub_name.encode('UTF-8') + '[/B]', '', desc.encode('UTF-8'), thumbnl, thumbnl)
     except:
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
@@ -481,13 +512,6 @@ def main_list1(params):
         #action="", 
         title="Youtube Search for 'NHK BS'",
         url='plugin://plugin.video.youtube/search/?q=NHK BS',
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="Best Japan Asia",
-        url="plugin://plugin.video.youtube/channel/UCy_e-6H1aNSgqgPS9_i4QXA/",
         thumbnail=nhk_icon,
         folder=True )
 

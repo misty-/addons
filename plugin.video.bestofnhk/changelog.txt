@@ -1,3 +1,12 @@
+Ver. 1.0.27 
+
+Best of NHK - 49th release
+
+Added: Setting to disable text color in schedule and live. Push request by user runningnaked.
+
+Fix: Remove dead youtube channel
+              
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.26
 
 Best of NHK - 48th release
