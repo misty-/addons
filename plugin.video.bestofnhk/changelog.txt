@@ -1,3 +1,10 @@
+Ver. 1.0.28 
+
+Best of NHK - 50th release
+
+Fix: Monthly calendar fanart / background. NHK stopped their calendar, add new source for beautiful Japanese landscapes.
+         
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.27 
 
 Best of NHK - 49th release

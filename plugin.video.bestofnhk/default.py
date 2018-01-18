@@ -54,6 +54,8 @@ day = ''
 tz_C = 0
 #print "Date and time is: " + Date + " " + Time
 use_color = settings.getSetting('usecolor')
+month = { 1:'01_jan', 2:'02_feb', 3:'03_mar', 4:'04_apr', 5:'05_may', 6:'06_jun',
+          7:'07_jul', 8:'08_aug', 9:'09_sep', 10:'10_oct', 11:'11_nov', 12:'12_dec' }
 
 # NHK World Schedule Time Zone and DST correction
 #print "Time zone is: " + TimeZone
@@ -119,7 +121,7 @@ def CATEGORIES():
 # Create content list
 def addDir(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name}
-    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'https://www3.nhk.or.jp/nhkworld/en/calendar/images/2160_1920/'+str_Mth+'.jpg')
+    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'http://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg')
 
 def addLink(name,url,plot,img,fanart):
     addon.add_item({'url': fanart}, {'title': name, 'plot': plot}, img = img, fanart = fanart, resolved=False, total_items=0, playlist=False, item_type='video', 
@@ -456,7 +458,7 @@ def IDX_FEAT_NEWS(url):
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
-    fanart = 'https://www3.nhk.or.jp/nhkworld/en/calendar/images/2160_1920/'+str_Mth+'.jpg'
+    fanart = 'http://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg'
     media_item_list('NHK Radio News in Arabic (mp3)', host5+'arabic.xml','','',fanart)
     media_item_list('NHK Radio News in Bengali (mp3)', host5+'bengali.xml','','',fanart)
     media_item_list('NHK Radio News in Burmese (mp3)', host5+'burmese.xml','','',fanart)
