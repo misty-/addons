@@ -1,3 +1,10 @@
+Ver. 1.0.29 
+
+Best of NHK - 51st release
+
+Add: JIBTV. Some JIBTV video do not play. Videos were either removed or have not yet been added by JIBTV.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.28 
 
 Best of NHK - 50th release

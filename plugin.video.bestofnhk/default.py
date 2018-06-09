@@ -7,8 +7,6 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 import xbmcaddon
-#import random
-#import string
 import sys
 import os
 import datetime
@@ -35,6 +33,7 @@ host2 = 'http://www3.nhk.or.jp/'
 host3 = 'http://ak.c.ooyala.com/'
 host4 = 'http://player.ooyala.com/player/all/'
 host5 = 'http://www.nhk.or.jp/rj/podcast/rss/'
+host6 = 'https://www.jibtv.com/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 nhk_icon = addon01.getAddonInfo('icon') # icon.png in addon directory
@@ -111,7 +110,7 @@ def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
     addDir('NHK World On Demand', 'http://api.nhk.or.jp/nhkworld/vodesdlist/v1/all/all/all.json?%s' % apikey, 'vod', nhk_icon)
-    #addDir('JIBTV On Demand', 'http://jibtv.com/', 'jibtv', jib_icon)
+    addDir('JIBTV On Demand', 'https://www.jibtv.com/programs/', 'jibtv', jib_icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
     addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
     addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
@@ -122,6 +121,10 @@ def CATEGORIES():
 def addDir(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name}
     addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'http://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg')
+
+def addDir1(name,url,mode,iconimage):
+    params = {'url':url, 'mode':mode, 'name':name, 'iconimage':iconimage}
+    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = iconimage)
 
 def addLink(name,url,plot,img,fanart):
     addon.add_item({'url': fanart}, {'title': name, 'plot': plot}, img = img, fanart = fanart, resolved=False, total_items=0, playlist=False, item_type='video', 
@@ -303,10 +306,21 @@ def IDX_VOD(url):
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
 # jibtv
+'''
 def IDX_JIBTV(url):
     addDir('Recommended', 'http://jibtv.com/', 'jib_rec', jib_icon)
     addDir('Featured Programs', 'http://jibtv.com/programs/', 'jib_feat', jib_icon)
-
+'''
+def IDX_JIBTV(url):
+    link = net.http_GET(url).content
+    match1 = re.compile('<tr data-href="(.+?)">\n.+?<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\n.+?<td><span class="font-500">(.+?)</span><span ').findall(link)
+    match2 = re.compile('<tr data-href="(.+?)">\n.+?<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\n.+?<td><span class="font-500">(.+?)\n</span><span ').findall(link)
+    for vid_page_, thumbnl_, title_ in match1 + match2:
+        vid_page = host6+vid_page_
+        thumbnl = host6+thumbnl_
+        title = (title_).encode('UTF-8').replace('<br>',' - ').replace('<br />',' - ')
+        addDir1(title, vid_page, 'jib_feat', thumbnl)
+'''
 def JIB_REC(url):
     link = net.http_GET(url).content
     match=re.compile('<a href="(.+?)" title="(.+?)">').findall(link)
@@ -335,61 +349,38 @@ def JIB_REC(url):
         except:
             pass
         xbmcplugin.setContent(pluginhandle, 'episodes')
-
-def JIB_FEAT(url):
+'''
+def JIB_FEAT(url,iconimage): 
     link = net.http_GET(url).content
-    match=re.compile('<a href="/programs/(.+?)"').findall(link)
-    for vid_page in match:
+    try:
+        title_ = re.compile('<meta property="og:title" content="(.+?)"').findall(link)
+        titl_e = ''.join(title_)
+        title = (titl_e).encode('UTF-8').replace('<br />',' - ')
+        desc_ = re.compile('<meta property="og:description" content="(.+?)"').findall(link)
+        plot = ''.join(desc_)
+        meta_id = re.compile('play\(\{ meta_id: (.+?) \}\)').findall(link)
+        vid_id_ = ''.join(meta_id)
+        vid_id = vid_id_[0:3]
         try:
-            link1 = net.http_GET('http://jibtv.com/programs/%s' % vid_page).content
-            title_ = re.compile('<meta property="og:title" content="(.+?)"').findall(link1)
-            titl_e = ''.join(title_)
-            title = (titl_e).encode('UTF-8').replace('<br />',' - ')
-            desc_ = re.compile('<meta property="og:description" content="(.+?)"').findall(link1)
-            plot = ''.join(desc_)
-            thumb = re.compile('<meta property="og:image" content="(.+?)"').findall(link1)
-            thumb1 = re.compile('<meta content="(.+?)" property="og:image"').findall(link1)
-            thumbnl = ''.join(thumb).replace('showcace','showcase')
-            thumbnl1 = ''.join(thumb1).replace('showcace','showcase')
-            meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
-            vid_id_ = ''.join(meta_id)
-            vid_id = vid_id_[0:3]
-            try:
-                link2 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id).content
-                vid_src_ = re.compile('"url":"(.+?)"').findall(link2)
-                vid_src = ''.join(vid_src_)
-                if thumbnl == "":
-                    media_item_list(title, vid_src, plot, thumbnl1, thumbnl1)
-                elif thumbnl1 == "":
-                    media_item_list(title, vid_src, plot, thumbnl, thumbnl)
-                elif thumbnl and thumbnl1 == "":
-                    media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
-            except:
-                link2 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/playlist' % vid_id).content
-                match1=re.compile('"metas":\[\{"meta_id":(.+?),"name":"(.+?)".+?,\{"meta_id":(.+?),"name":"(.+?)"').findall(link2)
-                for vid_id1, title1, vid_id2, title2 in match1:
-                    link3 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id1).content
-                    link4 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id2).content
-                    vid_src1_ = re.compile('"url":"(.+?)"').findall(link3)
-                    vid_src1 = ''.join(vid_src1_)
-                    if thumbnl == "":
-                        media_item_list(title1, vid_src1, plot, thumbnl1, thumbnl1)
-                    elif thumbnl1 == "":
-                        media_item_list(title1, vid_src1, plot, thumbnl, thumbnl)
-                    elif thumbnl and thumbnl1 == "":
-                        media_item_list(title1, vid_src1, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
-                    vid_src2_ = re.compile('"url":"(.+?)"').findall(link4)
-                    vid_src2 = ''.join(vid_src2_)
-                    if thumbnl == "":
-                        media_item_list(title2, vid_src2, plot, thumbnl1, thumbnl1)
-                    elif thumbnl1 == "":
-                        media_item_list(title2, vid_src2, plot, thumbnl, thumbnl)
-                    elif thumbnl and thumbnl1 == "":
-                        media_item_list(title2, vid_src2, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
-
+            link2 = net.http_GET('https://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id).content
+            vid_src_ = re.compile('"url":"(.+?)"').findall(link2)
+            vid_src = ''.join(vid_src_)
+            media_item_list(title, vid_src, plot, iconimage, iconimage)
         except:
-           pass
-        xbmcplugin.setContent(pluginhandle, 'episodes')
+            link2 = net.http_GET('https://jibtv-vcms.logica.io/api/v1/metas/%s/playlist' % vid_id).content
+            match1=re.compile('"metas":\[\{"meta_id":(.+?),"name":"(.+?)".+?,\{"meta_id":(.+?),"name":"(.+?)"').findall(link2)
+            for vid_id1, title1, vid_id2, title2 in match1:
+                link3 = net.http_GET('https://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id1).content
+                link4 = net.http_GET('https://jibtv-vcms.logica.io/api/v1/metas/%s/medias' % vid_id2).content
+                vid_src1_ = re.compile('"url":"(.+?)"').findall(link3)
+                vid_src1 = ''.join(vid_src1_)
+                media_item_list(title1, vid_src1, plot, iconimage, iconimage)
+                vid_src2_ = re.compile('"url":"(.+?)"').findall(link4)
+                vid_src2 = ''.join(vid_src2_)
+                media_item_list(title2, vid_src2, plot, iconimage, iconimage)
+    except:
+        pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
 
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
@@ -721,6 +712,7 @@ play = addon.queries.get('play', None)
 mode = addon.queries['mode']
 url = addon.queries.get('url', '')
 name = addon.queries.get('name', '')
+iconimage = addon.queries.get('iconimage', '')
 
 print "Play: " +str(play)
 print "Mode: "+str(mode)
@@ -758,7 +750,7 @@ elif mode=='jib_rec':
 
 elif mode=='jib_feat':
     print ""+url
-    JIB_FEAT(url)
+    JIB_FEAT(url,iconimage)
 
 elif mode=='youtube1':
     print ""+url
