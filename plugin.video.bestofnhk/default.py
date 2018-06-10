@@ -510,6 +510,13 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
+        title="JAPAN to the World",
+        url="plugin://plugin.video.youtube/user/chipselecthun/",
+        thumbnail=icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
         title="JAPANmania NHK VOD",
         url="plugin://plugin.video.youtube/channel/UCG29zNTM2Se-jNJCVcyLsaQ/",
         thumbnail=nhk_icon,
@@ -548,6 +555,13 @@ def main_list1(params):
         title="UNESCO/NHK",
         url="plugin://plugin.video.youtube/playlist/PLWuYED1WVJIPKU_tUlzLTfkbNnAtkDOhS/",
         thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="NHK Documentary",
+        url='plugin://plugin.video.youtube/search/?q=NHK Documentary',
+        thumbnail=icon,
         folder=True )
 
     plugintools.add_item( 
