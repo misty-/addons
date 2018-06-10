@@ -1,0 +1,484 @@
+Ver. 1.0.30
+
+Best of NHK - 52nd release
+
+Add: New Youtube channels
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.29 
+
+Best of NHK - 51st release
+
+Add: JIBTV. Some JIBTV video do not play. Videos were either removed or have not yet been added by JIBTV.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.28 
+
+Best of NHK - 50th release
+
+Fix: Monthly calendar fanart / background. NHK stopped their calendar, add new source for beautiful Japanese landscapes.
+         
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.27 
+
+Best of NHK - 49th release
+
+Added: Setting to disable text color in schedule and live. Push request by user runningnaked.
+
+Fix: Remove dead youtube channel
+              
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.26
+
+Best of NHK - 48th release
+
+Fix: Increase VOD found and cosmetic fix to VOD descriptions
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.25
+
+Best of NHK - 47th release
+
+Fix: NHK Newsroom
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.24
+
+Best of NHK - 46th release
+
+Fix: Schedule and Live
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.23.1
+
+Best of NHK - 45th release
+
+Fix: Coding error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.23 
+
+Best of NHK - 44th release
+
+Add: "Best Japan Asia" in Youtube section
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.22
+
+Best of NHK - 43rd release
+
+Kodi 15.x is the minimum version for this add-on.
+Remove: Non-functional JIBTV
+Remove: f4mproxy dependency
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.7
+
+Best of NHK - 42nd release
+
+Fix: NHK monthly background image
+Add: Youtube search for NHK BS, which are raw video (no subtitles).
+     In order to properly view Japanese titles, please navigate to:
+     SYSTEM > Settings > Appearance > Skin > Fonts, change font to Arial Based
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.6
+
+Best of NHK - 41st release
+
+Fix: NHK Live HD and SD streams
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.5
+
+Best of NHK - 40th release
+
+Add: "JAPANmania" VOD and "Blends" in Youtube section. Removed non-working Youtube channels.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.4
+
+Best of NHK - 39th release
+
+Fix: NHK Live SD stream
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.3
+
+Best of NHK - 38th release
+
+Fix: JIBTV
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.2
+
+Best of NHK - 37th release
+
+Fix: NHK Newsroom
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21.1
+
+Best of NHK - 36th release
+
+Misc. fixes
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Ver. 1.0.21
+
+Best of NHK - 35th release
+
+Fix: NHK On Demand unicode error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.20.1
+
+Best of NHK - 34th release
+
+Fix: JIBTV - They keep changing their code...
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.20
+
+Best of NHK - 33rd release
+
+Update: Code changes to JIBTV Featured Programs
+Add: Youtube channels for NHK World On Demand, NHK World News and NHK Easy Japanese
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.19.1
+
+Best of NHK - 32nd release
+
+Fix: JIBTV (2nd try)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.19
+
+Best of NHK - 31st release
+
+Fix: JIBTV
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.18
+
+Best of NHK - 30th release
+
+Fix: NHK VOD
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.17
+
+Best of NHK - 29th release
+
+Add: JIBTV On Demand
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.16
+
+Best of NHK - 28th release
+
+Fix: Live streams for residents of Japan
+Add: 'Somewhere Street' in YouTube videos
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.15
+
+Best of NHK - 27th release
+
+Fix: Video on demand 404 error
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.14.1
+
+Best of NHK - 26th release
+
+Update: Remove forced 'media info 2' view selection.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.14
+
+Best of NHK - 25th release
+
+Updated icon, add media info and more graphics
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.13
+
+Best of NHK - 24th release
+
+Re-added NHK News Top Stories
+Updated NHK YouTube video list
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.12
+
+Best of NHK - 23th release
+
+Fix: Remove Radio News Japanese - causing 404 error file does not exist
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.11
+
+Best of NHK - 23th release
+
+Remove NHK News Top Stories
+Fix: NHK News Feature Stories
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.10
+
+Best of NHK - 22th release
+
+Fix: NHK Radio News for Frodo, Gotham, Helix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.9
+
+Best of NHK - 21th release
+
+Fix: NHK Radio News links
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.8
+
+Best of NHK - 20th release
+
+New feature: Current and next show schedule preview
+Fix: Unicode error in NHK schedule
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.7.1
+
+Best of NHK - 19th release
+
+Fix: NHK schedule fix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.7
+
+Best of NHK - 18th release
+
+New feature: Add HD (720) live stream
+Fix: misc. code fix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.6.1
+
+Best of NHK - 17th release
+
+Fix: misc. code fix
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.6
+
+Best of NHK - 16th release
+
+New feature: NHK News Feature Stories
+Fix: NHK schedule
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.5
+
+Best of NHK - 15th release
+
+Fix: NHK schedule and NHK Newsroom Tokyo
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.4
+
+Best of NHK - 14th release
+
+Fix: NHK Radio News audio change
+Misc: Clean up code, thumbnails for VOD vdeos and youtube links
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.3
+
+Best of NHK - 13th release
+
+New features: NHK World On Demand - Catchup on recently shown
+selection of programs you may have missed. Added NHK Radio
+News in Japanese.
+
+Fix: NHK Newsroom Tokyo video change
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.2
+
+Best of NHK - 12th release
+
+Fix: Small problem with Top Stories not finding some videos.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 1.0.1
+
+Best of NHK - 11th release
+
+New features: Added NHK News Top Stories and NHK World on Youtube.
+Top Stories are frequently updated NHK breaking news video clips.
+NHK World on Youtube brings back the long missed ability to view
+archived NHK World programs.
+
+Fix: Small problem with NHK Newsroom Tokyo not finding video.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.11
+
+Best of NHK - 10th release
+
+Fix: NHK World live stream failure
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.10
+
+Best of NHK - Ninth release.
+
+Added 2nd live stream and Newsroom Tokyo daily news (M-F)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.9
+
+Best of NHK - Eighth release.
+
+Fix: NHK World live stream failure and code cleanup.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.8
+
+Best of NHK - Seventh release.
+
+Fix: NHK World live stream failure
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.7
+
+Best of NHK - Sixth release.
+
+Maintenance release. Removed forced auto-opening of addon settings menu if timezone is not set.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.6
+
+Best of NHK - Fifth release.
+
+New feature:
+
+Added 2nd live stream (Thanks to m5Germany @ xbmchub)
+Try either stream and see which one plays better for you.
+(I see a small improvement with the 2nd stream.)
+
+To do:
+
+Download videos function. Please ignore the download folder setting in the addon
+settings window. It won't hurt anything if it is set, but download will not function.
+
+Known issues: No change from previous version.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.5
+
+Best of NHK - Fourth release.
+
+Fix: NHK World live stream failure (Thanks goes to gujal @ xbmchub)
+
+New feature:
+
+NHK World live stream time zone and DST corrected schedule. Please be sure to
+set your time zone in the Best of NHK addon settings. This time zone
+setting does not change your clock. The setting is only used internally
+by the addon so the schedule will display correctly for your time zone and DST.
+
+Created new fanart for background.
+
+To do:
+
+Download videos function. Please ignore the download folder setting in the addon
+settings window. It won't hurt anything if it is set, but download will not function.
+
+Known issues: No change from previous version.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.1
+
+Best of NHK - Third release.
+
+Fix: NHK World live stream failure
+
+Known issues: No change from previous version.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.9.0
+
+Best of NHK - Second release.
+
+New feature:
+
+NHK pre-recorded daily radio news broadcast in 17 languages.
+
+Known issues: No change from previous version.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Ver. 0.8.5
+
+Best of NHK - First release.
+
+Features:
+
+NHK World live stream
+Latest videos
+Videos by name
+Play random video
+
+Known issues:
+
+Some flv flash videos are not decoded by XBMC ffmpeg.
+This problem is not the fault of this plugin.
+The videos will play correctly with an external player.
+You will need to setup playercorefactory.xml configuration
+for your specific needs.
+
+For more details on playercorefactory.xml, please visit
+http://wiki.xbmc.org/index.php?title=External_players
+
+Enjoy!
+
+
+
+
+
