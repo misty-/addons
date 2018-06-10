@@ -512,7 +512,7 @@ def main_list1(params):
         #action="", 
         title="JAPAN to the World",
         url="plugin://plugin.video.youtube/user/chipselecthun/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
@@ -561,7 +561,7 @@ def main_list1(params):
         #action="", 
         title="NHK Documentary",
         url='plugin://plugin.video.youtube/search/?q=NHK Documentary',
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
