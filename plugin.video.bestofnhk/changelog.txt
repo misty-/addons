@@ -1,3 +1,10 @@
+Ver. 1.0.31
+
+Best of NHK - 53rd release
+
+Fix: NHK VOD and Youtube channel
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.30.2
 
 Best of NHK - 52nd release

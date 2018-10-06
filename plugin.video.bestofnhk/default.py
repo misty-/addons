@@ -290,15 +290,15 @@ def IDX_VOD(url):
     req = urllib2.urlopen(url)
     vod_json = json.load(req)
     try:
-        for i in range(800):
+        for i in range(1000):
             series_ = vod_json['data']['episodes'][i]['title']
             ep_name_ = vod_json['data']['episodes'][i]['sub_title']
             plot_ = vod_json['data']['episodes'][i]['description']
             thumbnl_ = vod_json['data']['episodes'][i]['image_l']
             vid_id = vod_json['data']['episodes'][i]['vod_id']
             series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ').replace('<span style="font-style: italic;">', '').replace('</span>','')
-            ep_name = (ep_name_).encode('UTF-8').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<i>','').replace('</i>','').replace('<br>',' ').replace('<b>','').replace('</b>','')
-            plot = (plot_).encode('UTF-8').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('<i>','').replace('</i>','').replace('<br>',' ').replace('<b>','').replace('</b>','')
+            ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','')
+            plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','')
             thumbnl = host2[:-1]+thumbnl_
             media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, thumbnl)
     except:
@@ -510,9 +510,9 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
-        title="JAPAN to the World",
-        url="plugin://plugin.video.youtube/user/chipselecthun/",
-        thumbnail=nhk_icon,
+        title="Exotic Japan",
+        url="plugin://plugin.video.youtube/user/UltraSnowLion/",
+        thumbnail=icon,
         folder=True )
 
     plugintools.add_item( 
