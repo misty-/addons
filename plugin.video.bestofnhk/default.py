@@ -512,7 +512,7 @@ def main_list1(params):
         #action="", 
         title="Exotic Japan",
         url="plugin://plugin.video.youtube/user/UltraSnowLion/",
-        thumbnail=icon,
+        thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
