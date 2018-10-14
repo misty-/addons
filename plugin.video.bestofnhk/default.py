@@ -33,7 +33,7 @@ host2 = 'http://www3.nhk.or.jp/'
 host3 = 'http://ak.c.ooyala.com/'
 host4 = 'http://player.ooyala.com/player/all/'
 host5 = 'http://www.nhk.or.jp/rj/podcast/rss/'
-host6 = 'https://www.jibtv.com/'
+host6 = 'https://www.jibtv.com'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 nhk_icon = addon01.getAddonInfo('icon') # icon.png in addon directory
@@ -313,8 +313,8 @@ def IDX_JIBTV(url):
 '''
 def IDX_JIBTV(url):
     link = net.http_GET(url).content
-    match1 = re.compile('<tr data-href="(.+?)">\n.+?<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\n.+?<td><span class="font-500">(.+?)</span><span ').findall(link)
-    match2 = re.compile('<tr data-href="(.+?)">\n.+?<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\n.+?<td><span class="font-500">(.+?)\n</span><span ').findall(link)
+    match1 = re.compile('<tr data-href="(.+?)">\r\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\r\n\t*<td><span class="font-500">(.+?)</span><span ').findall(link)
+    match2 = re.compile('<tr data-href="(.+?)">\r\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\r\n\t*<td><span class="font-500">(.+?)\r\n</span><span ').findall(link)
     for vid_page_, thumbnl_, title_ in match1 + match2:
         vid_page = host6+vid_page_
         thumbnl = host6+thumbnl_

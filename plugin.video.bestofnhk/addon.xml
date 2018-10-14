@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.31.1" provider-name="misty">
+<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.32" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.t0mm0.common" version="2.1.1"/>
@@ -13,10 +13,10 @@
   	    <language></language>
         <summary>NHK World</summary>
         <description>Weird, fun, interesting documentaries from NHK World Japan. New shows daily.</description>
-        <news>Ver. 1.0.31.1
-              Best of NHK - 54th release
+        <news>Ver. 1.0.32
+              Best of NHK - 55th release
               Kodi 15.x is the minimum version for this add-on.
-              Fix: Youtube channel
+              Fix: JIBTV
         </news>
   </extension>
 </addon>

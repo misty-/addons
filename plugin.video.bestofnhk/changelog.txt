@@ -1,3 +1,10 @@
+Ver. 1.0.32
+
+Best of NHK - 55th release
+
+Fix: JIBTV
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.31.1
 
 Best of NHK - 54th release
