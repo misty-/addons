@@ -55,6 +55,12 @@ tz_C = 0
 use_color = settings.getSetting('usecolor')
 month = { 1:'01_jan', 2:'02_feb', 3:'03_mar', 4:'04_apr', 5:'05_may', 6:'06_jun',
           7:'07_jul', 8:'08_aug', 9:'09_sep', 10:'10_oct', 11:'11_nov', 12:'12_dec' }
+hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
+       'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+       'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
+       'Accept-Encoding': 'none',
+       'Accept-Language': 'en-US,en;q=0.8',
+       'Connection': 'keep-alive'}
 
 # NHK World Schedule Time Zone and DST correction
 #print "Time zone is: " + TimeZone
@@ -290,7 +296,7 @@ def IDX_VOD(url):
     req = urllib2.urlopen(url)
     vod_json = json.load(req)
     try:
-        for i in range(1000):
+        for i in range(3000):
             series_ = vod_json['data']['episodes'][i]['title']
             ep_name_ = vod_json['data']['episodes'][i]['sub_title']
             plot_ = vod_json['data']['episodes'][i]['description']
@@ -315,7 +321,9 @@ def IDX_JIBTV(url):
     link = net.http_GET(url).content
     match1 = re.compile('<tr data-href="(.+?)">\r\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\r\n\t*<td><span class="font-500">(.+?)</span><span ').findall(link)
     match2 = re.compile('<tr data-href="(.+?)">\r\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\r\n\t*<td><span class="font-500">(.+?)\r\n</span><span ').findall(link)
-    for vid_page_, thumbnl_, title_ in match1 + match2:
+    match3 = re.compile('<tr data-href="(.+?)">\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\n\t*<td><span class="font-500">(.+?)</span><span ').findall(link)
+    match4 = re.compile('<tr data-href="(.+?)">\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\n\t*<td><span class="font-500">(.+?)\n</span><span ').findall(link)
+    for vid_page_, thumbnl_, title_ in match1 + match2 + match3 + match4:
         vid_page = host6+vid_page_
         thumbnl = host6+thumbnl_
         title = (title_).encode('UTF-8').replace('<br>',' - ').replace('<br />',' - ')
@@ -395,13 +403,16 @@ def IDX_NEWS(url):
 
 # Latest top news stories
 def IDX_TOPNEWS(url):
-    req = urllib2.urlopen(url)
-    top_json = json.load(req)
+    
+    req = urllib2.Request(url, headers=hdr)
+    file = urllib2.urlopen(req)
+    top_json = json.load(file)
     try:
         for i in range(200):
             if top_json['data'][i]['videos']:
                 xml_link = top_json['data'][i]['videos']['config']
-                file = urllib2.urlopen(host2[:-1]+xml_link)
+                req = urllib2.Request((host2[:-1]+xml_link), headers=hdr)
+                file = urllib2.urlopen(req)
                 data = file.read()
                 file.close()
                 dom = parseString(data)
@@ -423,8 +434,9 @@ def IDX_FEATURE(url):
     addDir('NHK News Feature Stories - BizTec', url, 'feat_news_biztec', nhk_icon)
 
 def IDX_FEAT_NEWS(url):
-    req = urllib2.urlopen(url)
-    feat_json = json.load(req)
+    req = urllib2.Request(url, headers=hdr)
+    file = urllib2.urlopen(req)
+    feat_json = json.load(file)
     try:
         for i in range(300):
             #thumbnl = feat_json['data'][i]['thumbnails']['middle']
@@ -432,7 +444,8 @@ def IDX_FEAT_NEWS(url):
             #title = feat_json['data'][i]['title']
             cat = feat_json['data'][i]['categories']['name']
             if mode == 'feat_news_japan' and cat == 'JAPAN' or mode == 'feat_news_asia' and cat == 'ASIA' or mode == 'feat_news_world' and cat == 'WORLD' or mode == 'feat_news_biztec' and cat == 'BIZTCH':
-                file = urllib2.urlopen(host2[:-1]+xml_link)
+                req = urllib2.Request((host2[:-1]+xml_link), headers=hdr)
+                file = urllib2.urlopen(req)
                 data = file.read()
                 file.close()
                 dom = parseString(data)
@@ -510,48 +523,6 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
-        title="Exotic Japan",
-        url="plugin://plugin.video.youtube/user/UltraSnowLion/",
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="JAPANmania NHK VOD",
-        url="plugin://plugin.video.youtube/channel/UCG29zNTM2Se-jNJCVcyLsaQ/",
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 01",
-        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
-        thumbnail=nhk_icon,
-        folder=True )
-        
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 02",
-        url="plugin://plugin.video.youtube/channel/UC4w_dcTPt8iaLE18TB7RLtQ/",
-        thumbnail=nhk_icon,
-        folder=True )
-        
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 03",
-        url="plugin://plugin.video.youtube/channel/UCgP5mLnSCcP8tj1jWIWYP5Q/",
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
-        title="NHK World Shows 04",
-        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
-        thumbnail=nhk_icon,
-        folder=True )
-
-    plugintools.add_item( 
-        #action="", 
         title="UNESCO/NHK",
         url="plugin://plugin.video.youtube/playlist/PLWuYED1WVJIPKU_tUlzLTfkbNnAtkDOhS/",
         thumbnail=nhk_icon,
@@ -566,8 +537,50 @@ def main_list1(params):
 
     plugintools.add_item( 
         #action="", 
+        title="Begin Japanology",
+        url="plugin://plugin.video.youtube/search/?q=Begin Japanology",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Japanology Plus",
+        url="plugin://plugin.video.youtube/search/?q=Japanology Plus",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Tokyo Eye",
+        url="plugin://plugin.video.youtube/search/?q=Tokyo Eye",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Trails to Tsukiji",
+        url="plugin://plugin.video.youtube/search/?q=Trails to Tsukiji",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Dining with the Chef",
+        url="plugin://plugin.video.youtube/search/?q=Dining with the chef",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Document 72 Hours",
+        url="plugin://plugin.video.youtube/search/?q=Document 72 hours",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
         title="Blends",
-        url="plugin://plugin.video.youtube/playlist/PL4LETBC6Driq5QCpyT2fV_ca35W1CZ87B/",
+        url="plugin://plugin.video.youtube/playlist/PL6McKfIW72Lp48IFPOOtIRmJWrhu_NJ7p/",
         thumbnail=nhk_icon,
         folder=True )
 
@@ -575,6 +588,27 @@ def main_list1(params):
         #action="", 
         title="Journeys in Japan",
         url='plugin://plugin.video.youtube/search/?q=intitle:"journeys in japan"',
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Core Kyoto",
+        url="plugin://plugin.video.youtube/search/?q=NHK Core Kyoto",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="Japan Railway Journal",
+        url="plugin://plugin.video.youtube/search/?q=NHK Japan Railway Journal",
+        thumbnail=nhk_icon,
+        folder=True )
+
+    plugintools.add_item( 
+        #action="", 
+        title="J-Trip Plan",
+        url="plugin://plugin.video.youtube/search/?q=NHK J-Trip Plan",
         thumbnail=nhk_icon,
         folder=True )
 
@@ -629,21 +663,21 @@ def main_list2(params):
         
     plugintools.add_item( 
         #action="", 
-        title="Begin Japanology 01",
-        url="plugin://plugin.video.youtube/channel/UCPMSNvTv2rgODVy0GvsMxZg/",
+        title="NHK World Shows 01",
+        url="plugin://plugin.video.youtube/channel/UCs8DHpkt9f61vUOZO_qwiSQ/",
         thumbnail=nhk_icon,
         folder=True )
 
     plugintools.add_item( 
         #action="", 
-        title="Begin Japanology 02",
-        url="plugin://plugin.video.youtube/playlist/PL8IcLS3A4sWKqf47xzXl_NIwlj_Hae5fM/",
+        title="NHK World Shows 02",
+        url="plugin://plugin.video.youtube/playlist/PLKQaIKexM4LJL4GL-lfgvDdlLElTjJIUW/",
         thumbnail=nhk_icon,
         folder=True )
-        
+       
     plugintools.add_item( 
         #action="", 
-        title="Begin Japanology 03",
+        title="Begin Japanology",
         url="plugin://plugin.video.youtube/playlist/PLJ4SclxaotEijsfzIFlUcHG6huoiovh9s/",
         thumbnail=nhk_icon,
         folder=True )
@@ -700,7 +734,8 @@ def main_list2(params):
 # Create media items list
 def media_item_list(name,url,plot,img,fanart):
     if mode=='audio':
-        file = urllib2.urlopen(url)
+        req = urllib2.Request(url, headers=hdr)
+        file = urllib2.urlopen(req)
         data = file.read()
         file.close()
         dom = parseString(data)

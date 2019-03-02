@@ -1,3 +1,12 @@
+Ver. 1.0.33
+
+Best of NHK - 56th release
+
+Fix: JIBTV, NHK News Top Stories, NHK News Feature Stories, NHK Radio News
+Add: New Youtube channels
+Remove: Broken Youtube channels
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.32
 
 Best of NHK - 55th release
