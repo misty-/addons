@@ -29,15 +29,18 @@ pluginhandle = int(sys.argv[1])
 
 # globals
 #host1 = 'http://nhkworld-hds-live1.hds1.fmslive.stream.ne.jp/hds-live/nhkworld-hds-live1/_definst_/livestream/'
-host2 = 'http://www3.nhk.or.jp/'
-host3 = 'http://ak.c.ooyala.com/'
-host4 = 'http://player.ooyala.com/player/all/'
-host5 = 'http://www.nhk.or.jp/rj/podcast/rss/'
+host2 = 'https://www3.nhk.or.jp/'
+host3 = 'https://ak.c.ooyala.com/'
+host4 = 'https://player.ooyala.com/player/all/'
+host5 = 'https://www.nhk.or.jp/rj/podcast/rss/'
 host6 = 'https://www.jibtv.com'
+host7 = ''
+host8 = 'https://api.nhk.or.jp/nhkworld/vodesdlist/v7/'
+host9 = 'https://www3.nhk.or.jp/nhkworld/assets/images/vod/icon/png320/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 nhk_icon = addon01.getAddonInfo('icon') # icon.png in addon directory
-jib_icon = 'http://www.jamaipanese.com/wp-content/uploads/2009/05/jibbywithfreesby.jpg'
+jib_icon = 'https://www.jamaipanese.com/wp-content/uploads/2009/05/jibbywithfreesby.jpg'
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
 str_Yr = str(time.strftime ('%Y'))
@@ -107,26 +110,26 @@ e_poch_midnt = calendar.timegm(d_atetime.timetuple())
 start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
 end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
 
-sch = 'http://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
-now = 'http://api.nhk.or.jp/nhkworld/epg/v7/world/now.json?%s' % apikey
+sch = 'https://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
+now = 'https://api.nhk.or.jp/nhkworld/epg/v7/world/now.json?%s' % apikey
 
 
 # Main Menu
 def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
-    addDir('NHK World On Demand', 'http://api.nhk.or.jp/nhkworld/vodesdlist/v1/all/all/all.json?%s' % apikey, 'vod', nhk_icon)
+    addDir('NHK World On Demand', '', 'vod_cats', nhk_icon)
     addDir('JIBTV On Demand', 'https://www.jibtv.com/programs/', 'jibtv', jib_icon)
     addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
     addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
-    addDir('NHK News Feature Stories', 'http://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
+    addDir('NHK News Feature Stories', 'https://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
     addDir('NHK Radio News', '', 'audio', nhk_icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', nhk_icon)
 
 # Create content list
 def addDir(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name}
-    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'http://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg')
+    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'https://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg')
 
 def addDir1(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name, 'iconimage':iconimage}
@@ -291,6 +294,28 @@ def IDX_LIVE_STRM():
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
+def IDX_VOD_CATS(url):
+    addDir('Latest Episodes', host8+'all/all/en/all/12.json?%s' % apikey, 'vod', nhk_icon)
+    addDir('Most Watched', host8+'mostwatch/all/en/all/12.json?%s' % apikey, 'vod', nhk_icon)
+    addDir('Art & Design', host8+'category/19/en/all/all.json?%s' % apikey, 'vod', host9+'19.png')
+    addDir('Biz/Tech', host8+'category/14/en/all/all.json?%s' % apikey, 'vod', host9+'14.png')
+    addDir('Culture & Lifestyle', host8+'category/20/en/all/all.json?%s' % apikey, 'vod', host9+'20.png')
+    addDir('Current Affairs', host8+'category/12/en/all/all.json?%s' % apikey, 'vod', host9+'12.png')
+    addDir('Debate', host8+'category/13/en/all/all.json?%s' % apikey, 'vod', host9+'13.png')
+    addDir('Disaster Preparedness', host8+'category/29/en/all/all.json?%s' % apikey, 'vod', host9+'29.png')
+    addDir('Documentary', host8+'category/15/en/all/all.json?%s' % apikey, 'vod', host9+'15.png')
+    addDir('Drama', host8+'category/26/en/all/all.json?%s' % apikey, 'vod', host9+'26.png')
+    addDir('Entertainment', host8+'category/21/en/all/all.json?%s' % apikey, 'vod', host9+'21.png')
+    addDir('Food', host8+'category/17/en/all/all.json?%s' % apikey, 'vod', host9+'17.png')
+    addDir('Interactive', host8+'category/27/en/all/all.json?%s' % apikey, 'vod', host9+'27.png')
+    addDir('Interview', host8+'category/16/en/all/all.json?%s' % apikey, 'vod', host9+'16.png')
+    addDir('Learn Japanese', host8+'category/28/en/all/all.json?%s' % apikey, 'vod', host9+'28.png')
+    addDir('News', host8+'category/11/en/all/all.json?%s' % apikey, 'vod', host9+'11.png')
+    addDir('Pop Culture & Fashion', host8+'category/22/en/all/all.json?%s' % apikey, 'vod', host9+'22.png')
+    addDir('Science & Nature', host8+'category/23/en/all/all.json?%s' % apikey, 'vod', host9+'23.png')
+    addDir('Sport', host8+'category/25/en/all/all.json?%s' % apikey, 'vod', host9+'25.png')
+    addDir('Travel', host8+'category/18/en/all/all.json?%s' % apikey, 'vod', host9+'18.png')
+
 # video on demand
 def IDX_VOD(url):
     req = urllib2.urlopen(url)
@@ -303,8 +328,8 @@ def IDX_VOD(url):
             thumbnl_ = vod_json['data']['episodes'][i]['image_l']
             vid_id = vod_json['data']['episodes'][i]['vod_id']
             series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ').replace('<span style="font-style: italic;">', '').replace('</span>','')
-            ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','')
-            plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','')
+            ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
+            plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
             thumbnl = host2[:-1]+thumbnl_
             media_item_list(series + ' - ' + ep_name, host4 + vid_id + '.m3u8', plot, thumbnl, thumbnl)
     except:
@@ -397,7 +422,7 @@ def IDX_NEWS(url):
     match2=re.compile('<h3></h3>\n.+?<p class="date">(.+?)</p>').findall(link)
     vid_id = str(match1).replace("['","").replace("']","")
     d_ate = str(match2).replace("['","").replace("']","")
-    icon = "http://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
+    icon = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
     fanart_ = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/top/our_team.jpg"
     media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','', icon, fanart_)
 
@@ -462,7 +487,7 @@ def IDX_FEAT_NEWS(url):
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
-    fanart = 'http://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg'
+    fanart = 'https://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg'
     media_item_list('NHK Radio News in Arabic (mp3)', host5+'arabic.xml','','',fanart)
     media_item_list('NHK Radio News in Bengali (mp3)', host5+'bengali.xml','','',fanart)
     media_item_list('NHK Radio News in Burmese (mp3)', host5+'burmese.xml','','',fanart)
@@ -788,6 +813,10 @@ elif mode=='live_strm':
 elif mode=='vod':
     print ""+url
     IDX_VOD(url)
+
+elif mode=='vod_cats':
+    print ""+url
+    IDX_VOD_CATS(url)
 
 elif mode=='jibtv':
     print ""+url

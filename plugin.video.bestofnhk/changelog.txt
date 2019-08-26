@@ -1,3 +1,10 @@
+Ver. 1.0.35
+
+Best of NHK - 58th release
+
+Fix: NHK On Demand
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.34
 
 Best of NHK - 57th release
