@@ -120,9 +120,10 @@ def CATEGORIES():
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
     addDir('NHK World On Demand', '', 'vod_cats', nhk_icon)
     addDir('JIBTV On Demand', 'https://www.jibtv.com/programs/', 'jibtv', jib_icon)
-    addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
-    addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
-    addDir('NHK News Feature Stories', 'https://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
+    addDir('NHK World News', '', 'news', nhk_icon)
+    #addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
+    #addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
+    #addDir('NHK News Feature Stories', 'https://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
     addDir('NHK Radio News', '', 'audio', nhk_icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', nhk_icon)
 
@@ -295,6 +296,7 @@ def IDX_LIVE_STRM():
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
 def IDX_VOD_CATS(url):
+    addDir('Full On Demand Listing', host8+'all/all/en/all/all.json?%s' % apikey, 'vod', nhk_icon)
     addDir('Latest Episodes', host8+'all/all/en/all/12.json?%s' % apikey, 'vod', nhk_icon)
     addDir('Most Watched', host8+'mostwatch/all/en/all/12.json?%s' % apikey, 'vod', nhk_icon)
     addDir('Art & Design', host8+'category/19/en/all/all.json?%s' % apikey, 'vod', host9+'19.png')
@@ -307,7 +309,7 @@ def IDX_VOD_CATS(url):
     addDir('Drama', host8+'category/26/en/all/all.json?%s' % apikey, 'vod', host9+'26.png')
     addDir('Entertainment', host8+'category/21/en/all/all.json?%s' % apikey, 'vod', host9+'21.png')
     addDir('Food', host8+'category/17/en/all/all.json?%s' % apikey, 'vod', host9+'17.png')
-    addDir('Interactive', host8+'category/27/en/all/all.json?%s' % apikey, 'vod', host9+'27.png')
+    #addDir('Interactive', host8+'category/27/en/all/all.json?%s' % apikey, 'vod', host9+'27.png')
     addDir('Interview', host8+'category/16/en/all/all.json?%s' % apikey, 'vod', host9+'16.png')
     addDir('Learn Japanese', host8+'category/28/en/all/all.json?%s' % apikey, 'vod', host9+'28.png')
     addDir('News', host8+'category/11/en/all/all.json?%s' % apikey, 'vod', host9+'11.png')
@@ -415,6 +417,30 @@ def JIB_FEAT(url,iconimage):
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
+# New NHK News
+def IDX_NEWS(url):
+    addDir('NHK Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
+    addDir('Newsline', host2+'nhkworld/data/en/news/programs/1001.xml', 'the_news', nhk_icon)
+    addDir('Newsroom Tokyo', host2+'nhkworld/data/en/news/programs/1002.xml', 'the_news', nhk_icon)
+    addDir('Newsline Asia 24', host2+'nhkworld/data/en/news/programs/1003.xml', 'the_news', nhk_icon)
+    addDir('Newsline Biz', host2+'nhkworld/data/en/news/programs/1004.xml', 'the_news', nhk_icon)
+    addDir('Newsline In Depth', host2+'nhkworld/data/en/news/programs/1005.xml', 'the_news', nhk_icon)
+
+def THE_NEWS(url):
+    req = urllib2.Request(url, headers=hdr)
+    file = urllib2.urlopen(req)
+    data = file.read()
+    file.close()
+    dom = parseString(data)
+    v_url = dom.getElementsByTagName('file.high')[0].toxml()
+    image = dom.getElementsByTagName('image')[0].toxml()
+    name = dom.getElementsByTagName('media.title')[0].toxml()
+    vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+    thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
+    name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"')
+    media_item_list(name_,vid_url,'',thumbnl,thumbnl)
+
+'''
 # Newsroom Tokyo news broadcast updated daily M-F
 def IDX_NEWS(url):
     link = net.http_GET(url).content
@@ -425,7 +451,7 @@ def IDX_NEWS(url):
     icon = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
     fanart_ = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/top/our_team.jpg"
     media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','', icon, fanart_)
-
+'''
 # Latest top news stories
 def IDX_TOPNEWS(url):
     
@@ -450,7 +476,7 @@ def IDX_TOPNEWS(url):
                 media_item_list(name_,vid_url,'',thumbnl,thumbnl)
     except:
         pass
-
+'''
 # Feature news stories
 def IDX_FEATURE(url):
     addDir('NHK News Feature Stories - Japan', url, 'feat_news_japan', nhk_icon)
@@ -484,7 +510,7 @@ def IDX_FEAT_NEWS(url):
                 media_item_list(name_,vid_url,'',thumbnl,thumbnl)
     except:
         pass
-
+'''
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
     fanart = 'https://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg'
@@ -605,7 +631,7 @@ def main_list1(params):
     plugintools.add_item( 
         #action="", 
         title="Blends",
-        url="plugin://plugin.video.youtube/playlist/PL6McKfIW72Lp48IFPOOtIRmJWrhu_NJ7p/",
+        url="plugin://plugin.video.youtube/search/?q=NHK Blends",
         thumbnail=nhk_icon,
         folder=True )
 
@@ -647,7 +673,7 @@ def main_list1(params):
     plugintools.add_item( 
         #action="", 
         title="Somewhere Street",
-        url="plugin://plugin.video.youtube/playlist/PLlvv-XeEWsbc7iLhLRSGRLF5TkkFf7P9x/",
+        url="plugin://plugin.video.youtube/search/?q=NHK Somewhere Street",
         thumbnail=nhk_icon,
         folder=True )
 
@@ -837,6 +863,14 @@ elif mode=='youtube1':
 elif mode=='youtube2':
     print ""+url
     IDX_YOUTUBE2()
+
+elif mode=='news':
+    print ""+url
+    IDX_NEWS(url)
+
+elif mode=='the_news':
+    print ""+url
+    THE_NEWS(url)
 
 elif mode=='newsroom':
     print ""+url

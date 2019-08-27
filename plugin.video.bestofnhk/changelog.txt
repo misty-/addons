@@ -1,3 +1,11 @@
+Ver. 1.0.36
+
+Best of NHK - 59th release
+
+Fix: NHK News
+Add: Full On Demand Listing
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.35
 
 Best of NHK - 58th release
