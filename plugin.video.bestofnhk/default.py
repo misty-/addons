@@ -110,7 +110,7 @@ e_poch_midnt = calendar.timegm(d_atetime.timetuple())
 start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
 end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
 
-sch = 'https://api.nhk.or.jp/nhkworld/epg/v4/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
+sch = 'https://api.nhk.or.jp/nhkworld/epg/v7/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
 now = 'https://api.nhk.or.jp/nhkworld/epg/v7/world/now.json?%s' % apikey
 
 
