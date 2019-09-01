@@ -1,3 +1,10 @@
+Ver. 1.0.38
+
+Best of NHK - 61th release
+
+Fix: NHK Live Schedule
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.37
 
 Best of NHK - 60th release
