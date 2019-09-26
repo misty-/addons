@@ -1,6 +1,13 @@
+Ver. 1.0.39
+
+Best of NHK - 62nd release
+
+Fix: NHK VOD reliability and speed
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.38
 
-Best of NHK - 61th release
+Best of NHK - 61st release
 
 Fix: NHK Live Schedule
 

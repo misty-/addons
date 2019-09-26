@@ -40,7 +40,7 @@ host9 = 'https://www3.nhk.or.jp/nhkworld/assets/images/vod/icon/png320/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 nhk_icon = addon01.getAddonInfo('icon') # icon.png in addon directory
-jib_icon = 'https://www.jamaipanese.com/wp-content/uploads/2009/05/jibbywithfreesby.jpg'
+jib_icon = 'http://www.jamaipanese.com/wp-content/uploads/2009/05/jibbywithfreesby.jpg'
 download_path = settings.getSetting('download_folder')
 Time = str(time.strftime ('%H:%M:%S%p/%Z/%c'))
 str_Yr = str(time.strftime ('%Y'))
@@ -121,9 +121,6 @@ def CATEGORIES():
     addDir('NHK World On Demand', '', 'vod_cats', nhk_icon)
     addDir('JIBTV On Demand', 'https://www.jibtv.com/programs/', 'jibtv', jib_icon)
     addDir('NHK World News', '', 'news', nhk_icon)
-    #addDir('NHK Newsroom Tokyo - Updated daily M-F', host2+'nhkworld/newsroomtokyo/', 'newsroom', nhk_icon)
-    #addDir('NHK News Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
-    #addDir('NHK News Feature Stories', 'https://api.nhk.or.jp/nhkworld/pg/list/v1/en/newsvideos/all/all.json?%s' % apikey, 'feature', nhk_icon)
     addDir('NHK Radio News', '', 'audio', nhk_icon)
     addDir('NHK Videos on Youtube', '', 'youtube1', nhk_icon)
 
@@ -135,6 +132,10 @@ def addDir(name,url,mode,iconimage):
 def addDir1(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name, 'iconimage':iconimage}
     addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = iconimage)
+
+def addDir2(name,url,mode,plot,iconimage):
+    params = {'url':url, 'mode':mode, 'name':name, 'plot':plot, 'iconimage':iconimage}
+    addon.add_directory(params, {'title': str(name), 'plot': plot}, img = iconimage, fanart = iconimage)
 
 def addLink(name,url,plot,img,fanart):
     addon.add_item({'url': fanart}, {'title': name, 'plot': plot}, img = img, fanart = fanart, resolved=False, total_items=0, playlist=False, item_type='video', 
@@ -333,10 +334,28 @@ def IDX_VOD(url):
             ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
             plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
             thumbnl = host2[:-1]+thumbnl_
-            media_item_list(series + ' - ' + ep_name, vid_id, plot, thumbnl, thumbnl)
+            addDir2(series + ' - ' + ep_name, vid_id, 'vod_resolve', plot, thumbnl)
     except:
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
+
+def VOD_RESOLVE(name,url,plot,iconimage):
+    if url[0:6] == 'nw_vod':
+        vid_id = str(url)
+        req = urllib2.Request('https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+vid_id+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+vid_id+'&de-subtitle-on=false', headers=hdr)
+        response = urllib2.urlopen(req)
+        link=response.read()
+        response.close()
+        match = re.compile("'data-de-program-uuid','(.+?)'").findall(link)
+        for p_uuid_ in match:
+            p_uuid = str(p_uuid_).replace("['" , "").replace("']" , "")
+            req = urllib2.urlopen('https://movie-s.nhk.or.jp/ws/ws_program/api/67f5b750-b419-11e9-8a16-0e45e8988f42/apiv/5/mode/json?v='+p_uuid)
+            vod_json = json.load(req)
+            vlink = vod_json['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
+            media_item_list(name, vlink, plot, iconimage, iconimage)
+    elif url[0:6] != 'nw_vod':
+        vid_id = str(url)
+        media_item_list(name, host4 + vid_id + '.m3u8', plot, iconimage, iconimage)
 
 # jibtv
 '''
@@ -794,29 +813,9 @@ def media_item_list(name,url,plot,img,fanart):
         url = re.compile('.+?url="(.+?)".+?').findall(xmlTag)
         radionews_url = str(url).replace("[u'", "").replace("']","")
         addon.add_music_item({'url': radionews_url}, {'title': name}, context_replace = nhk_icon, fanart = fanart, playlist=False)
-
-    elif mode == 'vod' and url[0:6] == 'nw_vod':
-        vid_id = url
-        req = urllib2.Request('https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+vid_id+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+vid_id+'&de-subtitle-on=false', headers=hdr)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        match = re.compile("'data-de-program-uuid','(.+?)'").findall(link)
-        for p_uuid_ in match:
-            p_uuid = str(p_uuid_).replace("['" , "").replace("']" , "")
-            req = urllib2.urlopen('https://movie-s.nhk.or.jp/ws/ws_program/api/67f5b750-b419-11e9-8a16-0e45e8988f42/apiv/5/mode/json?v='+p_uuid)
-            vod_json = json.load(req)
-            vlink = vod_json['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
-            addon.add_video_item({'url': vlink}, {'title': name, 'plot': plot}, img = img, fanart = fanart, playlist=False)
-                
-    elif mode == 'vod' and url[0:6] != 'nw_vod':
-        vid_id = url
-        addon.add_video_item({'url': host4 + vid_id + '.m3u8'}, {'title': name, 'plot': plot}, img = img, fanart = fanart, playlist=False)
-        
         
     else:
         addon.add_video_item({'url': url}, {'title': name, 'plot': plot}, img = img, fanart = fanart, playlist=False)
-            
 
 
 # Downloader
@@ -829,6 +828,7 @@ mode = addon.queries['mode']
 url = addon.queries.get('url', '')
 name = addon.queries.get('name', '')
 iconimage = addon.queries.get('iconimage', '')
+plot = addon.queries.get('plot', '')
 
 print "Play: " +str(play)
 print "Mode: "+str(mode)
@@ -859,6 +859,10 @@ elif mode=='vod':
 elif mode=='vod_cats':
     print ""+url
     IDX_VOD_CATS(url)
+
+elif mode=='vod_resolve':
+    print ""+url
+    VOD_RESOLVE(name,url,plot,iconimage)
 
 elif mode=='jibtv':
     print ""+url
