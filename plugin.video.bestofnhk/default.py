@@ -340,7 +340,7 @@ def IDX_VOD(url):
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
 def VOD_RESOLVE(name,url,plot,iconimage):
-    if url[0:6] == 'nw_vod':
+    if url[0:4] == 'nw_v':
         vid_id = str(url)
         req = urllib2.Request('https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+vid_id+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+vid_id+'&de-subtitle-on=false', headers=hdr)
         response = urllib2.urlopen(req)

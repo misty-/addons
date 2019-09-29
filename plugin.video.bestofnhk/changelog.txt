@@ -1,3 +1,10 @@
+Ver. 1.0.40
+
+Best of NHK - 63rd release
+
+Fix: Some videos not playing in NHK VOD
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.39
 
 Best of NHK - 62nd release
