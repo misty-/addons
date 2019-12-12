@@ -258,8 +258,8 @@ def IDX_LIVE_STRM():
     show_time = str(datetime.datetime.fromtimestamp(pubDate/1000).strftime('%H:%M'))
     # menu
     if TimeZone == '(GMT+09:00) Osaka, Sapporo, Tokyo':
-        media_item_list(name.encode('UTF-8') + ' - 720', 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_2M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
-        media_item_list(name.encode('UTF-8') + ' - 1080', 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_4M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
+        media_item_list(name.encode('UTF-8') + ' - 720', 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp/index_2M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
+        media_item_list(name.encode('UTF-8') + ' - 1080', 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp/index_4M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     else:
         media_item_list(name.encode('UTF-8') + ' - 720', 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_2M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
         media_item_list(name.encode('UTF-8') + ' - 1080', 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_4M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
@@ -324,7 +324,7 @@ def IDX_VOD(url):
     req = urllib2.urlopen(url)
     vod_json = json.load(req)
     try:
-        for i in range(3000):
+        for i in range(5000):
             series_ = vod_json['data']['episodes'][i]['title']
             ep_name_ = vod_json['data']['episodes'][i]['sub_title']
             plot_ = vod_json['data']['episodes'][i]['description']
@@ -353,7 +353,7 @@ def VOD_RESOLVE(name,url,plot,iconimage):
             vod_json = json.load(req)
             vlink = vod_json['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
             media_item_list(name, vlink, plot, iconimage, iconimage)
-    elif url[0:6] != 'nw_vod':
+    elif url[0:4] != 'nw_v':
         vid_id = str(url)
         media_item_list(name, host4 + vid_id + '.m3u8', plot, iconimage, iconimage)
 

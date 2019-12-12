@@ -1,3 +1,10 @@
+Ver. 1.0.42
+
+Best of NHK - 65th release
+
+Fix: NHK World Domestic Japan Live Stream
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.41
 
 Best of NHK - 64th release
