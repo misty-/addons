@@ -64,7 +64,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.41" provider-name="misty">
+<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.42" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.t0mm0.common" version="2.1.1"/>
@@ -78,7 +78,7 @@
   	    <language></language>
         <summary>NHK World</summary>
         <description>Weird, fun, interesting documentaries from NHK World Japan. New shows daily.</description>
-        <news>Ver. 1.0.41
+        <news>Ver. 1.0.42
               Best of NHK - 65th release
               Kodi 15.x is the minimum version for this add-on.
               Fix: NHK World Domestic Japan Live Stream
