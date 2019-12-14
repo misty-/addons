@@ -351,8 +351,12 @@ def VOD_RESOLVE(name,url,plot,iconimage):
             p_uuid = str(p_uuid_).replace("['" , "").replace("']" , "")
             req = urllib2.urlopen('https://movie-s.nhk.or.jp/ws/ws_program/api/67f5b750-b419-11e9-8a16-0e45e8988f42/apiv/5/mode/json?v='+p_uuid)
             vod_json = json.load(req)
-            vlink = vod_json['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
-            media_item_list(name, vlink, plot, iconimage, iconimage)
+            vlink1 = vod_json['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
+            v_id2 = vod_json['response']['WsProgramResponse']['program']['asset']['referenceFile']['rtmp']['stream']
+            vlink_2 = v_id2.split('?')
+            vlink2 = 'https://nhkw-mzvod.akamaized.net/www60/mz-nhk10/definst/mp4:mm/flvmedia/5905/m/F/m/' + vlink_2[0] + '/chunklist.m3u8'
+            media_item_list('720: '+ name, vlink1, plot, iconimage, iconimage)
+            media_item_list('1080: '+ name, vlink2, plot, iconimage, iconimage)
     elif url[0:4] != 'nw_v':
         vid_id = str(url)
         media_item_list(name, host4 + vid_id + '.m3u8', plot, iconimage, iconimage)
