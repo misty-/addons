@@ -118,6 +118,7 @@ now = 'https://api.nhk.or.jp/nhkworld/epg/v7/world/now.json?%s' % apikey
 def CATEGORIES():
     addDir('NHK World Live Schedule', '', 'schedule', nhk_icon)
     addDir('NHK World Live Stream', '', 'live_strm', nhk_icon)
+    addDir('NHK World Chinese Language Stream', '', 'other_live_strm', nhk_icon)
     addDir('NHK World On Demand', '', 'vod_cats', nhk_icon)
     addDir('JIBTV On Demand', 'https://www.jibtv.com/programs/', 'jibtv', jib_icon)
     addDir('NHK World News', '', 'news', nhk_icon)
@@ -262,7 +263,7 @@ def IDX_LIVE_STRM():
         media_item_list(name.encode('UTF-8') + ' - 1080', 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp/index_4M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     else:
         media_item_list(name.encode('UTF-8') + ' - 720', 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_2M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
-        media_item_list(name.encode('UTF-8') + ' - 1080', 'https://nhkwlive-xjp.akamaized.net/hls/live/2003458/nhkwlive-xjp/index_4M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
+        media_item_list(name.encode('UTF-8') + ' - 1080', 'https://nhkwlive-ojp.akamaized.net/hls/live/2003459/nhkwlive-ojp/index_4M.m3u8', desc.encode('UTF-8'), thumbnl, thumbnl)
     try:
         if sub_name == "":
             if use_color == "true":
@@ -295,6 +296,9 @@ def IDX_LIVE_STRM():
     except:
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
+
+def IDX_OTHER_LIVE_STRM():
+    media_item_list('NHK Live - Chinese', 'https://nhkw-zh-hlscomp.akamaized.net/8thz5iufork8wjip/playlist.m3u8', '', nhk_icon, '')
 
 def IDX_VOD_CATS(url):
     addDir('On Demand Full Listing', host8+'all/all/en/all/all.json?%s' % apikey, 'vod', nhk_icon)
@@ -855,6 +859,10 @@ elif mode=='schedule':
 elif mode=='live_strm':
     print ""+url
     IDX_LIVE_STRM()
+
+elif mode=='other_live_strm':
+    print ""+url
+    IDX_OTHER_LIVE_STRM()
 
 elif mode=='vod':
     print ""+url
