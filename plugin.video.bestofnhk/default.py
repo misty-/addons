@@ -1,4 +1,4 @@
-# Best of NHK - by misty 2013-2018.
+# Best of NHK - by misty 2013-2020.
 # import python libraries
 import urllib
 import urllib2
@@ -35,7 +35,7 @@ host4 = 'https://player.ooyala.com/player/all/'
 host5 = 'https://www.nhk.or.jp/rj/podcast/rss/'
 host6 = 'https://www.jibtv.com'
 host7 = ''
-host8 = 'https://api.nhk.or.jp/nhkworld/vodesdlist/v7/'
+host8 = 'https://api.nhk.or.jp/nhkworld/vodesdlist/v7a/'
 host9 = 'https://www3.nhk.or.jp/nhkworld/assets/images/vod/icon/png320/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
@@ -110,8 +110,8 @@ e_poch_midnt = calendar.timegm(d_atetime.timetuple())
 start_time = int(e_poch_midnt) + int(60*tz_C) # e_poch_midnt = GMT midnight
 end_time = int(start_time) + ((60*60*24)-60) # date+23:59:00
 
-sch = 'https://api.nhk.or.jp/nhkworld/epg/v7/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
-now = 'https://api.nhk.or.jp/nhkworld/epg/v7/world/now.json?%s' % apikey
+sch = 'https://api.nhk.or.jp/nhkworld/epg/v7a/world/s'+str(int(start_time))+'-e'+str(int(end_time))+'.json?%s' % apikey
+now = 'https://api.nhk.or.jp/nhkworld/epg/v7a/world/now.json?%s' % apikey
 
 
 # Main Menu

@@ -1,3 +1,10 @@
+Ver. 1.0.45
+
+Best of NHK - 68th release
+
+Fix: Schedule, Live Stream and VOD
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.44
 
 Best of NHK - 67th release
