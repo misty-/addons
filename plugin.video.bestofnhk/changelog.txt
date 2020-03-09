@@ -1,3 +1,11 @@
+Ver. 1.0.46
+
+Best of NHK - 69th release
+
+Fix: NHK World News section
+Add: News At a Glance
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.45
 
 Best of NHK - 68th release

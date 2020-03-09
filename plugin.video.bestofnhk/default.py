@@ -447,6 +447,7 @@ def JIB_FEAT(url,iconimage):
 # New NHK News
 def IDX_NEWS(url):
     addDir('NHK Top Stories', host2+'nhkworld/data/en/news/all.json', 'topnews', nhk_icon)
+    addDir('News At a Glance', host2+'nhkworld/en/news/ataglance/index.json', 'glance', nhk_icon)
     addDir('Newsline', host2+'nhkworld/data/en/news/programs/1001.xml', 'the_news', nhk_icon)
     addDir('Newsroom Tokyo', host2+'nhkworld/data/en/news/programs/1002.xml', 'the_news', nhk_icon)
     addDir('Newsline Asia 24', host2+'nhkworld/data/en/news/programs/1003.xml', 'the_news', nhk_icon)
@@ -462,7 +463,7 @@ def THE_NEWS(url):
     v_url = dom.getElementsByTagName('file.high')[0].toxml()
     image = dom.getElementsByTagName('image')[0].toxml()
     name = dom.getElementsByTagName('media.title')[0].toxml()
-    vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+    vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('hq.mp4',',l,h,q.mp4.csmil/master.m3u8')
     thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
     name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"')
     media_item_list(name_,vid_url,'',thumbnl,thumbnl)
@@ -497,12 +498,46 @@ def IDX_TOPNEWS(url):
                 v_url = dom.getElementsByTagName('file.high')[0].toxml()
                 image = dom.getElementsByTagName('image')[0].toxml()
                 name = dom.getElementsByTagName('media.title')[0].toxml()
-                vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
+                vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('HQ.mp4',',L,H,Q.mp4.csmil/master.m3u8')
                 thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
                 name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('_amp_','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
                 media_item_list(name_,vid_url,'',thumbnl,thumbnl)
     except:
         pass
+
+def IDX_GLANCE(url):
+    req = urllib2.Request(url, headers=hdr)
+    file = urllib2.urlopen(req)
+    g_json = json.load(file)
+    try:
+        for i in range(5000):
+            if g_json['data'][i]['video']:
+                ep_name_ = g_json['data'][i]['title']
+                plot_ = g_json['data'][i]['description']
+                thumbnl_ = g_json['data'][i]['image']['main_pc']
+                xml_link = g_json['data'][i]['video']['config']
+                ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
+                plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
+                thumbnl = host2[:-1]+thumbnl_
+                addDir2(ep_name, xml_link, 'g_resolve', plot, thumbnl)
+    except:
+        pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
+
+def G_RESOLVE(name,url,plot,iconimage):
+    req = urllib2.Request((host2[:-1]+url), headers=hdr)
+    file = urllib2.urlopen(req)
+    data = file.read()
+    file.close()
+    dom = parseString(data)
+    v_url = dom.getElementsByTagName('file.high')[0].toxml()
+    image = dom.getElementsByTagName('image')[0].toxml()
+    name = dom.getElementsByTagName('media.title')[0].toxml()
+    vid_url = v_url.replace('<file.high>','').replace('</file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('mp4','mp4/master.m3u8')
+    thumbnl = host2 + image.replace('<image>','').replace('</image>','')
+    name_ = name.replace('<![CDATA[','').replace(']]>','').replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('_amp_','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
+    media_item_list(name_,vid_url,plot,thumbnl,thumbnl)
+
 '''
 # Feature news stories
 def IDX_FEATURE(url):
@@ -911,7 +946,15 @@ elif mode=='newsroom':
 elif mode=='topnews':
     print ""+url
     IDX_TOPNEWS(url)
-    
+
+elif mode=='glance':
+    print ""+url
+    IDX_GLANCE(url)
+
+elif mode=='g_resolve':
+    print ""+url
+    G_RESOLVE(name,url,plot,iconimage)
+
 elif mode=='feature':
     print ""+url
     IDX_FEATURE(url)
