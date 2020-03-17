@@ -344,33 +344,27 @@ def IDX_VOD(url):
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
 def VOD_RESOLVE(name,url,plot,iconimage):
-    if url[0:4] == 'nw_v':
-        vid_id = str(url)
-        req = urllib2.Request('https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+vid_id+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+vid_id+'&de-subtitle-on=false', headers=hdr)
-        response = urllib2.urlopen(req)
-        link=response.read()
-        response.close()
-        match = re.compile("'data-de-program-uuid','(.+?)'").findall(link)
-        for p_uuid_ in match:
-            p_uuid = str(p_uuid_).replace("['" , "").replace("']" , "")
-            req = urllib2.urlopen('https://movie-s.nhk.or.jp/ws/ws_program/api/67f5b750-b419-11e9-8a16-0e45e8988f42/apiv/5/mode/json?v='+p_uuid)
-            vod_json = json.load(req)
-            vlink1 = vod_json['response']['WsProgramResponse']['program']['asset']['ipadM3u8Url']
-            v_id2 = vod_json['response']['WsProgramResponse']['program']['asset']['referenceFile']['rtmp']['stream']
-            vlink_2 = v_id2.split('?')
-            vlink2 = 'https://nhkw-mzvod.akamaized.net/www60/mz-nhk10/definst/mp4:mm/flvmedia/5905/m/F/m/' + vlink_2[0] + '/chunklist.m3u8'
-            media_item_list('720: '+ name, vlink1, plot, iconimage, iconimage)
-            media_item_list('1080: '+ name, vlink2, plot, iconimage, iconimage)
-    elif url[0:4] != 'nw_v':
-        vid_id = str(url)
-        media_item_list(name, host4 + vid_id + '.m3u8', plot, iconimage, iconimage)
+    vid_id = str(url)
+    req = urllib2.Request('https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+vid_id+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+vid_id+'&de-subtitle-on=false', headers=hdr)
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match = re.compile("'data-de-program-uuid','(.+?)'").findall(link)
+    for p_uuid_ in match:
+        p_uuid = str(p_uuid_).replace("['" , "").replace("']" , "")
+        req = urllib2.urlopen('https://movie-s.nhk.or.jp/ws/ws_program/api/67f5b750-b419-11e9-8a16-0e45e8988f42/apiv/5/mode/json?v='+p_uuid)
+        vod_json = json.load(req)
+        v1 = vod_json['response']['WsProgramResponse']['program']['asset']['assetFiles'][0]['rtmp']['play_path']
+        v2 = vod_json['response']['WsProgramResponse']['program']['asset']['referenceFile']['rtmp']['play_path']
+        vlink_1 = v1.split('?')
+        vlink_2 = v2.split('?')
+        vlink1 = 'https://nhkw-mzvod.akamaized.net/www60/mz-nhk10/definst/' + vlink_1[0] + '/chunklist.m3u8'
+        vlink2 = 'https://nhkw-mzvod.akamaized.net/www60/mz-nhk10/definst/' + vlink_2[0] + '/chunklist.m3u8'
+        media_item_list('720: '+ name, vlink1, plot, iconimage, iconimage)
+        media_item_list('1080: '+ name, vlink2, plot, iconimage, iconimage)
+
 
 # jibtv
-'''
-def IDX_JIBTV(url):
-    addDir('Recommended', 'http://jibtv.com/', 'jib_rec', jib_icon)
-    addDir('Featured Programs', 'http://jibtv.com/programs/', 'jib_feat', jib_icon)
-'''
 def IDX_JIBTV(url):
     link = net.http_GET(url).content
     match1 = re.compile('<tr data-href="(.+?)">\r\n\t*<td class="text-center w-40"><img src="(.+?)" class="img-responsive img-rounded" width="100%" /></td>\r\n\t*<td><span class="font-500">(.+?)</span><span ').findall(link)
@@ -382,36 +376,7 @@ def IDX_JIBTV(url):
         thumbnl = host6+thumbnl_
         title = (title_).encode('UTF-8').replace('<br>',' - ').replace('<br />',' - ')
         addDir1(title, vid_page, 'jib_feat', thumbnl)
-'''
-def JIB_REC(url):
-    link = net.http_GET(url).content
-    match=re.compile('<a href="(.+?)" title="(.+?)">').findall(link)
-    #thumb_=re.compile('<img src="programs/(.+?)"').findall(link)
-    for vid_page, title_ in match:
-        try:
-            link1 = net.http_GET('http://jibtv.com/%s' % vid_page).content
-            desc_ = re.compile('<meta property="og:description" content="(.+?)" />').findall(link1)
-            plot = ''.join(desc_)
-            thumb = re.compile('<meta property="og:image" content="(.+?)"').findall(link1)
-            thumb1 = re.compile('<meta content="(.+?)" property="og:image"').findall(link1)
-            thumbnl = ''.join(thumb).replace('showcace','showcase')
-            thumbnl1 = ''.join(thumb1).replace('showcace','showcase')
-            meta_id = re.compile('player.play\(\{ meta_id: (.+?) \}\)').findall(link1)
-            vid_id = ''.join(meta_id)
-            link2 = net.http_GET('http://jibtv-vcms.logica.bz/api/v1/metas/%s/medias' % vid_id).content
-            vid_src_ = re.compile('"url":"(.+?)"').findall(link2)
-            vid_src = ''.join(vid_src_)
-            title = (title_).encode('UTF-8').replace('<br />',' - ')
-            if thumbnl == "":
-                media_item_list(title, vid_src, plot, thumbnl1, thumbnl1)
-            elif thumbnl1 == "":
-                media_item_list(title, vid_src, plot, thumbnl, thumbnl)
-            elif thumbnl and thumbnl1 == "":
-                media_item_list(title, vid_src, plot, jib_icon , 'http://www3.nhk.or.jp/nhkworld/en/calendar'+str_Yr+'/images/large/'+str_Mth+'.jpg')
-        except:
-            pass
-        xbmcplugin.setContent(pluginhandle, 'episodes')
-'''
+
 def JIB_FEAT(url,iconimage): 
     link = net.http_GET(url).content
     try:
@@ -468,43 +433,27 @@ def THE_NEWS(url):
     name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"')
     media_item_list(name_,vid_url,'',thumbnl,thumbnl)
 
-'''
-# Newsroom Tokyo news broadcast updated daily M-F
-def IDX_NEWS(url):
-    link = net.http_GET(url).content
-    match1=re.compile('nw_addPlayer\(\'movie-area\', \{lang: \'en\', media: \'tv\', type: \'vod\', source: \'(.+?)\', callback: playerCallback\}\)').findall(link)
-    match2=re.compile('<h3></h3>\n.+?<p class="date">(.+?)</p>').findall(link)
-    vid_id = str(match1).replace("['","").replace("']","")
-    d_ate = str(match2).replace("['","").replace("']","")
-    icon = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/common/logo.png"
-    fanart_ = "https://www3.nhk.or.jp/nhkworld/newsroomtokyo/img/top/our_team.jpg"
-    media_item_list('Newsroom Tokyo for '+ d_ate, host4 + vid_id + '.m3u8','', icon, fanart_)
-'''
 # Latest top news stories
 def IDX_TOPNEWS(url):
-    
     req = urllib2.Request(url, headers=hdr)
     file = urllib2.urlopen(req)
     top_json = json.load(file)
     try:
         for i in range(200):
             if top_json['data'][i]['videos']:
+                ep_name_ = top_json['data'][i]['title']
+                plot_ = top_json['data'][i]['description']
+                thumbnl_ = top_json['data'][i]['thumbnails']['middle']
                 xml_link = top_json['data'][i]['videos']['config']
-                req = urllib2.Request((host2[:-1]+xml_link), headers=hdr)
-                file = urllib2.urlopen(req)
-                data = file.read()
-                file.close()
-                dom = parseString(data)
-                v_url = dom.getElementsByTagName('file.high')[0].toxml()
-                image = dom.getElementsByTagName('image')[0].toxml()
-                name = dom.getElementsByTagName('media.title')[0].toxml()
-                vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('HQ.mp4',',L,H,Q.mp4.csmil/master.m3u8')
-                thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
-                name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('_amp_','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-                media_item_list(name_,vid_url,'',thumbnl,thumbnl)
+                ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
+                plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','')
+                thumbnl = host2[:-1]+thumbnl_
+                addDir2(ep_name, xml_link, 'tn_resolve', plot, thumbnl)
     except:
         pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
 
+# News at a glance
 def IDX_GLANCE(url):
     req = urllib2.Request(url, headers=hdr)
     file = urllib2.urlopen(req)
@@ -524,55 +473,19 @@ def IDX_GLANCE(url):
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
-def G_RESOLVE(name,url,plot,iconimage):
+def RESOLVE(name,url,mode,plot,iconimage):
     req = urllib2.Request((host2[:-1]+url), headers=hdr)
     file = urllib2.urlopen(req)
     data = file.read()
     file.close()
     dom = parseString(data)
     v_url = dom.getElementsByTagName('file.high')[0].toxml()
-    image = dom.getElementsByTagName('image')[0].toxml()
-    name = dom.getElementsByTagName('media.title')[0].toxml()
-    vid_url = v_url.replace('<file.high>','').replace('</file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('mp4','mp4/master.m3u8')
-    thumbnl = host2 + image.replace('<image>','').replace('</image>','')
-    name_ = name.replace('<![CDATA[','').replace(']]>','').replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('_amp_','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-    media_item_list(name_,vid_url,plot,thumbnl,thumbnl)
+    if mode != 'tn_resolve':
+        vid_url = v_url.replace('<file.high>','').replace('</file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('mp4','mp4/master.m3u8')
+    else:
+        vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','').replace('rtmp://flv.nhk.or.jp/ondemand/flv','https://nhkworld-vh.akamaihd.net/i').replace('HQ.mp4',',L,H,Q.mp4.csmil/master.m3u8')
+    media_item_list(name,vid_url,plot,iconimage,iconimage)
 
-'''
-# Feature news stories
-def IDX_FEATURE(url):
-    addDir('NHK News Feature Stories - Japan', url, 'feat_news_japan', nhk_icon)
-    addDir('NHK News Feature Stories - Asia', url, 'feat_news_asia', nhk_icon)
-    addDir('NHK News Feature Stories - World', url, 'feat_news_world', nhk_icon)
-    addDir('NHK News Feature Stories - BizTec', url, 'feat_news_biztec', nhk_icon)
-
-def IDX_FEAT_NEWS(url):
-    req = urllib2.Request(url, headers=hdr)
-    file = urllib2.urlopen(req)
-    feat_json = json.load(file)
-    try:
-        for i in range(300):
-            #thumbnl = feat_json['data'][i]['thumbnails']['middle']
-            xml_link = feat_json['data'][i]['videos']['config']
-            #title = feat_json['data'][i]['title']
-            cat = feat_json['data'][i]['categories']['name']
-            if mode == 'feat_news_japan' and cat == 'JAPAN' or mode == 'feat_news_asia' and cat == 'ASIA' or mode == 'feat_news_world' and cat == 'WORLD' or mode == 'feat_news_biztec' and cat == 'BIZTCH':
-                req = urllib2.Request((host2[:-1]+xml_link), headers=hdr)
-                file = urllib2.urlopen(req)
-                data = file.read()
-                file.close()
-                dom = parseString(data)
-                v_url = dom.getElementsByTagName('file.high')[0].toxml()
-                image = dom.getElementsByTagName('image')[0].toxml()
-                name = dom.getElementsByTagName('media.title')[0].toxml()
-                vid_url = v_url.replace('<file.high><![CDATA[','').replace(']]></file.high>','')
-                thumbnl = host2 + image.replace('<image><![CDATA[/','').replace(']]></image>','')
-                name_ = name.replace('<media.title>','').replace('</media.title>','').replace("_#039_","'").replace('_quot_','"').replace('&quot;','"').replace('&amp;','&').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xc3','e').replace('\\xef\\xbd\\x9e',' ~ ')
-                #print "name is: "+name_
-                media_item_list(name_,vid_url,'',thumbnl,thumbnl)
-    except:
-        pass
-'''
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
     fanart = 'https://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg'
@@ -915,10 +828,6 @@ elif mode=='jibtv':
     print ""+url
     IDX_JIBTV(url)
 
-elif mode=='jib_rec':
-    print ""+url
-    JIB_REC(url)
-
 elif mode=='jib_feat':
     print ""+url
     JIB_FEAT(url,iconimage)
@@ -947,33 +856,17 @@ elif mode=='topnews':
     print ""+url
     IDX_TOPNEWS(url)
 
+elif mode=='tn_resolve':
+    print ""+url
+    RESOLVE(name,url,mode,plot,iconimage)
+
 elif mode=='glance':
     print ""+url
     IDX_GLANCE(url)
 
 elif mode=='g_resolve':
     print ""+url
-    G_RESOLVE(name,url,plot,iconimage)
-
-elif mode=='feature':
-    print ""+url
-    IDX_FEATURE(url)
-    
-elif mode=='feat_news_japan':
-    print ""+url
-    IDX_FEAT_NEWS(url)
-
-elif mode=='feat_news_asia':
-    print ""+url
-    IDX_FEAT_NEWS(url)
-
-elif mode=='feat_news_world':
-    print ""+url
-    IDX_FEAT_NEWS(url)
-
-elif mode=='feat_news_biztec':
-    print ""+url
-    IDX_FEAT_NEWS(url)
+    RESOLVE(name,url,mode,plot,iconimage)
 
 elif mode=='audio':
     print ""+url
