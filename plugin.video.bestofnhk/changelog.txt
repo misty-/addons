@@ -1,3 +1,10 @@
+Ver. 1.0.48a
+
+Best of NHK - 72nd release
+
+Small code correction
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.48
 
 Best of NHK - 71st release

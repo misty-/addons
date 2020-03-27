@@ -74,65 +74,69 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
 
-z = randrange(112)
+z = randrange(121)
 
-img = {0:'2053171/images/O0YyXBlk2CyLbEjZZFPyrl7dpA4jknc0bhYu9iWl.jpeg', 1:'2079016/images/Taf9c2PrMleSaB7DdYE6YX5acL9y6b6ywddV57tG.jpeg', 
-        2:'3019104/images/U8ftOKW2BDqmlqgXLm2P5vSomn7Pj4MhPkh17I6g.jpeg', 3:'2079012/images/uUdt6pekz0KBANhUhV9uA1KJWYfgFO1yRUC8EC3r.jpeg',
-        4:'2064032/images/SL3FKzFGgrte1t78Ncs0uGnPHhIZor4sfTHhSShu.jpeg', 5:'2053166/images/Bk575HEqWeQQtCAxdoCFLxcgHd4nKYj3Lsb7OAIj.jpeg',
-        6:'9111005/images/QRBsV1cIdplD4mt87yjNc5X9VlhHAwP4XE4gA56R.jpeg', 7:'2029117/images/96a53dfd1b6e98e048d17d01899b3ee53eb26a31.jpg',
-        8:'3019073/images/RTpidoWBkKSMN7KPvXKFkTJ0hGn4caxfelZxkqId.jpeg', 9:'2007398/images/pYmhSPIcfIgcMHkp7Aos6PJyocFkwPPCdSDnBaVf.jpeg',
-        10:'2064028/images/FcblA0xVQcIrmChpDhMPXlzzcDYNVRIhWu0uBHIT.jpeg', 11:'3004615/images/kijkIzg7gcFqjUKcw78vmbCdwMH54C7qXIxP4ZJC.jpeg',
-        12:'2029125/images/1sBRY2CltpgNfNobToUXbd8J2jXwgi5ouDW98ae5.jpeg', 13:'2007390/images/MOwAz7U062d8vtllEdXmx59nkRyDySRjnPNF6Un2.jpeg',
-        14:'2029123/images/Kjn122N5bKfqjkHUvCOZnoXpn7mXs62S0oM5bDuA.jpeg', 15:'2029111/images/b22ba676282bb4922538ef23e3516624b9537266.jpg',
-        16:'2059049/images/e96bcf43c15390d21a21514372a0cdc2a32b78ec.jpg', 17:'2007150/images/ZPDvrpcvYW4zXNRwxQCOa57pYB1tKp6obtWVcoSc.jpeg',
-        18:'2046073/images/e3ac6115be9d6ff77816168850fa89a47f85c320.jpg', 19:'6119006/images/rbP8zsNXShZKpOmdBx4hbmvXnjMXZiNzti3yk3Iy.jpeg',
-        20:'2059076/images/bW5X1HuzEQpGwdEh8T2bqk4JAnrPzZXyFELkUICM.jpeg', 21:'2029106/images/422641daa78a4651c2263214f85b38dfaa66f76b.jpg',
-        22:'2064011/images/4d7bc151e9017385078a6686eed9c546dfc4fd7b.jpg', 23:'2032183/images/GVK4GGPV0aScRCsR7g2MmqauK6BAFDIl7CTQ6Wuz.jpeg',
-        24:'2064009/images/0f4dc9f98599c3187279a9f16cef5ef2d5f6e964.jpg', 25:'3004582/images/fNvoGcevk9GKYVtUvPWHrjrZlI60BKhVB89EMc01.jpeg',
-        26:'2066020/images/uw3jRuNpdqXiffNPt0jV7j2DT7B8hjzRdFMVg4Gs.jpeg', 27:'6023026/images/BLdfRUgKQzluaZ1NHVWKRvsjFzBLwb0XmzluQTKH.jpeg',
-        28:'6024014/images/BtNgodMdLv8x8zA7zxtxvaFjVp7yYx7yp4UGgqaV.jpeg', 29:'2046084/images/2c8aa6a76b36041de06ee0811388aaaad0455b6c.jpg',
-        30:'3004513/images/dfe21def666d8e6edd836448d193b24352748753.jpg', 31:'2029110/images/a832fbe4dffe156ae0ee2c39ba17f8b56a2a43f0.jpg',
-        32:'9106005/images/aa5ed0fa7339e997ba7874656ffc59e616cbe53c.jpg', 33:'3019109/images/kWsJOoQf3c0N1ZfehhmqOoTlZdV9mYr7k6i29X7J.jpeg',
-        34:'2079003/images/v3MprittwgQSlIJo24sg8WihWKDrXMJzS08VXoK3.jpeg', 35:'5003094/images/dc4d6ed666c0a2ae39cb8088d72a30b5845ef001.jpg',
-        36:'6121002/images/7BKeV3WZz2RigltNN9tyehK4jZmaSwp67Um0VkAp.jpeg', 37:'6121001/images/1t9R5PktLQFjTwnHLgBTp3fh38kJjm3siHQI6gh4.jpeg',
-        38:'6120002/images/DlurEdgrWEfSocwkpeRFKo1N3bqMHUQ6ELgT78yK.jpeg', 39:'2061342/images/1omTb6Ed1z3VNPG9ch0j61avgSubEYQMPXAolFXi.jpeg',
-        40:'2029104/images/55bc04d408b7cab74b50097c8faf699d09f8c7f8.jpg', 41:'2061340/images/kRokNUDEb1hl5pd05moiZxUMyavYfysvEsgCNzB1.jpeg',
-        42:'2061339/images/7RXc1jtahLNWS9Fkj4Pam94aTqwoeCNhpu0yQr11.jpeg', 43:'2079017/images/RnyYCYFvjp7stAb2cxNfCgbMoVCTT79olm1s0DrZ.jpeg',
-        44:'2061336/images/6ZzrtTySligelx9MPrMw74eGoJRmlWHHSbiAVTso.jpeg', 45:'2004351/images/WOtHa3l8JjwQVu2wyKe9QSTlGDvDpfcNRILTqUbr.jpeg',
-        46:'2079005/images/gs2C2vYUzDsM5VHxYHNXLhPnS2QV6OvqmjFT3S7Z.jpeg', 47:'3004649/images/B19jqkG9OdtB0fokEBONKqKkcO1rQQL8eCTFlONN.jpeg',
-        48:'2068019/images/f8iZwgghpyRckVqwWDsLICyJgLin0aOpT6tRA12H.jpeg', 49:'2029133/images/0zqSOqrKdxl6xvnR6A02RdEmoMyMuCLeCMStFDXD.jpeg',
-        50:'2032193/images/rrwDGEq4ezLP9sEDjfXnlO5hvsbeQPnI1UyQ8dcH.jpeg', 51:'2029130/images/UWs2eFqi0ZA2gJwNltyNRZtlTEdxPw87qUhgVeX2.jpeg',
-        52:'2029101/images/jyaxRwRUi0tX7roRDDMdhjbksA270Puwt2yRIrrr.jpeg', 53:'3019098/images/l4OSOiFVsQTCrUPMnPsVDFfUoF6p1M4nnZYKsMCa.jpeg',
-        54:'3019022/images/RtS14vWB3k8hqPNDbvL1lb3AbeT0YztV9j5TzluY.jpeg', 55:'2029129/images/YDWoSvV5N2jbhLocflS2Re679cOwrd2nGCkrHXkT.jpeg',
-        56:'6119005/images/lqgxlgys9FYYaoPN1wZVvtdX5Yyon1L7qs7y5UNz.jpeg', 57:'2004348/images/LKPkufOawbxnLU4W7rvuA5hulI6qfcrrC9VL6yff.jpeg',
-        58:'2064037/images/TWFLdKetLMscu1r2AggZvtfADHER63BFxgLlq69C.jpeg', 59:'2077009/images/JWsKAGlGXZmGU40FVqhacdgNSLmAY1326RWwT0iP.jpeg',
-        60:'2068005/images/32123c4f569adc22d474221774161fb060c95f6b.jpg', 61:'2049081/images/RnR1rQGVFYPAaImzvQb4TWrPTYsd2vK83yu63BHJ.jpeg',
-        62:'2029096/images/gMa8UPu7mlHneaSymkUK8kxuGR5uRsP9fH6SJlL8.jpeg', 63:'2079014/images/TlMDcaIyXA9cLR8E8qKeeEB0XN0ysdagbRhKW4g6.jpeg',
-        64:'3004627/images/f9sGULvKDDXpsnd5i9R1azA5WzAAD9Pw97AMMSWQ.jpeg', 65:'2064044/images/EXDDHFml3l4j8grDxG1RnpuqVOQ90dq9q9V0xYtt.jpeg',
-        66:'3019094/images/teN6LhiVrbnn3AzU0qsKddVqWB2WPIH0GGXMx0qc.jpeg', 67:'5006021/images/GQGMOVB4zU5TGuyuvexIRq3DcpYjbfqzHhN6ms9E.jpeg',
-        68:'2046110/images/mWVIYrEdxFgJ56lEjzHXO9ZnihsAA5353mQy1sH6.jpeg', 69:'2029126/images/4adqaDqA6DYygeog5Lkbcff0ikdhVb5oLDmabtbg.jpeg',
-        70:'2007400/images/qI57eZb8qVW8mIZwiKRbKj1O90ljgOm0EmAWQLxG.jpeg', 71:'2059068/images/KXYNyzYI2wzoZsonH5vIjnXNZdV0njeiVTIpYMzL.jpeg',
-        72:'2049078/images/famGpHlgLEKMNYHjmWFgfST7Bqf5Ligcdgawa5Ss.jpeg', 73:'3019074/images/ND398dFbHryGO6kfDSLbiV58luvEVlUr4LZYHqkA.jpeg',
-        74:'2059067/images/f127ca6bbeb6731c8cafe65607a4de64f84fc313.jpg', 75:'6028012/images/LL9A0yzYNb6fCfIjK7BAVVuXjDPaaKglQhvPpMbm.jpeg',
-        76:'2019246/images/NJtK3bQSubIeuNgVreVoDslOJNfD3DUWpmvv7v3g.jpeg', 77:'2068013/images/239a78e4e1fd4d8be718216dae8d0345024ea386.jpg',
-        78:'2069041/images/tyoGF0aKVEso7sWKKIIaNkxAZ1sqI8GUsJg2W4WS.jpeg', 79:'2064033/images/CsB3KuplnwlZcryK12wZ53F1PAomEOx3aIedMzn4.jpeg',
-        80:'2032196/images/1LvUl0VER2KP6L10DaoDp1P29oBMEKIPaW4q1uBH.jpeg', 81:'3019090/images/2ALyiUoFOirRTHkhwNbjs4VU11nvjs2nJL8T4ORe.jpeg',
-        82:'2007395/images/FfOFVZcD5RAcuPel2c3hWy6YNhAFiVeAUaf3mMSh.jpeg', 83:'2007392/images/ifHYXp1n4d9qOeLNYXnX9JPvY5Ck7w3GKH1j37BI.jpeg',
-        84:'2064026/images/1FYeggnqyeD6YuvjhOg9vDq0PsIazcJEJWBXNobe.jpeg', 85:'2049073/images/xWeutxOXmXYbaPTCj9A7lSEEqQCu47VpyuUxxZ7e.jpeg',
-        86:'2059057/images/bfdc4c4facd1529b3af6a201c6f2296f16e3bc25.jpg', 87:'2068012/images/35cae975434fa2665422df87e0be145031c05de6.jpg',
-        88:'2029082/images/5dd7424f8379756e4a8451c3bc7afb024738c107.jpg', 89:'3019047/images/197d33a607e9d3a5d2496f33a8d4ba258f2cfcac.jpg',
-        90:'2032192/images/vYc2DH6YojWdHFRpeBtBmGs7Ju0futMz2q2VwZs9.jpeg', 91:'2059022/images/c1e92ccc362ac6bd2e7ae83a124f302c246aed54.jpg',
-        92:'2049067/images/4NvPbRuPgfF5hUF20h9B5JBqbc1XGH6d4IvVS7P6.jpeg', 93:'3004602/images/4btVByLuOUkVUG1oH7H4Fo1z3KRm4GAvUkiVgWeH.jpeg',
-        94:'2049072/images/I6enwJ36WjnMWFYCiytaeyGaY896iC1PawnMxRTA.jpeg', 95:'2032188/images/uoMw0pOirBZ9zCDobxVcZg7grp8Vfeam7atLyCyl.jpeg',
-        96:'2049070/images/WgQ6hvh8JdEN4qCmQZgDMjTFcZa2mUkbUND3n6kt.jpeg', 97:'2053152/images/uhoKqmORsWlrNb55Zl4mD7kawbAREl1AimIusNlP.jpeg',
-        98:'2059078/images/HchRYMxthJoLr6ffPzB5cUARoSSmK7ql0OCLNziv.jpeg', 99:'2069031/images/636be35e59212946c5347c767b15a35d66376c53.jpg',
-        100:'2066022/images/byk6FKVsUQTednDtfFCbgIDA77RSnfbrIAmBbRMN.jpeg', 101:'2007332/images/508a921cdbf4f6db1bb99830dd82f5aacd9dda73.jpg',
-        102:'2058493/images/py3WqcNHgyxLxSPJdXGbUnRhLUOh0qShTjlZJnAu.jpeg', 103:'2064013/images/c79dab82b8c5e1f41761e016e9293add4b15577d.jpg',
-        104:'2064007/images/9e8737acfa9c31fd1dbcb233169fc954d46bcf54.jpg', 105:'2029122/images/Jr4nJXlNYNQP4uYqyFneQRP57AhXT65143YKwrKz.jpeg',
-        106:'6024002/images/lFG6zaUl4S02uBrj1f2LDNlbSACmS0LfcArn0dYz.jpeg', 107:'6024001/images/ITMzW2Gy6tEPDImwqUISTBojEp7GQUqqeIoMm858.jpeg',
-        108:'2029118/images/pU2ZuIUfJRMmlNk0gfzdG469zMjUtLaNfF9rIUeO.jpeg', 109:'2007318/images/123e3cae17b12efe83e4b38daec8547f08599235.jpg',
-        110:'3004536/images/0fda24c5880fed5dbdc4e7426c749e87651bd0ec.jpg', 111:'2007346/images/701d1b40d4f1b7c0289d1a522894afc8813f4bff.jpg',
-        112:'2007326/images/12a25a21f641af5f113b7f54f749be2fb4b346d9.jpg'}
+img = {0:'video/2053171/images/O0YyXBlk2CyLbEjZZFPyrl7dpA4jknc0bhYu9iWl.jpeg', 1:'video/2079016/images/Taf9c2PrMleSaB7DdYE6YX5acL9y6b6ywddV57tG.jpeg', 
+        2:'video/3019104/images/U8ftOKW2BDqmlqgXLm2P5vSomn7Pj4MhPkh17I6g.jpeg', 3:'video/2079012/images/uUdt6pekz0KBANhUhV9uA1KJWYfgFO1yRUC8EC3r.jpeg',
+        4:'video/2064032/images/SL3FKzFGgrte1t78Ncs0uGnPHhIZor4sfTHhSShu.jpeg', 5:'video/2053166/images/Bk575HEqWeQQtCAxdoCFLxcgHd4nKYj3Lsb7OAIj.jpeg',
+        6:'video/9111005/images/QRBsV1cIdplD4mt87yjNc5X9VlhHAwP4XE4gA56R.jpeg', 7:'video/2029117/images/96a53dfd1b6e98e048d17d01899b3ee53eb26a31.jpg',
+        8:'video/3019073/images/RTpidoWBkKSMN7KPvXKFkTJ0hGn4caxfelZxkqId.jpeg', 9:'video/2007398/images/pYmhSPIcfIgcMHkp7Aos6PJyocFkwPPCdSDnBaVf.jpeg',
+        10:'video/2064028/images/FcblA0xVQcIrmChpDhMPXlzzcDYNVRIhWu0uBHIT.jpeg', 11:'video/3004615/images/kijkIzg7gcFqjUKcw78vmbCdwMH54C7qXIxP4ZJC.jpeg',
+        12:'video/2029125/images/1sBRY2CltpgNfNobToUXbd8J2jXwgi5ouDW98ae5.jpeg', 13:'video/2007390/images/MOwAz7U062d8vtllEdXmx59nkRyDySRjnPNF6Un2.jpeg',
+        14:'video/2029123/images/Kjn122N5bKfqjkHUvCOZnoXpn7mXs62S0oM5bDuA.jpeg', 15:'video/2029111/images/b22ba676282bb4922538ef23e3516624b9537266.jpg',
+        16:'video/2059049/images/e96bcf43c15390d21a21514372a0cdc2a32b78ec.jpg', 17:'video/2007150/images/ZPDvrpcvYW4zXNRwxQCOa57pYB1tKp6obtWVcoSc.jpeg',
+        18:'video/2046073/images/e3ac6115be9d6ff77816168850fa89a47f85c320.jpg', 19:'video/6119006/images/rbP8zsNXShZKpOmdBx4hbmvXnjMXZiNzti3yk3Iy.jpeg',
+        20:'video/2059076/images/bW5X1HuzEQpGwdEh8T2bqk4JAnrPzZXyFELkUICM.jpeg', 21:'video/2029106/images/422641daa78a4651c2263214f85b38dfaa66f76b.jpg',
+        22:'video/2064011/images/4d7bc151e9017385078a6686eed9c546dfc4fd7b.jpg', 23:'video/2032183/images/GVK4GGPV0aScRCsR7g2MmqauK6BAFDIl7CTQ6Wuz.jpeg',
+        24:'video/2064009/images/0f4dc9f98599c3187279a9f16cef5ef2d5f6e964.jpg', 25:'video/3004582/images/fNvoGcevk9GKYVtUvPWHrjrZlI60BKhVB89EMc01.jpeg',
+        26:'video/2066020/images/uw3jRuNpdqXiffNPt0jV7j2DT7B8hjzRdFMVg4Gs.jpeg', 27:'video/6023026/images/BLdfRUgKQzluaZ1NHVWKRvsjFzBLwb0XmzluQTKH.jpeg',
+        28:'video/6024014/images/BtNgodMdLv8x8zA7zxtxvaFjVp7yYx7yp4UGgqaV.jpeg', 29:'video/2046084/images/2c8aa6a76b36041de06ee0811388aaaad0455b6c.jpg',
+        30:'video/3004513/images/dfe21def666d8e6edd836448d193b24352748753.jpg', 31:'video/2029110/images/a832fbe4dffe156ae0ee2c39ba17f8b56a2a43f0.jpg',
+        32:'video/3004454/images/JvKM3qNkjHwNstK962ZFg8CJj6EdIdfpOPU8s05J.jpeg', 33:'video/3019109/images/kWsJOoQf3c0N1ZfehhmqOoTlZdV9mYr7k6i29X7J.jpeg',
+        34:'video/2079003/images/v3MprittwgQSlIJo24sg8WihWKDrXMJzS08VXoK3.jpeg', 35:'video/5003094/images/dc4d6ed666c0a2ae39cb8088d72a30b5845ef001.jpg',
+        36:'video/6121002/images/7BKeV3WZz2RigltNN9tyehK4jZmaSwp67Um0VkAp.jpeg', 37:'video/6121001/images/1t9R5PktLQFjTwnHLgBTp3fh38kJjm3siHQI6gh4.jpeg',
+        38:'video/6120002/images/DlurEdgrWEfSocwkpeRFKo1N3bqMHUQ6ELgT78yK.jpeg', 39:'video/2061342/images/1omTb6Ed1z3VNPG9ch0j61avgSubEYQMPXAolFXi.jpeg',
+        40:'video/2029104/images/55bc04d408b7cab74b50097c8faf699d09f8c7f8.jpg', 41:'video/2061340/images/kRokNUDEb1hl5pd05moiZxUMyavYfysvEsgCNzB1.jpeg',
+        42:'video/2061339/images/7RXc1jtahLNWS9Fkj4Pam94aTqwoeCNhpu0yQr11.jpeg', 43:'video/2079017/images/RnyYCYFvjp7stAb2cxNfCgbMoVCTT79olm1s0DrZ.jpeg',
+        44:'video/2061336/images/6ZzrtTySligelx9MPrMw74eGoJRmlWHHSbiAVTso.jpeg', 45:'video/2004351/images/WOtHa3l8JjwQVu2wyKe9QSTlGDvDpfcNRILTqUbr.jpeg',
+        46:'video/2079005/images/gs2C2vYUzDsM5VHxYHNXLhPnS2QV6OvqmjFT3S7Z.jpeg', 47:'video/3004649/images/B19jqkG9OdtB0fokEBONKqKkcO1rQQL8eCTFlONN.jpeg',
+        48:'video/2068019/images/f8iZwgghpyRckVqwWDsLICyJgLin0aOpT6tRA12H.jpeg', 49:'video/2029133/images/0zqSOqrKdxl6xvnR6A02RdEmoMyMuCLeCMStFDXD.jpeg',
+        50:'video/2032193/images/rrwDGEq4ezLP9sEDjfXnlO5hvsbeQPnI1UyQ8dcH.jpeg', 51:'video/2029130/images/UWs2eFqi0ZA2gJwNltyNRZtlTEdxPw87qUhgVeX2.jpeg',
+        52:'video/2029101/images/jyaxRwRUi0tX7roRDDMdhjbksA270Puwt2yRIrrr.jpeg', 53:'video/3019098/images/l4OSOiFVsQTCrUPMnPsVDFfUoF6p1M4nnZYKsMCa.jpeg',
+        54:'video/3019022/images/RtS14vWB3k8hqPNDbvL1lb3AbeT0YztV9j5TzluY.jpeg', 55:'video/2029129/images/YDWoSvV5N2jbhLocflS2Re679cOwrd2nGCkrHXkT.jpeg',
+        56:'video/6119005/images/lqgxlgys9FYYaoPN1wZVvtdX5Yyon1L7qs7y5UNz.jpeg', 57:'video/2004348/images/LKPkufOawbxnLU4W7rvuA5hulI6qfcrrC9VL6yff.jpeg',
+        58:'video/2064037/images/TWFLdKetLMscu1r2AggZvtfADHER63BFxgLlq69C.jpeg', 59:'video/2077009/images/JWsKAGlGXZmGU40FVqhacdgNSLmAY1326RWwT0iP.jpeg',
+        60:'video/2068005/images/32123c4f569adc22d474221774161fb060c95f6b.jpg', 61:'video/2049081/images/RnR1rQGVFYPAaImzvQb4TWrPTYsd2vK83yu63BHJ.jpeg',
+        62:'video/2029096/images/gMa8UPu7mlHneaSymkUK8kxuGR5uRsP9fH6SJlL8.jpeg', 63:'video/2079014/images/TlMDcaIyXA9cLR8E8qKeeEB0XN0ysdagbRhKW4g6.jpeg',
+        64:'video/3004627/images/f9sGULvKDDXpsnd5i9R1azA5WzAAD9Pw97AMMSWQ.jpeg', 65:'video/2064044/images/EXDDHFml3l4j8grDxG1RnpuqVOQ90dq9q9V0xYtt.jpeg',
+        66:'video/3019094/images/teN6LhiVrbnn3AzU0qsKddVqWB2WPIH0GGXMx0qc.jpeg', 67:'video/5006021/images/GQGMOVB4zU5TGuyuvexIRq3DcpYjbfqzHhN6ms9E.jpeg',
+        68:'video/2046110/images/mWVIYrEdxFgJ56lEjzHXO9ZnihsAA5353mQy1sH6.jpeg', 69:'video/2029126/images/4adqaDqA6DYygeog5Lkbcff0ikdhVb5oLDmabtbg.jpeg',
+        70:'video/2007400/images/qI57eZb8qVW8mIZwiKRbKj1O90ljgOm0EmAWQLxG.jpeg', 71:'video/2059068/images/KXYNyzYI2wzoZsonH5vIjnXNZdV0njeiVTIpYMzL.jpeg',
+        72:'video/2049078/images/famGpHlgLEKMNYHjmWFgfST7Bqf5Ligcdgawa5Ss.jpeg', 73:'video/3019074/images/ND398dFbHryGO6kfDSLbiV58luvEVlUr4LZYHqkA.jpeg',
+        74:'video/2059067/images/f127ca6bbeb6731c8cafe65607a4de64f84fc313.jpg', 75:'video/6028012/images/LL9A0yzYNb6fCfIjK7BAVVuXjDPaaKglQhvPpMbm.jpeg',
+        76:'video/2019246/images/NJtK3bQSubIeuNgVreVoDslOJNfD3DUWpmvv7v3g.jpeg', 77:'video/2068013/images/239a78e4e1fd4d8be718216dae8d0345024ea386.jpg',
+        78:'video/2069041/images/tyoGF0aKVEso7sWKKIIaNkxAZ1sqI8GUsJg2W4WS.jpeg', 79:'video/2064033/images/CsB3KuplnwlZcryK12wZ53F1PAomEOx3aIedMzn4.jpeg',
+        80:'video/2032196/images/1LvUl0VER2KP6L10DaoDp1P29oBMEKIPaW4q1uBH.jpeg', 81:'video/3019090/images/2ALyiUoFOirRTHkhwNbjs4VU11nvjs2nJL8T4ORe.jpeg',
+        82:'video/2007395/images/FfOFVZcD5RAcuPel2c3hWy6YNhAFiVeAUaf3mMSh.jpeg', 83:'video/2007392/images/ifHYXp1n4d9qOeLNYXnX9JPvY5Ck7w3GKH1j37BI.jpeg',
+        84:'video/2064026/images/1FYeggnqyeD6YuvjhOg9vDq0PsIazcJEJWBXNobe.jpeg', 85:'video/2049073/images/xWeutxOXmXYbaPTCj9A7lSEEqQCu47VpyuUxxZ7e.jpeg',
+        86:'video/2059057/images/bfdc4c4facd1529b3af6a201c6f2296f16e3bc25.jpg', 87:'video/2068012/images/35cae975434fa2665422df87e0be145031c05de6.jpg',
+        88:'video/2029082/images/5dd7424f8379756e4a8451c3bc7afb024738c107.jpg', 89:'video/3019047/images/197d33a607e9d3a5d2496f33a8d4ba258f2cfcac.jpg',
+        90:'video/2032192/images/vYc2DH6YojWdHFRpeBtBmGs7Ju0futMz2q2VwZs9.jpeg', 91:'video/2059022/images/c1e92ccc362ac6bd2e7ae83a124f302c246aed54.jpg',
+        92:'video/2049067/images/4NvPbRuPgfF5hUF20h9B5JBqbc1XGH6d4IvVS7P6.jpeg', 93:'video/3004602/images/4btVByLuOUkVUG1oH7H4Fo1z3KRm4GAvUkiVgWeH.jpeg',
+        94:'video/2049072/images/I6enwJ36WjnMWFYCiytaeyGaY896iC1PawnMxRTA.jpeg', 95:'video/2032188/images/uoMw0pOirBZ9zCDobxVcZg7grp8Vfeam7atLyCyl.jpeg',
+        96:'video/2049070/images/WgQ6hvh8JdEN4qCmQZgDMjTFcZa2mUkbUND3n6kt.jpeg', 97:'video/2053152/images/uhoKqmORsWlrNb55Zl4mD7kawbAREl1AimIusNlP.jpeg',
+        98:'video/2059078/images/HchRYMxthJoLr6ffPzB5cUARoSSmK7ql0OCLNziv.jpeg', 99:'video/2069031/images/636be35e59212946c5347c767b15a35d66376c53.jpg',
+        100:'video/2066022/images/byk6FKVsUQTednDtfFCbgIDA77RSnfbrIAmBbRMN.jpeg', 101:'video/2007332/images/508a921cdbf4f6db1bb99830dd82f5aacd9dda73.jpg',
+        102:'video/2058493/images/py3WqcNHgyxLxSPJdXGbUnRhLUOh0qShTjlZJnAu.jpeg', 103:'video/2064013/images/c79dab82b8c5e1f41761e016e9293add4b15577d.jpg',
+        104:'video/2064007/images/9e8737acfa9c31fd1dbcb233169fc954d46bcf54.jpg', 105:'video/2029122/images/Jr4nJXlNYNQP4uYqyFneQRP57AhXT65143YKwrKz.jpeg',
+        106:'video/6024002/images/lFG6zaUl4S02uBrj1f2LDNlbSACmS0LfcArn0dYz.jpeg', 107:'video/6024001/images/ITMzW2Gy6tEPDImwqUISTBojEp7GQUqqeIoMm858.jpeg',
+        108:'video/2029118/images/pU2ZuIUfJRMmlNk0gfzdG469zMjUtLaNfF9rIUeO.jpeg', 109:'video/2007318/images/123e3cae17b12efe83e4b38daec8547f08599235.jpg',
+        110:'video/3004536/images/0fda24c5880fed5dbdc4e7426c749e87651bd0ec.jpg', 111:'video/2007346/images/701d1b40d4f1b7c0289d1a522894afc8813f4bff.jpg',
+        112:'video/2007326/images/12a25a21f641af5f113b7f54f749be2fb4b346d9.jpg', 113:'special/fukushima/images/A0x2Rq7Ojwqs1t3FfrBL2VFSLrv7g3MtZjGiQP0e.jpeg',
+        114:'special/fukushima/images/ywoBGITSx4BaZ6188SIk4lOspfdv1OBaRC6fUjSx.jpeg', 115:'special/nagano/images/EU6h6X8Fo8xrJ9QDNcLNlVIv9M6AeVrAJiK2DXk4.jpeg',
+        116:'special/mie/images/olQ5Hvn5hD4cAtgIbu3zoGIPTpp2soPgHI8INb5j.jpeg', 117:'special/wakayama/images/JmKwKWVFYPJy4mXSKcYMnAwoutcpBDfo5wEQ7iwO.jpeg',
+        118:'special/nara/images/AxLkpaG1qvqeVRrq4XXegascly15Ro3zOv2TbSak.jpeg', 119:'special/nara/images/UhBehrFRqUPtQYeO5V3ZIYS0wyHvHwFNjfOnPJoz.jpeg',
+        120:'special/tokushima/images/wBuFKSZepjzTKAYbK4iTa9CVRvnPELSCmNclZgfY.jpeg'}
 
 # NHK World Schedule Time Zone and DST correction
 #print "Time zone is: " + TimeZone
@@ -197,7 +201,7 @@ def CATEGORIES():
 # Create content list
 def addDir(name,url,mode,iconimage):
     params = {'url':url, 'mode':mode, 'name':name}
-    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'https://www3.nhk.or.jp/nhkworld/en/ondemand/video/'+img[z])
+    addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'https://www3.nhk.or.jp/nhkworld/en/ondemand/'+img[z])
     #addon.add_directory(params, {'title': str(name)}, img = iconimage, fanart = 'https://www.jnto.go.jp/eng/wallpaper/'+str_Yr+'/img/type-a/1920-1080/'+month[Mth]+'.jpg')
 
 def addDir1(name,url,mode,iconimage):
@@ -375,7 +379,7 @@ def IDX_LIVE_STRM():
     xbmcplugin.setContent(pluginhandle, 'episodes')
 
 def IDX_OTHER_LIVE_STRM():
-    fanart = 'https://www3.nhk.or.jp/nhkworld/en/ondemand/video/'+img[z]
+    fanart = 'https://www3.nhk.or.jp/nhkworld/en/ondemand/'+img[z]
     media_item_list('NHK Live - Chinese', 'https://nhkw-zh-hlscomp.akamaized.net/8thz5iufork8wjip/playlist.m3u8', '', nhk_icon, fanart)
 
 def IDX_VOD_CATS(url):
@@ -600,7 +604,7 @@ def RESOLVE(name,url,mode,plot,iconimage):
 
 # Pre-recorded NHK World Radio in 17 languages
 def IDX_RADIO(url):
-    fanart = 'https://www3.nhk.or.jp/nhkworld/en/ondemand/video/'+img[z]
+    fanart = 'https://www3.nhk.or.jp/nhkworld/en/ondemand/'+img[z]
     for i in range(17):
         media_item_list('NHK Radio News in '+lang[i], host13+lang_key[i]+'/news.json?%s' % apikey,'','',fanart)
 
