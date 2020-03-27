@@ -64,7 +64,7 @@
 	</extension>
 </addon>
 
-<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.48" provider-name="misty">
+<addon id="plugin.video.bestofnhk" name="Best of NHK" version="1.0.48a" provider-name="misty">
   <requires>
         <import addon="xbmc.python" version="2.20.0"/>
         <import addon="script.module.t0mm0.common" version="2.1.1"/>
@@ -81,10 +81,7 @@
         <news>Ver. 1.0.47
               Best of NHK - 71st release
               Kodi 15.x is the minimum version for this add-on.
-              Code cleanup
-              Add: Video clips in NHK World On Demand
-              Add: Biz Stream and News Videos in NHK World News
-              Code Change: Youtube section
+              Small code correction
         </news>
   </extension>
 </addon>
