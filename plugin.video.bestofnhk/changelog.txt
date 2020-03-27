@@ -1,3 +1,13 @@
+Ver. 1.0.48
+
+Best of NHK - 71st release
+
+Code cleanup
+Add: Video clips in NHK World On Demand
+Add: Biz Stream and News Videos in NHK World News
+Code Change: Youtube section
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.47
 
 Best of NHK - 70th release
