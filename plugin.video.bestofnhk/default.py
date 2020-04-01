@@ -41,6 +41,7 @@ host10 = 'https://api.nhk.or.jp/nhkworld/pg/v6a/'
 host11 = 'https://www3.nhk.or.jp/nhkworld/upld/thumbnails/en/news/programs/'
 host12 = 'https://api.nhk.or.jp/nhkworld/vodcliplist/v7a/'
 host13 = 'https://api.nhk.or.jp/nhkworld/rdonews/v6a/'
+host14 = 'https://api.nhk.or.jp/nhkworld/vodplaylist/v7a/'
 apikey = 'apikey=EJfK8jdS57GqlupFgAfAAwr573q01y6k'
 feat = 'nhkworld/rss/news/english/features_'
 nhk_icon = addon01.getAddonInfo('icon') # icon.png in addon directory
@@ -73,8 +74,10 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
        'Accept-Encoding': 'none',
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
+       
+s_dict={}; e_dict={}; v_dict={}; p_dict={}; t_dict={}; req1_dict={}; link_dict={}
 
-z = randrange(121)
+z = randrange(133)
 
 img = {0:'video/2053171/images/O0YyXBlk2CyLbEjZZFPyrl7dpA4jknc0bhYu9iWl.jpeg', 1:'video/2079016/images/Taf9c2PrMleSaB7DdYE6YX5acL9y6b6ywddV57tG.jpeg', 
         2:'video/3019104/images/U8ftOKW2BDqmlqgXLm2P5vSomn7Pj4MhPkh17I6g.jpeg', 3:'video/2079012/images/uUdt6pekz0KBANhUhV9uA1KJWYfgFO1yRUC8EC3r.jpeg',
@@ -136,7 +139,13 @@ img = {0:'video/2053171/images/O0YyXBlk2CyLbEjZZFPyrl7dpA4jknc0bhYu9iWl.jpeg', 1
         114:'special/fukushima/images/ywoBGITSx4BaZ6188SIk4lOspfdv1OBaRC6fUjSx.jpeg', 115:'special/nagano/images/EU6h6X8Fo8xrJ9QDNcLNlVIv9M6AeVrAJiK2DXk4.jpeg',
         116:'special/mie/images/olQ5Hvn5hD4cAtgIbu3zoGIPTpp2soPgHI8INb5j.jpeg', 117:'special/wakayama/images/JmKwKWVFYPJy4mXSKcYMnAwoutcpBDfo5wEQ7iwO.jpeg',
         118:'special/nara/images/AxLkpaG1qvqeVRrq4XXegascly15Ro3zOv2TbSak.jpeg', 119:'special/nara/images/UhBehrFRqUPtQYeO5V3ZIYS0wyHvHwFNjfOnPJoz.jpeg',
-        120:'special/tokushima/images/wBuFKSZepjzTKAYbK4iTa9CVRvnPELSCmNclZgfY.jpeg'}
+        120:'special/tokushima/images/wBuFKSZepjzTKAYbK4iTa9CVRvnPELSCmNclZgfY.jpeg', 121:'video/9999047/images/wRqD9soSv5Y6qLWlWQz8PArEZEdwlCPfZ70N1QG0.jpeg',
+        122:'video/5001288/images/3fcYxSufUgJO1WLnY4i1wpGQqUUbTRK41pvFFgFB.jpeg', 123:'video/2088002/images/6ChBBGG155obtxNbtER3yWzCZm4Vm4Nxd9Z8TVfS.jpeg',
+        124:'video/9999531/images/vOLpDIarmpojU3y19WN6SsugpsGAqCwnltD42VBF.jpeg', 125:'video/9999418/images/JVLcrYw8swn65XEDuyaHBNxlaobLWoh4YtlYKmiO.jpeg',
+        126:'video/9999191/images/c1HyNwXrF5dG0x0E1G7UPvMTjioaHzekHt2sCGUg.jpeg', 127:'video/9999147/images/8gdGgpy5DrQh2kj8NlkOVwPmC6cBTeb4O0etaYr4.jpeg',
+        128:'video/9999131/images/Bpo4ViEOlwZ15faYJTo51KQcThgfInyr8rSTQnIu.jpeg', 129:'video/9999116/images/mXeye2lD9XIGULOuST1HAlH06U2UtuY9RN7jprsc.jpeg',
+        130:'video/9999083/images/6MYzRXETwdnpdxwS4VnAI56OAYir4KDlTDCk1Nfh.jpeg', 131:'video/9999061/images/Y3RWptbrnVyFXIZJTWzWncPp7elOU8vrj3vfXgiq.jpeg',
+        132:'video/9999074/images/gR2x5A8J3ra1NsytdCemK59Kd8Mfzeg3k181MqOJ.jpeg'}
 
 # NHK World Schedule Time Zone and DST correction
 #print "Time zone is: " + TimeZone
@@ -220,7 +229,7 @@ def addDirYT(title, url):
     liz=xbmcgui.ListItem(title)
     liz.setProperty('IsPlayable', 'false')
     liz.setInfo(type="Video", infoLabels={"label":title,"title":title} )
-    liz.setArt({'thumb':nhk_icon,'fanart':''})
+    liz.setArt({'thumb':nhk_icon,'fanart':'https://www3.nhk.or.jp/nhkworld/en/ondemand/'+img[z]})
     xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz,isFolder=True)
 
 # NHK World Live Schedule
@@ -386,7 +395,8 @@ def IDX_VOD_CATS(url):
     addDir('On Demand Full Listing', host8+'all/all/en/all/all.json?%s' % apikey, 'vod', nhk_icon)
     addDir('Latest Episodes', host8+'all/all/en/all/12.json?%s' % apikey, 'vod', nhk_icon)
     addDir('Most Watched', host8+'mostwatch/all/en/all/12.json?%s' % apikey, 'vod', nhk_icon)
-    addDir('Video Clips', host12+'all/all/en/all/all.json?%s' % apikey, 'vod_clips', nhk_icon)
+    addDir('Playlists', host14+'en/all.json?%s' % apikey, 'p_lists', nhk_icon)
+    addDir('Video Clips', host12+'all/all/en/all/all.json?%s' % apikey, 'vod', nhk_icon)
     addDir('Art & Design', host8+'category/19/en/all/all.json?%s' % apikey, 'vod', host9+'19.png')
     addDir('Biz/Tech', host8+'category/14/en/all/all.json?%s' % apikey, 'vod', host9+'14.png')
     addDir('Culture & Lifestyle', host8+'category/20/en/all/all.json?%s' % apikey, 'vod', host9+'20.png')
@@ -400,7 +410,8 @@ def IDX_VOD_CATS(url):
     #addDir('Interactive', host8+'category/27/en/all/all.json?%s' % apikey, 'vod', host9+'27.png')
     addDir('Interview', host8+'category/16/en/all/all.json?%s' % apikey, 'vod', host9+'16.png')
     addDir('Learn Japanese', host8+'category/28/en/all/all.json?%s' % apikey, 'vod', host9+'28.png')
-    addDir('News', host8+'category/11/en/all/all.json?%s' % apikey, 'vod', host9+'11.png')
+    addDir('NHK World News', '', 'news', host9+'11.png')
+    #addDir('News', host8+'category/11/en/all/all.json?%s' % apikey, 'vod', host9+'11.png')
     addDir('Pop Culture & Fashion', host8+'category/22/en/all/all.json?%s' % apikey, 'vod', host9+'22.png')
     addDir('Science & Nature', host8+'category/23/en/all/all.json?%s' % apikey, 'vod', host9+'23.png')
     addDir('Sport', host8+'category/25/en/all/all.json?%s' % apikey, 'vod', host9+'25.png')
@@ -421,13 +432,12 @@ def IDX_VOD(url,mode):
             ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','').replace('<b>','').replace('</b>','')
             plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','').replace('<b>','').replace('</b>','')#.replace('["','').replace('"]','')
             thumbnl = host2[:-1]+thumbnl_
-            if mode == 'vod':
-                addDir2(series + ' - ' + ep_name, vid_id, 'vod_resolve', plot, thumbnl)
+            if series == '':
+                addDir2(ep_name, vid_id, 'vod_resolve', plot, thumbnl)
+            elif ep_name == '':
+                addDir2(series, vid_id, 'vod_resolve', plot, thumbnl)
             else:
-                if series == '':
-                    addDir2(ep_name, vid_id, 'vod_resolve', plot, thumbnl)
-                else:
-                    addDir2(series + ' - ' + ep_name, vid_id, 'vod_resolve', plot, thumbnl)
+                addDir2(series + ' - ' + ep_name, vid_id, 'vod_resolve', plot, thumbnl)
     except:
         pass
     xbmcplugin.setContent(pluginhandle, 'episodes')
@@ -458,6 +468,82 @@ def VOD_RESOLVE(name,url,plot,iconimage):
         except:
             pass
         xbmcplugin.setContent(pluginhandle, 'episodes')
+
+#playlists
+def IDX_P_LISTS(url):
+    req = urllib2.urlopen(url)
+    plists_json = json.load(req)
+    try:
+        for i in range(100):
+            p_list_id_ = plists_json['data']['playlist'][i]['playlist_id']
+            series_ = plists_json['data']['playlist'][i]['title']
+            thumbnl_ = plists_json['data']['playlist'][i]['image_original']
+            c_type = plists_json['data']['playlist'][i]['content_type']
+            p_list_id = host14+'en/'+p_list_id_+'.json?%s' % apikey
+            series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<span style="font-style: italic;">', '').replace('</span>','')
+            thumbnl = host2[:-1]+thumbnl_
+            addDir2(series, p_list_id, 'p_resolve', '', thumbnl)
+    except:
+        pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
+
+def P_RESOLVE(name,url,mode,plot,iconimage):
+    req = urllib2.urlopen(url)
+    vod_json = json.load(req)
+    try:
+        for i in range(100):
+            series_ = vod_json['data']['playlist'][0]['track'][i]['title_clean']
+            ep_name_ = vod_json['data']['playlist'][0]['track'][i]['sub_title_clean']
+            plot_ = vod_json['data']['playlist'][0]['track'][i]['description_clean']
+            thumbnl_ = vod_json['data']['playlist'][0]['track'][i]['image_l']
+            vid_id = vod_json['data']['playlist'][0]['track'][i]['vod_id']
+            series = (series_).encode('UTF-8').replace('[\'','').replace('\']','').replace('<br />',' ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<span style="font-style: italic;">', '').replace('</span>','').replace('\\xc3\\xa9','e')
+            ep_name = (ep_name_).encode('UTF-8').replace('<br>',' ').replace('[\'','').replace('\']','').replace('["','').replace('"]','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('\\xd7','x').replace('\\xc3\\x97','x').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','').replace('<b>','').replace('</b>','')
+            plot = (plot_).encode('UTF-8').replace('<br>',' ').replace('&#9825;',' ').replace('[\'','').replace('\']','').replace("\\\'","'").replace('<br />',' ').replace('&amp;','&').replace('<span style="font-style: italic;">','').replace('</span>','').replace('\\xe0','a').replace('\\xc3\\x89','E').replace('\\xe9','e').replace('\\xef\\xbd\\x9e',' ~ ').replace('<em>','').replace('</em>','').replace('\\xc3','').replace('<i>','').replace('</i>','').replace('<p>','').replace('</p>','').replace('<b>','').replace('</b>','')#.replace('["','').replace('"]','')
+            thumbnl = host2[:-1]+thumbnl_
+            s_dict[i]=series; e_dict[i]=ep_name; v_dict[i]=vid_id; p_dict[i]=plot; t_dict[i]=thumbnl
+            req1_dict[i] = 'https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+v_dict[i]+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+v_dict[i]+'&de-subtitle-on=false'
+            req1 = urllib2.Request(req1_dict[i], headers=hdr)
+            response = urllib2.urlopen(req1)
+            link=response.read()
+            response.close()
+            link_dict[i]=link
+            if s_dict[i] == '':
+                addDir2(e_dict[i],req1_dict[i],'p_resolve2',p_dict[i],t_dict[i])
+            elif e_dict[i] == '':
+                addDir2(s_dict[i],req1_dict[i],'p_resolve2',p_dict[i],t_dict[i])
+            else:
+                addDir2(s_dict[i]+' - '+e_dict[i],req1_dict[i],'p_resolve2',p_dict[i],t_dict[i])
+    except:
+        pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
+
+def P_RESOLVE2(name,url,mode,plot,iconimage):
+    req = urllib2.Request(url, headers=hdr)
+    response = urllib2.urlopen(req)
+    link=response.read()
+    response.close()
+    match = re.compile("'data-de-program-uuid','(.+?)'").findall(link)
+    for p_uuid_ in match:
+        p_uuid = str(p_uuid_).replace("['" , "").replace("']" , "")
+        req = urllib2.urlopen('https://movie-s.nhk.or.jp/ws/ws_program/api/67f5b750-b419-11e9-8a16-0e45e8988f42/apiv/5/mode/json?v='+p_uuid)
+        vod_json = json.load(req)
+        try:
+            v1 = vod_json['response']['WsProgramResponse']['program']['asset']['assetFiles'][0]['rtmp']['play_path']
+            vlink_1 = v1.split('?')
+            vlink1 = 'https://nhkw-mzvod.akamaized.net/www60/mz-nhk10/definst/' + vlink_1[0] + '/chunklist.m3u8'
+            media_item_list('720: '+ name, vlink1, plot, iconimage, iconimage)
+        except:
+            pass
+        try:
+            v2 = vod_json['response']['WsProgramResponse']['program']['asset']['referenceFile']['rtmp']['play_path']
+            vlink_2 = v2.split('?')
+            vlink2 = 'https://nhkw-mzvod.akamaized.net/www60/mz-nhk10/definst/' + vlink_2[0] + '/chunklist.m3u8'
+            media_item_list('1080: '+ name, vlink2, plot, iconimage, iconimage)
+        except:
+            pass
+    xbmcplugin.setContent(pluginhandle, 'episodes')
+
 
 # jibtv
 def IDX_JIBTV(url):
@@ -760,11 +846,19 @@ elif mode=='other_live_strm':
     print ""+url
     IDX_OTHER_LIVE_STRM()
 
-elif mode=='vod':
+elif mode=='p_lists':
     print ""+url
-    IDX_VOD(url,mode)
+    IDX_P_LISTS(url)
 
-elif mode=='vod_clips':
+elif mode=='p_resolve':
+    print ""+url
+    P_RESOLVE(name,url,mode,plot,iconimage)
+
+elif mode=='p_resolve2':
+    print ""+url
+    P_RESOLVE2(name,url,mode,plot,iconimage)
+
+elif mode=='vod':
     print ""+url
     IDX_VOD(url,mode)
 
