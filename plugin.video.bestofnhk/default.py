@@ -75,7 +75,7 @@ hdr = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML,
        'Accept-Language': 'en-US,en;q=0.8',
        'Connection': 'keep-alive'}
        
-s_dict={}; e_dict={}; v_dict={}; p_dict={}; t_dict={}; req1_dict={}; link_dict={}
+s_dict={}; e_dict={}; v_dict={}; p_dict={}; t_dict={}; req1_dict={}
 
 z = randrange(133)
 
@@ -503,11 +503,6 @@ def P_RESOLVE(name,url,mode,plot,iconimage):
             thumbnl = host2[:-1]+thumbnl_
             s_dict[i]=series; e_dict[i]=ep_name; v_dict[i]=vid_id; p_dict[i]=plot; t_dict[i]=thumbnl
             req1_dict[i] = 'https://movie-s.nhk.or.jp/v/refid/nhkworld/prefid/'+v_dict[i]+'?embed=js&targetId=videoplayer&de-responsive=true&de-callback-method=nwCustomCallback&de-appid='+v_dict[i]+'&de-subtitle-on=false'
-            req1 = urllib2.Request(req1_dict[i], headers=hdr)
-            response = urllib2.urlopen(req1)
-            link=response.read()
-            response.close()
-            link_dict[i]=link
             if s_dict[i] == '':
                 addDir2(e_dict[i],req1_dict[i],'p_resolve2',p_dict[i],t_dict[i])
             elif e_dict[i] == '':
