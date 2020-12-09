@@ -1,3 +1,10 @@
+Ver. 1.0.50
+
+Best of NHK - 75th release
+
+Fix: Live streams
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Ver. 1.0.49a
 
 Best of NHK - 74th release
